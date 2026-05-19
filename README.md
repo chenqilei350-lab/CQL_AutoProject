@@ -16,7 +16,7 @@ uv pip install -e .
 
 Pull an LLM:
 ```bash
-ollama pull llama3.2
+ollama pull llama3.1:8b
 ollama serve
 ```
 
@@ -29,7 +29,7 @@ Or in Python:
 from backend.extraction.extractor import Extractor
 from backend.schemas.process_knowledge.entities import Tool
 
-extractor = Extractor(model="llama3.2")
+extractor = Extractor(model="llama3.1:8b")
 tools = extractor.extract_list("Wir verwenden das Fronius TPS 400i.", Tool)
 ```
 
@@ -52,7 +52,7 @@ backend/
 
 ```python
 # Base model
-extractor = Extractor(model="llama3.2")
+extractor = Extractor(model="llama3.1:8b")
 
 # Larger model
 extractor = Extractor(model="llama3.1:70b")

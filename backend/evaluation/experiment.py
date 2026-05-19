@@ -19,7 +19,7 @@ class ExperimentConfig(BaseModel):
     schema_level: int                   # 1-5 complexity level
     
     # How
-    model: str                          # "llama3.2", "llama3.1:70b", "custom-finetuned-v1"
+    model: str                          # "llama3.1:8b", "llama3.1:70b", "custom-finetuned-v1"
     prompt_strategy: str                # "default", "few_shot", "custom_v3", "chain_of_thought"
     temperature: float = 0.0
     

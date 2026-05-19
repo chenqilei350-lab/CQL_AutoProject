@@ -1,26 +1,53 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
 .venv/
+venv/
+env/
+ENV/
 *.egg-info/
+.eggs/
+build/
+dist/
+site/
 
-# Environment
+# Tool caches and reports
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyre/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Environment and local secrets
 .env
+.env.*
+!.env.example
 
-# Data & Models
+# Data, outputs, and local models
 data/raw/*
 data/training/*
 data/results/*
 training/models/*
+outputs/
+artifacts/
+models/
 !**/.gitkeep
 
 # IDE
 .vscode/
 .idea/
 *.swp
+*.swo
 
 # OS
 .DS_Store
+Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/

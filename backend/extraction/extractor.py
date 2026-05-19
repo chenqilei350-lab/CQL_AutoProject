@@ -8,7 +8,7 @@ Usage:
     from backend.extraction.extractor import Extractor
     from backend.schemas.process_knowledge.entities import Tool
 
-    extractor = Extractor(model="llama3.2")
+    extractor = Extractor(model="llama3.1:8b")
     
     # Extract a single type
     tool = extractor.extract(

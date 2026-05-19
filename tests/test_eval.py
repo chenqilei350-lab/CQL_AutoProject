@@ -60,14 +60,14 @@ def test_experiment_config():
     """Test experiment config creation."""
     config = ExperimentConfig(
         experiment_name="test_run_1",
-        model="llama3.2",
+        model="llama3.1:8b",
         prompt_strategy="default",
         schema_level=1,
         domain="process_knowledge",
         temperature=0.0,
     )
     d = config.model_dump()
-    assert d["model"] == "llama3.2"
+    assert d["model"] == "llama3.1:8b"
     assert d["experiment_name"] == "test_run_1"
 
     print(f"  Config: {d}")

@@ -9,13 +9,13 @@ Usage:
     from backend.llm.client import get_client, extract_structured
 
     # Get a raw instructor client
-    client = get_client(model="llama3.2")
+    client = get_client()
 
     # Or extract structured data directly
     result = extract_structured(
         text="Hans used the Fronius TPS 400i for welding.",
         response_model=Tool,
-        model="llama3.2"
+        model="llama3.1:8b"
     )
 """
 
@@ -28,7 +28,7 @@ T = TypeVar("T", bound=BaseModel)
 
 # Ollama runs an OpenAI-compatible API on localhost
 OLLAMA_BASE_URL = "http://localhost:11434/v1"
-DEFAULT_MODEL = "llama3.2"
+DEFAULT_MODEL = "llama3.1:8b"
 
 
 def get_openai_client() -> OpenAI:
