@@ -3,6 +3,10 @@
 LLM-based extraction of structured knowledge from text into knowledge graphs.  
 Research project at TU Berlin — Institut für Industrielle Automatisierungstechnik.
 
+The reproducible V1 control is documented in [BASELINE_V1.md](BASELINE_V1.md).
+Use the `codex/industrial-baseline-v1` branch when reproducing or comparing
+the frozen `llama3.1:8b` industrial baseline.
+
 ## Setup
 
 **Prerequisites:** Python 3.12, [uv](https://docs.astral.sh/uv/), [Ollama](https://ollama.ai)
