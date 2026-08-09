@@ -37,6 +37,7 @@ from backend.evaluation.versioned_experiment import (
     DatasetSplitManifest,
     ModuleVersions,
     RuntimeEnvironment,
+    SubprocessTimeoutError,
     ensure_artifact_directory,
     fingerprint_file,
     fingerprint_tree,
@@ -628,6 +629,10 @@ def run_real_llm_matrix(
                     error = f"{type(exc).__name__}: {str(exc).splitlines()[0]}"
                     if isinstance(exc, LLMJsonParseError):
                         raw_response = {"parse_error_raw_content": exc.raw_content}
+                    if isinstance(exc, SubprocessTimeoutError):
+                        raw_response["timeout_recovery"] = recover_ollama_after_timeout(
+                            model
+                        )
                     extraction = EgocentricVideoExtraction(source_text=eval_scene.raw_text)
                 runtime = round(time.perf_counter() - started, 4)
                 record = build_run_record(
@@ -654,6 +659,42 @@ def run_real_llm_matrix(
                     flush=True,
                 )
     return records
+
+
+def recover_ollama_after_timeout(model: str, *, wait_seconds: float = 30.0) -> dict[str, Any]:
+    """Cancel server-side generation left behind by a terminated HTTP client."""
+
+    started = time.monotonic()
+    stop = subprocess.run(
+        ["ollama", "stop", model],
+        capture_output=True,
+        text=True,
+        timeout=15.0,
+        check=False,
+    )
+    unloaded = False
+    ps_error = ""
+    while time.monotonic() - started < wait_seconds:
+        status = subprocess.run(
+            ["ollama", "ps"],
+            capture_output=True,
+            text=True,
+            timeout=10.0,
+            check=False,
+        )
+        ps_error = status.stderr.strip()
+        if status.returncode == 0 and model not in status.stdout:
+            unloaded = True
+            break
+        time.sleep(1.0)
+    return {
+        "command": f"ollama stop {model}",
+        "stop_returncode": stop.returncode,
+        "stop_stderr": stop.stderr.strip(),
+        "unloaded": unloaded,
+        "wait_seconds": round(time.monotonic() - started, 3),
+        "status_error": ps_error,
+    }
 
 
 def extract_scene_with_hard_timeout(

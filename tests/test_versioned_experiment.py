@@ -23,6 +23,7 @@ from scripts.run_versioned_baseline import (
     build_split_manifest,
     load_checkpoint,
     load_gold_records,
+    recover_ollama_after_timeout,
 )
 
 
@@ -130,6 +131,24 @@ def test_isolated_process_enforces_hard_timeout() -> None:
             timeout_seconds=0.05,
         )
     assert time.monotonic() - started < 0.8
+
+
+def test_timeout_recovery_stops_and_waits_for_ollama(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[list[str]] = []
+
+    class Result:
+        returncode = 0
+        stdout = "NAME ID SIZE\n"
+        stderr = ""
+
+    def fake_run(command: list[str], **_: object) -> Result:
+        calls.append(command)
+        return Result()
+
+    monkeypatch.setattr("scripts.run_versioned_baseline.subprocess.run", fake_run)
+    result = recover_ollama_after_timeout("llama3.1:8b", wait_seconds=0.1)
+    assert calls == [["ollama", "stop", "llama3.1:8b"], ["ollama", "ps"]]
+    assert result["unloaded"] is True
 
 
 def test_paired_comparison_does_not_require_baseline_rerun() -> None:

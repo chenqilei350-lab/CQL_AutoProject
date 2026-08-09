@@ -294,6 +294,11 @@ def run_process_with_timeout(
         raise SubprocessTimeoutError(
             f"Isolated experiment call exceeded {timeout_seconds:.1f} seconds."
         )
+    except BaseException:
+        if process.is_alive():
+            process.terminate()
+            process.join(timeout=5.0)
+        raise
     finally:
         parent_connection.close()
 
