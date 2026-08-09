@@ -26,11 +26,31 @@ that are absent from the source.
 | Repetitions | `2` |
 | Per-call hard timeout | `180 s` |
 | Maximum output tokens | `3000` |
-| Current regression suite | `137 passed` |
+| Baseline implementation suite | `137 passed` |
+| Publication suite after license guards | `139 passed` |
 
-The result tag is pending until the full experiment and checksum verification
-finish. Historical scores such as Node F1 `0.6019` and Edge F1 `0.1421` remain
-historical observations and are not relabeled as V1 baseline results.
+The full experiment is complete and 14 artifact checksums pass. Historical
+scores such as Node F1 `0.6019` and Edge F1 `0.1421` remain historical
+observations and are not relabeled as V1 baseline results.
+
+### Final V1 Result Snapshot
+
+| Condition | Errors / 64 | Mean Node F1 | Mean raw Edge F1 | Mean final Edge F1 | Mean runtime |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `raw + one_shot` | 6 | 0.2374 | 0.0260 | 0.0799 | 91.10 s |
+| `raw + layered` | 5 | 0.2804 | 0.0947 | 0.1009 | 101.87 s |
+| `auto_unified + layered` | 3 | 0.2505 | 0.0418 | 0.0704 | 85.68 s |
+| `reviewed_unified + layered` | 12 | 0.7321 | 0.4423 | 0.6015 | 114.39 s |
+
+The Gold-entity relation diagnostic reaches precision `0.8926`, recall
+`0.8333`, and F1 `0.8620`. This is an oracle diagnostic with Gold entities and
+must not be compared directly with end-to-end model F1.
+
+The complete baseline, including licensed cleaned records and raw model
+responses, remains local and Git-ignored. The public export contains only
+audited numeric metrics, an aggregate source identity hash, and checksums. This
+separation preserves experiment identity without redistributing restricted
+source text.
 
 ## 3. Versioned Modules
 
@@ -136,6 +156,30 @@ the model digest, Gold, or metric definition changes materially, create a new
 baseline version instead of overwriting V1.
 
 ## 6. Recommended Improvements
+
+### P0. Repair Source and Segment Alignment Before Changing the Model
+
+**Current problem.** None of the 32 automatic IndEgo source texts exactly
+matches the reviewed Gold scene excerpt. Of 302 original automatic grounded
+entries, only 134 are supported within the selected excerpt and 168 are outside
+it. The aligned automatic representation consequently contains only 96 action
+entries and 12 tool/object entries, compared with 369 actions and 305
+tool/object entries in the reviewed upper bound.
+
+**Solution.** Add an explicit source-alignment layer keyed by `video_id`, source
+layer, segment ID, and timestamp overlap. Resolve the Gold excerpt to its full
+IndEgo transcript/action/keystep window before filtering evidence. Use exact
+normalized spans first, timestamp overlap second, and auditable fuzzy matching
+only as a reported fallback. Never copy reviewed Gold facts into automatic
+input.
+
+**Experiment.** Compare current `auto_unified_v1` with `aligned_auto_unified_v2`
+on the fixed quick set. Report source-match coverage, retained evidence entries,
+unsupported additions, Node/Edge F1, and runtime. Keep the raw baseline rows
+frozen.
+
+**Proposed Change ID.** `EXP-SOURCE-ALIGNMENT-001`, module
+`text_preprocessing`.
 
 ### P0. Native JSON-Schema-Constrained Ollama Output
 
@@ -260,13 +304,14 @@ evaluation still requires domain-relevant source text and Gold.
 
 ## 7. Recommended Execution Order
 
-1. Finish and checksum the V1 baseline; create and push the annotated tag.
-2. Implement native Ollama JSON Schema output and evaluate parse reliability.
-3. Manually verify relation Gold and run deterministic/LLM/GLiREL/hybrid
+1. Preserve and publish the completed V1 baseline and annotated tag.
+2. Repair source/segment alignment and evaluate automatic evidence retention.
+3. Implement native Ollama JSON Schema output and evaluate parse reliability.
+4. Manually verify relation Gold and run deterministic/LLM/GLiREL/hybrid
    relation ablations.
-4. Test atomic proposition preprocessing with strict evidence validation.
-5. Add development-only similar-example retrieval.
-6. Expand the industrial Gold and perform a frozen video-grouped holdout run.
+5. Test atomic proposition preprocessing with strict evidence validation.
+6. Add development-only similar-example retrieval.
+7. Expand the industrial Gold and perform a frozen video-grouped holdout run.
 
 ## 8. Sources
 

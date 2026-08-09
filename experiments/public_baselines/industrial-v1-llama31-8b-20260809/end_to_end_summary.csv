@@ -1,0 +1,5 @@
+condition,strategy,run_count,error_count,mean_raw_node_f1,mean_raw_edge_f1,mean_final_node_f1,mean_final_edge_f1,mean_ontology_conformance,mean_relation_hallucination_rate,mean_runtime_seconds,std_final_node_f1,std_final_edge_f1
+auto_unified,layered,64,3,0.250513,0.041809,0.250513,0.070438,1.0,0.0,85.682264,0.219053,0.163385
+raw,layered,64,5,0.280378,0.094741,0.280378,0.100869,1.0,0.0,101.870875,0.235593,0.20748
+raw,one_shot,64,6,0.237434,0.026041,0.237434,0.079884,1.0,0.0,91.095895,0.249804,0.200168
+reviewed_unified,layered,64,12,0.732062,0.442312,0.732062,0.601481,1.0,0.0,114.389378,0.393403,0.375477

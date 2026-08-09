@@ -38,12 +38,19 @@ outputs/
 artifacts/
 models/
 results/
+# Keep generated result folders local except for the audited baseline report.
+!docs/results/
+docs/results/*
+!docs/results/industrial_baseline_v1_report_en.md
 handoff_packages/
 EASG/
 raw/
 kg_ready_data/
 gold_case_admission_29366372/
 experiments/**/.work/
+# Full baseline artifacts can contain licensed source text and raw model output.
+# Publish only the sanitized exports under experiments/public_baselines/.
+experiments/baselines/
 !**/.gitkeep
 
 # IDE

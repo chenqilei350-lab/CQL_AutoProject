@@ -1,0 +1,4 @@
+relation_type,gold_edges,candidate_edges,matched_gold_edges,candidate_coverage_recall,accepted_precision,accepted_recall,accepted_f1
+ACTS_ON,405,383,333,0.822222,0.869452,0.822222,0.845178
+BEFORE,329,337,329,1.0,0.976261,1.0,0.987988
+USES_TOOL,94,53,28,0.297872,0.528302,0.297872,0.380952

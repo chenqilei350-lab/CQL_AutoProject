@@ -1,0 +1,9 @@
+{
+  "diagnostic_mode": "gold_entity_oracle_relation_candidate",
+  "scene_count": 32,
+  "gold_edge_count": 828,
+  "deterministic_accepted_edge_count": 773,
+  "deterministic_precision": 0.892626,
+  "deterministic_recall": 0.833333,
+  "deterministic_f1": 0.861961
+}

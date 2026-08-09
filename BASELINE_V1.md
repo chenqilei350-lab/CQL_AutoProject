@@ -10,16 +10,50 @@ paired change experiments.
 | --- | --- |
 | Baseline ID | `industrial-v1-llama31-8b-20260809` |
 | Branch | `codex/industrial-baseline-v1` |
-| Result tag | `baseline-industrial-v1-2026-08-09` after completion |
+| Result tag | `baseline-industrial-v1-2026-08-09` |
 | Tested code commit | `28899d59b7b383a3e0d79a8624d313924b6e7bce` |
 | Model | `llama3.1:8b` |
 | Ollama digest | `46e0c10c039e` |
 | Reference machine | Apple M4 MacBook Air, 16 GB |
-| Current regression suite | `137 passed` |
+| Baseline implementation suite | `137 passed` |
+| Publication suite | `139 passed` |
 
-The annotated result tag is deliberately created only after the one-time
-256-call experiment has finished, all required artifacts exist, and checksums
-pass. A partial checkpoint is not a final baseline result.
+The one-time 256-call experiment is complete. All required artifacts exist and
+14 recorded checksums pass. The annotated result tag points to the commit that
+adds these immutable results. A partial checkpoint was never published as a
+final baseline result.
+
+## Final Baseline Results
+
+| Condition | Errors / 64 | Mean Node F1 | Mean raw Edge F1 | Mean final Edge F1 | Mean runtime |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `raw + one_shot` | 6 | 0.2374 | 0.0260 | 0.0799 | 91.10 s |
+| `raw + layered` | 5 | 0.2804 | 0.0947 | 0.1009 | 101.87 s |
+| `auto_unified + layered` | 3 | 0.2505 | 0.0418 | 0.0704 | 85.68 s |
+| `reviewed_unified + layered` | 12 | 0.7321 | 0.4423 | 0.6015 | 114.39 s |
+
+`reviewed_unified` is a human-derived upper bound, not an automatic
+preprocessing result. The automatic condition is faster and has fewer errors,
+but it does not improve Edge F1 over raw layered extraction. The detailed
+interpretation is in `docs/results/industrial_baseline_v1_report_en.md`.
+
+## Public and Private Artifacts
+
+The complete immutable baseline is retained locally at
+`experiments/baselines/industrial-v1-llama31-8b-20260809/`. It includes
+licensed cleaned records and raw model responses needed for authorized
+rescoring, so the directory is ignored by Git.
+
+The public repository contains a sanitized export at
+`experiments/public_baselines/industrial-v1-llama31-8b-20260809/`. It contains
+aggregate and per-scene numeric metrics, a path-free source identity hash, and
+its own checksums. It excludes source text, prompts, evidence excerpts, raw
+responses, and local source paths. Recreate or verify it with:
+
+```bash
+uv run python scripts/export_public_baseline.py
+uv run python scripts/export_public_baseline.py --verify-only
+```
 
 ## Install
 

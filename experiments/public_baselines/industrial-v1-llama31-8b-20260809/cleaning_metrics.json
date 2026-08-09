@@ -1,0 +1,30 @@
+{
+  "source_name": "indego",
+  "files_seen": 579,
+  "source_file_count": 1163,
+  "source_total_bytes": 4068281,
+  "record_count": 7883,
+  "records_by_type": {
+    "action_segment": 619,
+    "file_notice": 131,
+    "keystep_segment": 2392,
+    "mistake_step": 314,
+    "mistake_warning": 2946,
+    "scenario_keystep": 219,
+    "transcript": 394,
+    "vqa_item": 868
+  },
+  "issues_by_code": {
+    "missing_time_bounds": 6,
+    "reference_layer_not_expanded": 129,
+    "tool_object_metadata_not_parsed": 2
+  },
+  "issues_by_severity": {
+    "info": 131,
+    "warning": 6
+  },
+  "empty_normalized_text_count": 0,
+  "records_with_provenance": 7883,
+  "records_with_timestamp": 3005,
+  "privacy_note": "The local source root was removed from this public aggregate."
+}
