@@ -11,9 +11,11 @@ import csv
 import gzip
 import hashlib
 import json
+import multiprocessing
+import time
 from pathlib import Path
 from statistics import mean
-from typing import Any, Iterable, Literal, Sequence
+from typing import Any, Callable, Iterable, Literal, Sequence
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -21,6 +23,10 @@ from pydantic import BaseModel, Field, model_validator
 ModuleName = Literal["data_cleaning", "text_preprocessing", "kg_extraction"]
 BaselineStatus = Literal["draft", "running", "complete"]
 ChangeDecision = Literal["improved", "neutral", "regressed", "incomplete"]
+
+
+class SubprocessTimeoutError(TimeoutError):
+    """Raised when an isolated experiment call exceeds its wall-clock limit."""
 
 
 class ModuleVersions(BaseModel):
@@ -237,6 +243,59 @@ def ensure_artifact_directory(path: str | Path) -> Path:
         raise FileExistsError(f"Completed experiment is immutable: {directory}")
     directory.mkdir(parents=True, exist_ok=True)
     return directory
+
+
+def run_process_with_timeout(
+    worker: Callable[..., None],
+    *,
+    args: tuple[Any, ...] = (),
+    timeout_seconds: float,
+) -> Any:
+    """Run a pipe-writing worker in an isolated spawn process.
+
+    The worker receives the child connection as its first argument and must
+    send one serializable payload. A process boundary makes the timeout a real
+    wall-clock limit even when an HTTP client or local model call is stuck.
+    """
+
+    if timeout_seconds <= 0:
+        raise ValueError("timeout_seconds must be greater than zero")
+    context = multiprocessing.get_context("spawn")
+    parent_connection, child_connection = context.Pipe(duplex=False)
+    process = context.Process(target=worker, args=(child_connection, *args))
+    process.start()
+    child_connection.close()
+    deadline = time.monotonic() + timeout_seconds
+    try:
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                break
+            if parent_connection.poll(min(0.1, remaining)):
+                payload = parent_connection.recv()
+                process.join(timeout=2.0)
+                if process.is_alive():
+                    process.terminate()
+                    process.join(timeout=2.0)
+                return payload
+            if not process.is_alive():
+                if parent_connection.poll():
+                    return parent_connection.recv()
+                raise RuntimeError(
+                    "Isolated experiment worker exited without returning a result "
+                    f"(exit code {process.exitcode})."
+                )
+
+        process.terminate()
+        process.join(timeout=5.0)
+        if process.is_alive() and hasattr(process, "kill"):
+            process.kill()
+            process.join(timeout=2.0)
+        raise SubprocessTimeoutError(
+            f"Isolated experiment call exceeded {timeout_seconds:.1f} seconds."
+        )
+    finally:
+        parent_connection.close()
 
 
 def write_json(path: str | Path, value: BaseModel | dict[str, Any], *, overwrite: bool = False) -> Path:

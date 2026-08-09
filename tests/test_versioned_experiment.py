@@ -1,4 +1,5 @@
 import json
+import time
 from pathlib import Path
 
 import pytest
@@ -9,9 +10,11 @@ from backend.evaluation.versioned_experiment import (
     DatasetSplitManifest,
     ModuleVersions,
     RuntimeEnvironment,
+    SubprocessTimeoutError,
     compare_metric_rows,
     ensure_artifact_directory,
     fingerprint_file,
+    run_process_with_timeout,
     verify_fingerprints,
     write_json,
 )
@@ -110,6 +113,25 @@ def test_checkpoint_round_trip_supports_resume(tmp_path: Path) -> None:
     assert load_checkpoint(path) == [first, second]
 
 
+def test_isolated_process_returns_serializable_result() -> None:
+    assert run_process_with_timeout(
+        _send_process_result,
+        args=({"status": "ok"},),
+        timeout_seconds=2.0,
+    ) == {"status": "ok"}
+
+
+def test_isolated_process_enforces_hard_timeout() -> None:
+    started = time.monotonic()
+    with pytest.raises(SubprocessTimeoutError, match="exceeded"):
+        run_process_with_timeout(
+            _sleep_then_send,
+            args=(1.0,),
+            timeout_seconds=0.05,
+        )
+    assert time.monotonic() - started < 0.8
+
+
 def test_paired_comparison_does_not_require_baseline_rerun() -> None:
     baseline = [metric_row("s1", 0.20, 0.50)]
     candidate = [metric_row("s1", 0.25, 0.51)]
@@ -160,3 +182,14 @@ def metric_row(scene_id: str, edge_f1: float, node_f1: float) -> dict[str, objec
         "runtime_seconds": 1.0,
         "execution_error": "",
     }
+
+
+def _send_process_result(connection: object, payload: dict[str, str]) -> None:
+    connection.send(payload)  # type: ignore[attr-defined]
+    connection.close()  # type: ignore[attr-defined]
+
+
+def _sleep_then_send(connection: object, seconds: float) -> None:
+    time.sleep(seconds)
+    connection.send({"status": "late"})  # type: ignore[attr-defined]
+    connection.close()  # type: ignore[attr-defined]

@@ -41,6 +41,7 @@ from backend.evaluation.versioned_experiment import (
     fingerprint_file,
     fingerprint_tree,
     sha256_file,
+    run_process_with_timeout,
     write_csv,
     write_gzip_jsonl,
     write_json,
@@ -89,7 +90,7 @@ def main() -> None:
     parser.add_argument("--indego-root", default=str(DEFAULT_INDEGO_ROOT))
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--model-digest", default=DEFAULT_MODEL_DIGEST)
-    parser.add_argument("--code-commit", required=True)
+    parser.add_argument("--code-commit")
     parser.add_argument("--repetitions", type=int, default=2)
     parser.add_argument("--timeout", type=float, default=180.0)
     parser.add_argument("--max-tokens", type=int, default=3000)
@@ -101,6 +102,9 @@ def main() -> None:
     if args.verify_only:
         verify_completed_baseline(artifact_dir)
         return
+
+    if not args.code_commit:
+        parser.error("--code-commit is required unless --verify-only is used")
 
     ensure_artifact_directory(artifact_dir)
     run_baseline(
@@ -600,9 +604,6 @@ def run_real_llm_matrix(
     if done:
         print(f"Resuming from {done}/{total} completed calls", flush=True)
 
-    from backend.llm.client import get_openai_client
-
-    client = get_openai_client(timeout=timeout)
     for condition, strategy in condition_specs:
         for scene in scenes:
             eval_scene = scene_for_condition(scene, condition, auto_unified)
@@ -615,8 +616,7 @@ def run_real_llm_matrix(
                 error = ""
                 raw_response: dict[str, Any] = {}
                 try:
-                    extraction, raw_response = extract_scene(
-                        client=client,
+                    extraction, raw_response = extract_scene_with_hard_timeout(
                         scene=eval_scene,
                         condition=model_condition,
                         strategy=strategy,
@@ -654,6 +654,91 @@ def run_real_llm_matrix(
                     flush=True,
                 )
     return records
+
+
+def extract_scene_with_hard_timeout(
+    *,
+    scene: BenchmarkScene,
+    condition: str,
+    strategy: str,
+    model: str,
+    timeout: float,
+    max_tokens: int,
+) -> tuple[EgocentricVideoExtraction, dict[str, Any]]:
+    """Extract one scene with a process-level wall-clock timeout."""
+
+    payload = run_process_with_timeout(
+        _llm_extraction_worker,
+        args=(
+            scene.model_dump(mode="json"),
+            condition,
+            strategy,
+            model,
+            timeout,
+            max_tokens,
+        ),
+        timeout_seconds=timeout,
+    )
+    if not payload.get("ok"):
+        error_type = payload.get("error_type", "RuntimeError")
+        error_message = payload.get("error_message", "Unknown extraction failure")
+        if error_type == "LLMJsonParseError":
+            raise LLMJsonParseError(
+                error_message,
+                raw_content=str(payload.get("raw_content", "")),
+            )
+        raise RuntimeError(f"{error_type}: {error_message}")
+    return (
+        EgocentricVideoExtraction.model_validate(payload["extraction"]),
+        dict(payload.get("raw_response", {})),
+    )
+
+
+def _llm_extraction_worker(
+    connection: Any,
+    scene_payload: dict[str, Any],
+    condition: str,
+    strategy: str,
+    model: str,
+    timeout: float,
+    max_tokens: int,
+) -> None:
+    """Execute one model call and return only serializable data over a pipe."""
+
+    try:
+        from backend.llm.client import get_openai_client
+
+        scene = BenchmarkScene.model_validate(scene_payload)
+        client = get_openai_client(timeout=timeout)
+        extraction, raw_response = extract_scene(
+            client=client,
+            scene=scene,
+            condition=condition,
+            strategy=strategy,
+            model=model,
+            timeout=timeout,
+            max_tokens=max_tokens,
+        )
+        connection.send(
+            {
+                "ok": True,
+                "extraction": extraction.model_dump(mode="json"),
+                "raw_response": raw_response,
+            }
+        )
+    except Exception as exc:
+        connection.send(
+            {
+                "ok": False,
+                "error_type": type(exc).__name__,
+                "error_message": str(exc).splitlines()[0],
+                "raw_content": (
+                    exc.raw_content if isinstance(exc, LLMJsonParseError) else ""
+                ),
+            }
+        )
+    finally:
+        connection.close()
 
 
 def scene_for_condition(
