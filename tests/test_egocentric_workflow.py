@@ -37,6 +37,91 @@ def test_egocentric_schema_validation():
     assert extraction.uses_tool[0].tool.name == "torque wrench"
 
 
+def test_schema_normalizes_common_local_model_field_aliases():
+    """确认本地小模型的常见等价字段能够进入严格 schema。"""
+
+    extraction = EgocentricVideoExtraction.model_validate(
+        {
+            "scenes": [
+                {
+                    "scene_id": "demo_01",
+                    "segment_id": "s1",
+                    "description": "assembly scene",
+                }
+            ],
+            "actions": [
+                {
+                    "description": "tighten bolt",
+                    "order": 2,
+                    "evidence": "tightens the bolt",
+                }
+            ],
+        }
+    )
+
+    assert extraction.scenes[0].name == "demo_01 segment s1"
+    assert extraction.scenes[0].video_id == "demo_01"
+    assert extraction.actions[0].name == "tighten bolt"
+    assert extraction.actions[0].sequence_index == 2
+    assert extraction.actions[0].evidence_text == "tightens the bolt"
+
+
+def test_schema_normalizes_inspection_style_local_model_output():
+    """确认模型以 id、type 和空格角色输出时仍可保留显式事实。"""
+
+    extraction = EgocentricVideoExtraction.model_validate(
+        {
+            "video_id": "inspect_demo_01",
+            "scenes": [{"id": "s2"}],
+            "actors": [{"name": "Maria", "role": "quality inspector"}],
+            "actions": [
+                {
+                    "id": "action1",
+                    "type": "measure",
+                    "object": "gap",
+                    "source_text": "measures the gap",
+                }
+            ],
+            "objects": [{"id": "object1", "type": "gap"}],
+        }
+    )
+
+    assert extraction.scenes[0].name == "inspect_demo_01 segment s2"
+    assert extraction.actors[0].role == "quality_inspector"
+    assert extraction.actions[0].name == "measure gap"
+    assert extraction.actions[0].action_type == "measurement"
+    assert extraction.objects[0].name == "gap"
+
+
+def test_schema_normalizes_string_relation_endpoints_from_local_model():
+    """确认小模型以字符串表示显式关系端点时仍能构建类型化关系。"""
+
+    extraction = EgocentricVideoExtraction.model_validate(
+        {
+            "video_id": "weld_demo_01",
+            "actions": [{"action": "align steel plate"}],
+            "uses_tool": [{"action": "start root weld", "tool": "torch"}],
+            "acts_on_object": [{"action": "align steel plate", "object": "plate"}],
+            "action_order": [
+                {"action": "align steel plate", "following_action": "start root weld"}
+            ],
+            "action_causes": [
+                {"action": "start root weld", "causing_action": "align steel plate"}
+            ],
+            "part_of_procedure": [{"action": "start root weld", "procedure": "welding"}],
+            "observed_in_scene": [{"action": "start root weld", "scene": "s1"}],
+        }
+    )
+
+    assert extraction.actions[0].name == "align steel plate"
+    assert extraction.uses_tool[0].tool.name == "torch"
+    assert extraction.acts_on_object[0].object.name == "plate"
+    assert extraction.action_order[0].before.name == "align steel plate"
+    assert extraction.action_causes[0].cause.name == "align steel plate"
+    assert extraction.part_of_procedure[0].procedure.name == "welding"
+    assert extraction.observed_in_scene[0].scene.name == "weld_demo_01 segment s1"
+
+
 # 测试 2：确认 gold example 可以转换成 graph，并且基础查询能返回预期结果。
 def test_property_graph_builds_nodes_edges_and_queries():
     graph = build_property_graph(WELDING_SCENE_EXPECTED)
@@ -84,6 +169,47 @@ def test_graph_preserves_provenance_and_relation_properties():
     cause_edges = [edge for edge in graph.edges if edge.type == "CAUSES"]
     assert cause_edges
     assert cause_edges[0].properties["rationale"] == "The alignment step prepares the plate for the root weld."
+
+
+def test_graph_preserves_relation_provenance():
+    extraction = EgocentricVideoExtraction(
+        source_text="Hans uses the caliper.",
+        actions=[Action(name="measure gap")],
+        tools=[Tool(name="caliper")],
+        uses_tool=[
+            UsesTool(
+                action=Action(name="measure gap"),
+                tool=Tool(name="caliper"),
+                provenance=Provenance(source_text="Hans uses the caliper.", confidence=0.8),
+            )
+        ],
+    )
+
+    graph = build_property_graph(extraction)
+    edge = next(edge for edge in graph.edges if edge.type == "USES_TOOL")
+
+    assert edge.properties["provenance"]["source_text"] == "Hans uses the caliper."
+    assert edge.properties["provenance"]["confidence"] == 0.8
+
+
+def test_property_graph_uses_stable_ids_for_fast_deduplication():
+    graph = PropertyGraph()
+    first = graph.add_node("Tool", "Fronius TPS 400i torch", {"model": "TPS 400i"})
+    second = graph.add_node("Tool", "fronius   tps 400i torch", {"tool_type": "welding torch"})
+
+    assert first.id == second.id
+    assert len(graph.nodes) == 1
+    assert len(graph.stable_id_index) == 1
+    assert graph.nodes[first.id].properties["tool_type"] == "welding torch"
+
+
+def test_property_graph_exports_cypher():
+    graph = build_property_graph(WELDING_SCENE_EXPECTED)
+    cypher = graph.to_cypher()
+
+    assert "MERGE (n:Action" in cypher
+    assert "MERGE (source)-[r:USES_TOOL" in cypher
+    assert "Fronius TPS 400i torch" in cypher
 
 
 # 测试 5：确认第二个质量检查 example 也能覆盖 measurement/documentation workflow。

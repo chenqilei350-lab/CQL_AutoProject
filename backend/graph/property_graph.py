@@ -15,6 +15,7 @@ from typing import Any, Iterable, Optional
 from pydantic import BaseModel, Field
 
 from backend.evaluation.matching import MatchStrategy, compare_values
+from backend.schemas.ontology import stable_node_id
 from backend.schemas.egocentric_video import (
     Action,
     ActionCauses,
@@ -27,7 +28,12 @@ from backend.schemas.egocentric_video import (
     SceneObject,
     UsesTool,
 )
-from backend.schemas.process_knowledge.entities import Procedure, Tool, Worker
+from backend.schemas.process_knowledge.entities import (
+    ProcessParameter,
+    Procedure,
+    Tool,
+    Worker,
+)
 
 
 class GraphNode(BaseModel):
@@ -70,6 +76,7 @@ class PropertyGraph(BaseModel):
     # nodes 用 dict 存，方便通过 node id 快速找到节点；edges 用 list 保存所有关系。
     nodes: dict[str, GraphNode] = Field(default_factory=dict)
     edges: list[GraphEdge] = Field(default_factory=list)
+    stable_id_index: dict[str, str] = Field(default_factory=dict)
 
     def add_node(
         self,
@@ -80,16 +87,31 @@ class PropertyGraph(BaseModel):
         match_threshold: float = 0.85,
     ) -> GraphNode:
         """Add a node or merge it with an existing node of the same label."""
-        # 先查找是否已有同类同名节点；如果有，就更新属性而不是新建重复节点。
+        # 先用 stable id 做 O(1) 查重，再回退到名称匹配。
         properties = properties or {}
-        existing = self.find_node(label, name, merge_strategy, match_threshold)
-        if existing:
+        stable_id = stable_node_id(label, name, properties)
+        indexed_id = self.stable_id_index.get(stable_id)
+        if indexed_id and indexed_id in self.nodes:
+            existing = self.nodes[indexed_id]
             existing.properties.update({k: v for k, v in properties.items() if v is not None})
             return existing
 
-        node_id = self._stable_node_id(label, name)
+        # Human-reviewed and source adapters may provide stable entity IDs for
+        # repeated actions with the same label at different times.  Preserve
+        # those occurrences instead of collapsing them by normalized name.
+        if not properties.get("entity_id"):
+            existing = self.find_node(label, name, merge_strategy, match_threshold)
+            if existing:
+                existing.properties.update(
+                    {k: v for k, v in properties.items() if v is not None}
+                )
+                self.stable_id_index[stable_id] = existing.id
+                return existing
+
+        node_id = self._unique_node_id(stable_id)
         node = GraphNode(id=node_id, label=label, name=name, properties=properties)
         self.nodes[node_id] = node
+        self.stable_id_index[stable_id] = node_id
         return node
 
     def add_edge(
@@ -189,15 +211,70 @@ class PropertyGraph(BaseModel):
             return []
         return [self.node(edge.target) for edge in self.outgoing(action, "CAUSES")]
 
-    def _stable_node_id(self, label: str, name: str) -> str:
-        # 用 label 和标准化名称生成稳定 id；如果冲突，就加数字后缀。
-        base = f"{label}:{normalize_name(name)}"
+    def to_cypher(self) -> str:
+        """Export the in-memory graph as a Cypher script for Neo4j/LadybugDB-style review."""
+        lines = [
+            "// Cypher script generated from AUT KG Extraction Pipeline",
+            "// Nodes",
+        ]
+        for node in self.nodes.values():
+            props = {"id": node.id, "name": node.name, **node.properties}
+            lines.append(
+                f"MERGE (n:{_cypher_identifier(node.label)} {{id: {_cypher_value(node.id)}}}) "
+                f"SET {_cypher_props('n', props)}"
+            )
+
+        lines.append("")
+        lines.append("// Relationships")
+        for edge in self.edges:
+            props = {"id": edge.id, **edge.properties}
+            lines.extend(
+                [
+                    (
+                        f"MATCH (source {{id: {_cypher_value(edge.source)}}}), "
+                        f"(target {{id: {_cypher_value(edge.target)}}})"
+                    ),
+                    (
+                        f"MERGE (source)-[r:{_cypher_identifier(edge.type)} "
+                        f"{{id: {_cypher_value(edge.id)}}}]->(target) "
+                        f"SET {_cypher_props('r', props)}"
+                    ),
+                ]
+            )
+        return "\n".join(lines)
+
+    def _unique_node_id(self, base: str) -> str:
+        # stable id 是首选；如果上下文真的冲突，就加数字后缀。
         candidate = base
         suffix = 2
         while candidate in self.nodes:
             candidate = f"{base}:{suffix}"
             suffix += 1
         return candidate
+
+
+def _cypher_identifier(value: str) -> str:
+    return "".join(ch if ch.isalnum() or ch == "_" else "_" for ch in value) or "Node"
+
+
+def _cypher_value(value: Any) -> str:
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, int | float):
+        return str(value)
+    escaped = str(value).replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+    return f'"{escaped}"'
+
+
+def _cypher_props(var_name: str, props: dict[str, Any]) -> str:
+    assignments = [
+        f"{var_name}.{_cypher_identifier(key)} = {_cypher_value(value)}"
+        for key, value in props.items()
+        if value is not None and not isinstance(value, list | dict)
+    ]
+    return ", ".join(assignments) if assignments else f"{var_name}.id = {var_name}.id"
 
 
 def build_property_graph(extraction: EgocentricVideoExtraction) -> PropertyGraph:
@@ -217,6 +294,8 @@ def build_property_graph(extraction: EgocentricVideoExtraction) -> PropertyGraph
         _add_tool(graph, tool)
     for obj in extraction.objects:
         _add_object(graph, obj)
+    for parameter in extraction.parameters:
+        _add_parameter(graph, parameter)
 
     for relation in extraction.uses_tool:
         _add_uses_tool(graph, relation)
@@ -275,9 +354,19 @@ def _add_object(graph: PropertyGraph, obj: SceneObject) -> GraphNode:
     return graph.add_node("Object", obj.name, properties)
 
 
+def _add_parameter(graph: PropertyGraph, parameter: ProcessParameter) -> GraphNode:
+    # 把独立测量参数转成节点，例如 temperature = 42 degrees Celsius。
+    # 当前 schema 尚无 Action 与 Parameter 的专用关系，因此先保留参数节点和属性。
+    return graph.add_node("ProcessParameter", parameter.name, model_properties(parameter))
+
+
 def _relation_properties(relation: BaseModel, exclude: Iterable[str]) -> dict[str, Any]:
     # 把关系对象上的非端点字段保留下来，例如 confidence、rationale、role。
-    return model_properties(relation, exclude=exclude)
+    properties = model_properties(relation, exclude=exclude)
+    provenance = getattr(relation, "provenance", None)
+    if provenance:
+        properties["provenance"] = provenance.model_dump(mode="json", exclude_none=True)
+    return properties
 
 
 def _add_uses_tool(graph: PropertyGraph, relation: UsesTool) -> None:

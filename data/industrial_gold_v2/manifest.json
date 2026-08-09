@@ -1,0 +1,112 @@
+{
+  "dataset_name": "industrial_gold_v2_reviewed",
+  "format_version": "2.0",
+  "reviewed_scene_count": 12,
+  "independent_video_count": 11,
+  "excluded_scene_count": 4,
+  "category_counts": {
+    "assembly": 4,
+    "disassembly": 3,
+    "inspection_repair": 2,
+    "logistics_organisation": 2,
+    "woodworking": 1
+  },
+  "entity_counts": {
+    "Action": 145,
+    "Object": 113,
+    "Tool": 14
+  },
+  "relation_counts": {
+    "ACTS_ON": 170,
+    "BEFORE": 133,
+    "USES_TOOL": 22
+  },
+  "quality_result_count": 32,
+  "outcome_count": 1,
+  "video_groups": {
+    "user_14_1410_2110_2": [
+      "indego_user_14_1410_2110_2_s2"
+    ],
+    "user_14_414_2609_1": [
+      "indego_user_14_414_2609_1_s1"
+    ],
+    "user_14_user_17_411_2810_table_assembly": [
+      "indego_user_14_user_17_411_2810_table_assembly_s1"
+    ],
+    "user_14_user_2_407_2210_1": [
+      "indego_user_14_user_2_407_2210_1_s1"
+    ],
+    "user_15_414_0702_1": [
+      "indego_user_15_414_0702_1_s1"
+    ],
+    "user_15_451_2401_1": [
+      "indego_user_15_451_2401_1_s4"
+    ],
+    "user_15_user_17_410_2210_2": [
+      "indego_user_15_user_17_410_2210_2_s1"
+    ],
+    "user_15_user_1_0111_1": [
+      "indego_user_15_user_1_0111_1_s1"
+    ],
+    "user_16_410_2110_2": [
+      "indego_user_16_410_2110_2_s2"
+    ],
+    "user_16_414_2101_1": [
+      "indego_user_16_414_2101_1_s1",
+      "indego_user_16_414_2101_1_s2"
+    ],
+    "user_16_user_2_0111_1": [
+      "indego_user_16_user_2_0111_1_s1"
+    ]
+  },
+  "excluded_scenes": [
+    {
+      "scene_id": "indego_user_16_414_2101_1_s8",
+      "video_id": "user_16_414_2101_1",
+      "category": "disassembly",
+      "review_decision": "excluded",
+      "reason": "high_content_duplication",
+      "duplicate_of": "indego_user_16_414_2101_1_s1",
+      "reviewer_note": "Human reviewer excluded S08 on 2026-07-31 because it is highly repetitive with S07 and comes from the same source video. It must not be counted as an independent gold example or included in formal evaluation."
+    },
+    {
+      "scene_id": "indego_user_15_414_0702_1_s10",
+      "video_id": "user_15_414_0702_1",
+      "category": "woodworking",
+      "review_decision": "excluded",
+      "reason": "high_content_duplication",
+      "duplicate_of": "indego_user_15_414_0702_1_s1",
+      "reviewer_note": "Human reviewer excluded S11 on 2026-08-01 because it is highly repetitive with S10 and comes from the same source video. It must not be counted as an independent gold example or included in formal evaluation."
+    },
+    {
+      "scene_id": "indego_user_15_451_2401_1_s1",
+      "video_id": "user_15_451_2401_1",
+      "category": "inspection_repair",
+      "review_decision": "excluded",
+      "reason": "high_content_duplication",
+      "duplicate_of": "indego_user_15_451_2401_1_s4",
+      "reviewer_note": "Human reviewer excluded S13 on 2026-08-01 because it duplicates the S09 computer inspection and repair workflow and comes from the same source video. It must not be counted as an independent gold example or included in formal evaluation."
+    },
+    {
+      "scene_id": "indego_user_15_451_2401_1_s3",
+      "video_id": "user_15_451_2401_1",
+      "category": "inspection_repair",
+      "review_decision": "excluded",
+      "reason": "high_content_duplication",
+      "duplicate_of": "indego_user_15_451_2401_1_s4",
+      "reviewer_note": "Human reviewer excluded S14 on 2026-08-01 because it duplicates the S09 computer inspection and repair workflow and comes from the same source video. It must not be counted as an independent gold example or included in formal evaluation."
+    }
+  ],
+  "evaluation_constraints": [
+    "Split by video_id, never by scene_id.",
+    "Excluded scenes must not enter training, prompting, or evaluation.",
+    "Quality results and outcomes remain audit metadata and unified-input fields; the current property-graph scorer evaluates Action/Object/Tool nodes and BEFORE/ACTS_ON/USES_TOOL edges.",
+    "This dataset is a development benchmark, not yet a statistically sufficient formal evaluation set."
+  ],
+  "benchmark_file": "benchmark.jsonl",
+  "source_files": {
+    "reviewed_gold": "data/industrial_gold_candidates/industrial_gold_v2_reviewed.jsonl",
+    "exclusions": "data/industrial_gold_candidates/industrial_gold_v2_exclusions.jsonl",
+    "candidate_raw_texts": "data/industrial_gold_candidates/industrial_gold_candidate_templates.jsonl"
+  }
+}

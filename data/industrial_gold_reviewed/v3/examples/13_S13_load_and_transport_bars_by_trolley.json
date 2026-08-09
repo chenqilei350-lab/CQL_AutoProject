@@ -1,0 +1,289 @@
+{
+  "scene_id": "indego_user_14_412_02024_1_s1",
+  "video_id": "user_14_412_02024_1",
+  "category": "logistics_organisation",
+  "task": "load and transport bars by trolley",
+  "source_text": "Video user_14_412_02024_1, segment s1, 00:04.182-07:36.867.\nCategory: logistics_organisation.\nSource video file: User_14_412_02024_1_480.mp4.\nTranscript excerpt: So today I want to load a trolley with some bars. So first I'm putting on my working gloves. So now I'm going to get my trolley and it's located outside. So I also need to take this belt with me. So this is my trolley and I'm taking it with me to another room. So first I need to turn on the lights. So now I'm going to get some bars. So now I'm going to bind these bars with this binding belt. So now I'm going to load my trolley with these bars. First I need to open the door. so now i'm loading these bars into the strolly so now i'm going to close it Now I'm taking it to another room.\nAnnotated keysteps:\nKeystep 1: preparation (00:04.182-02:01.676).\nKeystep 2: prepare shipment (02:01.676-04:45.463).\nKeystep 3: transport (04:45.463-07:05.807).\nKeystep 4: deliver (07:05.807-07:36.867).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nSo today I want to load a trolley with some bars. So first I'm putting on my working gloves.  So now I'm going to get my trolley and it's located outside. So I also need to take this belt with me.  So this is my trolley and I'm taking it with me to another room.  So first I need to turn on the lights. So now I'm going to get some bars.  So now I'm going to bind these bars with this binding belt.  So now I'm going to load my trolley with these bars. First I need to open the door.  so now i'm loading these bars into the strolly so now i'm going to close it  Now I'm taking it to another room.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "put on working gloves",
+      "evidence_text": "putting on my working gloves",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "retrieve trolley",
+      "evidence_text": "going to get my trolley",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "take binding belt",
+      "evidence_text": "take this belt with me",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "move empty trolley to another room",
+      "evidence_text": "taking it with me to another room",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "turn on lights",
+      "evidence_text": "turn on the lights",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "retrieve bars",
+      "evidence_text": "going to get some bars",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "bind bars",
+      "evidence_text": "bind these bars with this binding belt",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "open door",
+      "evidence_text": "open the door",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "load bars into trolley",
+      "evidence_text": "loading these bars into the strolly",
+      "sequence_index": 9
+    },
+    {
+      "id": "action_10",
+      "label": "Action",
+      "name": "close trolley",
+      "evidence_text": "going to close it",
+      "sequence_index": 10
+    },
+    {
+      "id": "action_11",
+      "label": "Action",
+      "name": "transport loaded trolley",
+      "evidence_text": "Now I'm taking it to another room",
+      "sequence_index": 11
+    },
+    {
+      "id": "action_12",
+      "label": "Action",
+      "name": "deliver shipment",
+      "evidence_text": "Keystep 4: deliver (07:05.807-07:36.867).",
+      "sequence_index": 12
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "working gloves",
+      "evidence_text": "working gloves"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "trolley",
+      "evidence_text": "trolley"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "binding belt",
+      "evidence_text": "binding belt"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "lights",
+      "evidence_text": "lights"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "bars",
+      "evidence_text": "bars"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "door",
+      "evidence_text": "door"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "shipment",
+      "evidence_text": "prepare shipment"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "binding belt",
+      "evidence_text": "binding belt"
+    },
+    {
+      "id": "tool_2",
+      "label": "Tool",
+      "name": "trolley",
+      "evidence_text": "trolley"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_9",
+      "relation": "BEFORE",
+      "target": "action_10"
+    },
+    {
+      "source": "action_10",
+      "relation": "BEFORE",
+      "target": "action_11"
+    },
+    {
+      "source": "action_11",
+      "relation": "BEFORE",
+      "target": "action_12"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_10",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_11",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_12",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_9",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_11",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "Lighting, belt retrieval, door operation, trolley closure, and transport-tool relations are restored. The final deliver keystep remains coarse because the transcript ends after transport."
+}

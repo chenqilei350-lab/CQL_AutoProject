@@ -12,12 +12,12 @@ Each example pairs a source text with the expected extraction result.
 
 from datetime import datetime
 from backend.schemas.process_knowledge.entities import (
-    Tool, Material, PPE, Worker, Step, Procedure,
+    Tool, Material, Worker, Step, Procedure,
     ProcessParameter, QualityRequirement
 )
 from backend.schemas.process_knowledge.relations import (
     StepOrder, ToolRequirement, StepExecution,
-    QualityCheck, QualificationRecord, ProcedureExecution,
+    QualityCheck, ProcedureExecution,
     StepFeedback
 )
 

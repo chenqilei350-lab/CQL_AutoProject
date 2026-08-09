@@ -1,0 +1,302 @@
+{
+  "scene_id": "indego_user_14_414_1712_woodworking_2_s1",
+  "video_id": "user_14_414_1712_woodworking_2",
+  "category": "woodworking",
+  "task": "paint and reassemble wooden box",
+  "source_text": "Video user_14_414_1712_woodworking_2, segment s1, 00:06.044-22:55.393.\nCategory: woodworking.\nSource video file: User_14_414_1712_woodworking_2_480.mp4.\nTranscript excerpt: So I want to reassemble this wooden box. And I'm gonna paint the inside of the box a bit. So I want to, I need to wear my, put on my gloves. And I also need to put on my mask. So I'll be using this rag and this band. So I want to paint the inner portion, inner part of the box. So the painting is done. So now I'm going to reassemble it. First I want to attach the cover of the box. so I'm doing the hinges first I'm trying to align the holes So the holes are aligned now. Screwing it. Thank you. It should be here. No. The holes are aligned now, I'm going to screw it. so the outer side is done Thank you. Bye. so the cover is installed successfully and now i can open it and close it easily as you can see so now i'm going to install the clasp Should be here, I guess. Mm hmm. Mm hmm. So the other part is here. Screwing. So now I'm going to install the upper parts. I'm just exploring it. Oh. Mm-hmm. That's working. So now I'm going to install this part here. So this part is also installed successfully. Now this side. So the holes are aligned. Let's clean it in. Mm-hmm. Thank you. So the assembly task is done and the box is ready to be used, as you can see. Now I can open it easily. Thank you.\nAnnotated keysteps:\nKeystep 1: preparation (00:06.044-01:24.803).\nKeystep 2: perform operation (01:24.803-03:28.531).\nKeystep 3: assemble object (03:28.531-21:22.754).\nKeystep 4: clean up (21:22.754-22:55.393).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nSo I want to reassemble this wooden box. And I'm gonna paint the inside of the box a bit. So I want to, I need to wear my, put on my gloves.  And I also need to put on my mask.  So I'll be using this rag and this band. So I want to paint the inner portion, inner part of the box.  So the painting is done. So now I'm going to reassemble it. First I want to attach the cover of the box.  so I'm doing the hinges first I'm trying to align the holes  So the holes are aligned now. Screwing it.  Thank you.  It should be here. No.  The holes are aligned now, I'm going to screw it.  so the outer side is done  Thank you.  Bye.  so the cover is installed successfully and now i can open it and close it easily as you can see so now i'm going to install the clasp  Should be here, I guess.  Mm hmm. Mm hmm.  So the other part is here. Screwing.  So now I'm going to install the upper parts.  I'm just exploring it. Oh. Mm-hmm.  That's working.  So now I'm going to install this part here.  So this part is also installed successfully. Now this side. So the holes are aligned. Let's clean it in.  Mm-hmm.  Thank you.  So the assembly task is done and the box is ready to be used, as you can see. Now I can open it easily.  Thank you.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "put on gloves",
+      "evidence_text": "put on my gloves",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "put on mask",
+      "evidence_text": "put on my mask",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "paint inside of wooden box",
+      "evidence_text": "paint the inner portion, inner part of the box",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "attach box cover",
+      "evidence_text": "attach the cover of the box",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "align hinge holes",
+      "evidence_text": "trying to align the holes",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "fasten hinge screws",
+      "evidence_text": "The holes are aligned now, I'm going to screw it",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "inspect cover movement",
+      "evidence_text": "open it and close it easily",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "install clasp",
+      "evidence_text": "going to install the clasp",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "fasten clasp",
+      "evidence_text": "The other part is here. Screwing",
+      "sequence_index": 9
+    },
+    {
+      "id": "action_10",
+      "label": "Action",
+      "name": "install unnamed upper parts",
+      "evidence_text": "install the upper parts",
+      "sequence_index": 10
+    },
+    {
+      "id": "action_11",
+      "label": "Action",
+      "name": "align remaining holes",
+      "evidence_text": "the holes are aligned",
+      "sequence_index": 11
+    },
+    {
+      "id": "action_12",
+      "label": "Action",
+      "name": "inspect completed box",
+      "evidence_text": "the box is ready to be used",
+      "sequence_index": 12
+    },
+    {
+      "id": "action_13",
+      "label": "Action",
+      "name": "clean up",
+      "evidence_text": "Keystep 4: clean up (21:22.754-22:55.393).",
+      "sequence_index": 13
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "gloves",
+      "evidence_text": "gloves"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "mask",
+      "evidence_text": "mask"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "wooden box",
+      "evidence_text": "wooden box"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "box cover",
+      "evidence_text": "cover of the box"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "hinges",
+      "evidence_text": "hinges"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "clasp",
+      "evidence_text": "clasp"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "unnamed upper parts",
+      "evidence_text": "upper parts"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "rag",
+      "evidence_text": "rag"
+    },
+    {
+      "id": "tool_2",
+      "label": "Tool",
+      "name": "unidentified band tool",
+      "evidence_text": "this band"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_9",
+      "relation": "BEFORE",
+      "target": "action_10"
+    },
+    {
+      "source": "action_10",
+      "relation": "BEFORE",
+      "target": "action_11"
+    },
+    {
+      "source": "action_11",
+      "relation": "BEFORE",
+      "target": "action_12"
+    },
+    {
+      "source": "action_12",
+      "relation": "BEFORE",
+      "target": "action_13"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_10",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_11",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_12",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_3",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    }
+  ],
+  "quality_results": [
+    {
+      "name": "box cover installed and movable",
+      "evidence_text": "the cover is installed successfully and now i can open it and close it easily",
+      "status": "passed"
+    },
+    {
+      "name": "box ready to use",
+      "evidence_text": "the box is ready to be used",
+      "status": "passed"
+    }
+  ],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "Rag and the source-named band are now tool-linked to painting. Cover-movement inspection, clasp fastening, final inspection, and the annotated cleanup step are restored. The band's standard identity remains unresolved."
+}

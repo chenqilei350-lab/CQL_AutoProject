@@ -1,0 +1,188 @@
+{
+  "scene_id": "indego_user_15_414_0702_1_s11",
+  "video_id": "user_15_414_0702_1",
+  "category": "woodworking",
+  "task": "sand and clean wooden-box parts",
+  "source_text": "Video user_15_414_0702_1, segment s11, 00:29.470-19:09.689.\nCategory: woodworking.\nSource video file: User_15_414_0702_1_480.mp4.\nTranscript excerpt: Okay, so today I want to clean this box and also oil the wood a bit to take care of it. So first what I have to do in order to do that is take the hardware off. And for that I'm first going to also put on some gloves. Okay, now I can take all the hardware off. by rotating the screwdriver clockwise. And then I'll just store everything together so I know what belongs to what. Put that over there. Whoops. Where did this... Ah, here I was looking for the screw. And now for the edge protectors at the bottom. So I'm going to very carefully flip the box over. So that I can now take these off by unscrewing the three screws here. Okay, I'm going to carefully flip this back over again. And now I'm also going to take the handles on the sides off. Might as if this will grip. I think the screwdriver might be a bit small, but it's fine. There we go. And the other side as well. Okay, now I've taken that off as well. The only thing left to take off on the outside is these clasps. So in order to do that, first I'm going to close it again so that I can unscrew these tiny screws. Okay, now the other side. Now that we've taken that off I can open it and then empty it. So we have this and for this I'm actually going to get a piece of styrofoam to place it on so that it doesn't get damaged in the process. So first of course I'm going to open Put them off to the side as well. Now I should be able to take this off. by sliding it upwards. And this I'm going to put over here. And then I can take this off. I'm going to place that here. And then take this and this off as well. Let's see if we can ...\nAnnotated actions:\nAction 1: remove part(s) (17:15.820-17:23.064).\nAction 2: inspect (17:25.431-17:33.904).\nAction 3: pick up tool (17:34.660-17:36.291).\nAction 4: sand (17:36.291-17:52.927).\nAction 5: put down tool (17:52.927-17:54.222).\nAction 6: pick up cleaner (17:54.973-17:56.097).\nAction 7: pick up tool (17:56.097-17:58.798).\nAction 8: put down cleaner (17:58.798-17:59.611).\nAnnotated keysteps:\nKeystep 1: disassemble object (00:29.470-19:09.689).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nOkay, so today I want to clean this box and also oil the wood a bit to take care of it. So first what I have to do in order to do that is take the hardware off. And for that I'm first going to also put on some gloves. Okay, now I can take all the hardware off.  by rotating the screwdriver clockwise.  And then I'll just store everything together so I know what belongs to what. Put that over there.  Whoops. Where did this...  Ah, here I was looking for the screw.  And now for the edge protectors at the bottom. So I'm going to very carefully flip the box over. So that I can now take these off by unscrewing the three screws here.  Okay, I'm going to carefully flip this back over again. And now I'm also going to take the handles on the sides off. Might as if this will grip.  I think the screwdriver might be a bit small, but it's fine. There we go.  And the other side as well.  Okay, now I've taken that off as well. The only thing left to take off on the outside is these clasps. So in order to do that, first I'm going to close it again so that I can unscrew these tiny screws.  Okay, now the other side.  Now that we've taken that off I can open it and then empty it. So we have this and for this I'm actually going to get a piece of styrofoam to place it on so that it doesn't get damaged in the process. So first of course I'm going to open  Put them off to the side as well. Now I should be able to take this off.  by sliding it upwards. And this I'm going to put over here.  And then I can take this off. I'm going to place that here. And then take this and this off as well. Let's see if we can take those off. Oh, no. Okay. So now I'm noticing that these edges are a tiny bit sharp, so I'm going to use some sandpaper to just sand them down a little bit.  that's a lot better and now I'm going to use this cleaning agent to just clean the whole box I'm gonna use this rag for that as well so I'm just gonna spray some on here and then use that to clean the inside of this box so the lid  of the insides. I'm going to close this and also clean the outside. Then I'm going to flip it over and clean the underside as well.  Okay, there we go. And now I'm going to open this back up and I'm going to oil the wood. So I'm just going to take one of these papers, take the lid off here, and then just put a tiny bit of oil.  on here like so. And then I can use this to oil the wood. I'm actually going to put a little bit more.  Make sure that everything is coated. The inside as well. I'm going to use a new piece for the sides.  Now that everything is shiny inside, I can now move on to the outside. I'm just going to close this again. I'm going to use a new piece for the outside. There we go.  And just rub that into the wood.  Okay now for the last two sides I am going to again use a new piece.  Alright, now everything's covered so I'm going to open this back up so that it can dry out and probably absorb the oil. I'm going to put this over here and then we'll continue after 20 to 30 minutes. So I'm going to put the lid back on here and that's that.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "remove parts",
+      "evidence_text": "Action 1: remove part(s)",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "inspect sharp edges",
+      "evidence_text": "these edges are a tiny bit sharp",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "pick up sandpaper",
+      "evidence_text": "use some sandpaper",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "sand sharp edges",
+      "evidence_text": "sand them down a little bit",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "put down sandpaper",
+      "evidence_text": "Action 5: put down tool",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "pick up cleaning agent",
+      "evidence_text": "use this cleaning agent",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "pick up rag",
+      "evidence_text": "use this rag for that as well",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "put down cleaning agent",
+      "evidence_text": "Action 8: put down cleaner",
+      "sequence_index": 8
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "box parts",
+      "evidence_text": "part(s)"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "sharp edges",
+      "evidence_text": "edges are a tiny bit sharp"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "sandpaper",
+      "evidence_text": "sandpaper"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "cleaning agent",
+      "evidence_text": "cleaning agent"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "rag",
+      "evidence_text": "rag"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "sandpaper",
+      "evidence_text": "sandpaper"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The full transcript resolves the sanding tool as sandpaper and the inspection target as sharp edges. Cleaner and rag pickups are retained as object-manipulation actions, but no cleaning tool edge is asserted because the annotated segment ends before cleaning begins."
+}

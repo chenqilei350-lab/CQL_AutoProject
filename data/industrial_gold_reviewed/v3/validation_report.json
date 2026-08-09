@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "record_count": 20,
+  "unique_scene_count": 20,
+  "reference_overlap_count": 0,
+  "forbidden_table_disassembly_count": 0,
+  "forbidden_computer_assembly_count": 0,
+  "category_counts": {
+    "assembly": 4,
+    "disassembly": 4,
+    "inspection_repair": 4,
+    "logistics_organisation": 3,
+    "mistake_detection": 2,
+    "woodworking": 3
+  },
+  "entity_counts": {
+    "Action": 224,
+    "Object": 144,
+    "Tool": 34
+  },
+  "relation_counts": {
+    "BEFORE": 196,
+    "ACTS_ON": 235,
+    "USES_TOOL": 72
+  },
+  "full_transcript_scene_count": 18,
+  "unclear_point_count": 35,
+  "errors": []
+}

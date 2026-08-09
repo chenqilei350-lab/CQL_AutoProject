@@ -1,0 +1,421 @@
+{
+  "scene_id": "indego_user_2_407_2910_1_s1",
+  "video_id": "user_2_407_2910_1",
+  "category": "inspection_repair",
+  "task": "inspect and repair demonstrator subassembly",
+  "source_text": "Video user_2_407_2910_1, segment s1, 00:13.204-15:48.014.\nCategory: inspection_repair.\nSource video file: User_2_407_2910_1_480.mp4.\nTranscript excerpt: Okay, first I'm gonna put on the working gloves to start the repair of this demonstrator sub-assembly. First thing I'm going to do is detach this plate because this will belong on this rectangular frame. I will need an Allen key for that. and I'm gonna put the whole thing up again and rotate it like this so basically the rectangular frame is correctly positioned already in the middle bar here too now what I can do is I can reattach the plate here. I will need four screws for that. I have two here. And probably this will have to go here. So I have to attach it like this. so here for the hole to screw in the bolt same goes for this one apparently there is no I can remove this plate here and get one of this out. Reattach this and put this back in here. So now I have four pieces to This was the wrong approach. I could have just flipped. the plate. I thought it was symmetrical, but it's not. So I don't need a hole in this bar. I can put both of them into the side bars. Okay, now I can tighten the plane. okay now all four bolts are tight and next step would be detaching this short bar because this is wrong um i will leave this here for now so yeah those two bars they belong with the the side here and that's why i'm gonna detach them also watch out here hold it so it doesn't fall okay leave it here Okay, so I detached this. This will go back here. What I can see is there was no knob like this. The knob belongs here. So I'm going to detach this now. Okay, I'll need a bigger Allen key for that. And... Yep. for that I'm going to need those pieces so here's already one I can use and ...\nAnnotated keysteps:\nKeystep 1: inspect (00:13.204-00:47.131).\nKeystep 2: repair (00:47.131-15:48.014).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nOkay, first I'm gonna put on the working gloves to start the repair of this demonstrator sub-assembly.  First thing I'm going to do is detach this plate because this will belong on this rectangular frame. I will need an Allen key for that.  and I'm gonna put the whole thing up again and rotate it like this so basically the rectangular frame is correctly positioned already in the middle bar here too now what I can do is I can reattach the  plate here. I will need four screws for that. I have two here. And probably this will have to go here. So I have to attach it like this.  so here for the hole to screw in the bolt same goes for this one apparently there is no  I can remove this plate here and get one of this out. Reattach this and put this back in here. So now I have four pieces to  This was the wrong approach. I could have just flipped.  the plate. I thought it was symmetrical, but it's not. So I don't need a hole in this bar. I can put both of them into the side bars.  Okay, now I can tighten the plane.  okay now all four bolts are tight and next step would be detaching this short bar because this is wrong  um i will leave this here for now so yeah those two bars they belong with the the side here and that's why i'm gonna detach them also  watch out here hold it so it doesn't fall okay leave it here  Okay, so I detached this. This will go back here. What I can see is there was no knob like this. The knob belongs here. So I'm going to detach this now. Okay, I'll need a bigger Allen key for that. And... Yep.  for that I'm going to need those pieces so here's already one I can use and here's also another one I'm just gonna put it in here  And now we can attach it with two bolts. I'll try a shorter one.  I'll try to align it with this line in the middle. Because I think, oh no, okay. In the picture it looks like it's like right on the edge here. And that's why I didn't screw them in all the way. To readjust the whole thing. Okay, so now it's tight.  And it's positioned the right way. I'm going to do the same thing for the bar on top here.  I'm going to remove the bolts and then I'm going to need two more holes for the bolts I'm going to take them from here and slide them in this trigger  Take two bolts again. Put one here. Tighten it slightly. The other one goes in here. You can also tighten it slightly.  Okay, I position and line it with the edge. And now I can tighten both of them. This, okay. Yeah. So, this needs a cover. Put the cover on.  There is a cover here. I'm just going to use the screwdriver to handle this back on. And the last step is only with this bar.  Attaching this here. And also the knob. Alright. So I think I'm gonna need this. And I will also need another hole.  where do i get one okay first i'm gonna attach the knob  Okay, it looks like it was aligned with the edge too. That's what I'm going to do. Tighten it a bit more. And then just need to attach it onto this bar. But apparently that is",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "put on working gloves",
+      "evidence_text": "put on the working gloves",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "detach plate",
+      "evidence_text": "detach this plate",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "reposition rectangular frame",
+      "evidence_text": "rectangular frame is correctly positioned",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "reattach plate with four screws",
+      "evidence_text": "reattach the plate here. I will need four screws",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "correct plate orientation",
+      "evidence_text": "This was the wrong approach",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "tighten four plate bolts",
+      "evidence_text": "all four bolts are tight",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "detach incorrectly positioned short bars",
+      "evidence_text": "detaching this short bar because this is wrong",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "reposition knob",
+      "evidence_text": "The knob belongs here",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "attach side pieces with two bolts",
+      "evidence_text": "attach it with two bolts",
+      "sequence_index": 9
+    },
+    {
+      "id": "action_10",
+      "label": "Action",
+      "name": "align side piece",
+      "evidence_text": "align it with this line in the middle",
+      "sequence_index": 10
+    },
+    {
+      "id": "action_11",
+      "label": "Action",
+      "name": "reposition top bar",
+      "evidence_text": "do the same thing for the bar on top",
+      "sequence_index": 11
+    },
+    {
+      "id": "action_12",
+      "label": "Action",
+      "name": "tighten top-bar bolts",
+      "evidence_text": "now I can tighten both of them",
+      "sequence_index": 12
+    },
+    {
+      "id": "action_13",
+      "label": "Action",
+      "name": "install cover",
+      "evidence_text": "Put the cover on",
+      "sequence_index": 13
+    },
+    {
+      "id": "action_14",
+      "label": "Action",
+      "name": "fasten cover",
+      "evidence_text": "use the screwdriver to handle this back on",
+      "sequence_index": 14
+    },
+    {
+      "id": "action_15",
+      "label": "Action",
+      "name": "attach final bar and knob",
+      "evidence_text": "Attaching this here. And also the knob",
+      "sequence_index": 15
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "working gloves",
+      "evidence_text": "working gloves"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "plate",
+      "evidence_text": "plate"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "rectangular frame",
+      "evidence_text": "rectangular frame"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "four plate screws",
+      "evidence_text": "four screws"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "four plate bolts",
+      "evidence_text": "four bolts"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "short bars",
+      "evidence_text": "short bar"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "knob",
+      "evidence_text": "knob"
+    },
+    {
+      "id": "object_8",
+      "label": "Object",
+      "name": "side pieces",
+      "evidence_text": "those pieces"
+    },
+    {
+      "id": "object_9",
+      "label": "Object",
+      "name": "two side bolts",
+      "evidence_text": "two bolts"
+    },
+    {
+      "id": "object_10",
+      "label": "Object",
+      "name": "top bar",
+      "evidence_text": "bar on top"
+    },
+    {
+      "id": "object_11",
+      "label": "Object",
+      "name": "cover",
+      "evidence_text": "cover"
+    },
+    {
+      "id": "object_12",
+      "label": "Object",
+      "name": "final bar",
+      "evidence_text": "last step is only with this bar"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "Allen key",
+      "evidence_text": "Allen key"
+    },
+    {
+      "id": "tool_2",
+      "label": "Tool",
+      "name": "bigger Allen key",
+      "evidence_text": "bigger Allen key"
+    },
+    {
+      "id": "tool_3",
+      "label": "Tool",
+      "name": "screwdriver",
+      "evidence_text": "screwdriver"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_9",
+      "relation": "BEFORE",
+      "target": "action_10"
+    },
+    {
+      "source": "action_10",
+      "relation": "BEFORE",
+      "target": "action_11"
+    },
+    {
+      "source": "action_11",
+      "relation": "BEFORE",
+      "target": "action_12"
+    },
+    {
+      "source": "action_12",
+      "relation": "BEFORE",
+      "target": "action_13"
+    },
+    {
+      "source": "action_13",
+      "relation": "BEFORE",
+      "target": "action_14"
+    },
+    {
+      "source": "action_14",
+      "relation": "BEFORE",
+      "target": "action_15"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_9"
+    },
+    {
+      "source": "action_10",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_11",
+      "relation": "ACTS_ON",
+      "target": "object_10"
+    },
+    {
+      "source": "action_12",
+      "relation": "ACTS_ON",
+      "target": "object_10"
+    },
+    {
+      "source": "action_13",
+      "relation": "ACTS_ON",
+      "target": "object_11"
+    },
+    {
+      "source": "action_14",
+      "relation": "ACTS_ON",
+      "target": "object_11"
+    },
+    {
+      "source": "action_15",
+      "relation": "ACTS_ON",
+      "target": "object_12"
+    },
+    {
+      "source": "action_15",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_2",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_4",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_6",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_7",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_8",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_9",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_11",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_12",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_14",
+      "relation": "USES_TOOL",
+      "target": "tool_3"
+    },
+    {
+      "source": "action_15",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The repair is expanded into 15 evidenced actions, including plate-orientation correction, bar/knob repositioning, cover installation, and three tool variants. The transcript truncates during the final attachment, so no completed outcome is asserted."
+}

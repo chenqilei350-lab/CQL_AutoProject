@@ -1,0 +1,203 @@
+{
+  "scene_id": "indego_warning_A_Task_19_s1",
+  "video_id": "warning_A_Task_19",
+  "category": "mistake_detection",
+  "task": "packaging mistake-detection procedure template",
+  "source_text": "Video warning_A_Task_19, segment s1, time unknown.\nCategory: mistake_detection.\nAnnotated keysteps:\nKeystep 1: put on gloves.\nKeystep 2: place package.\nKeystep 3: tape package.\nKeystep 4: wrap package.\nKeystep 5: belt package.\nKeystep 6: label.\nWarnings:\nWarning 1: step 'place package' has issue 'not centered'.\nWarning 2: step 'label' has issue 'label not on package/label not secure'.\nWarning 3: step 'wrap package' has issue 'didn't cut wrapping'.\nWarning 4: step 'belt package' has issue 'didn't belt'.\nWarning 5: step 'label' has issue 'label facedown/label not secure'.\nWarning 6: step 'tape package' has issue 'taped only halfway'.\nWarning 7: step 'belt package' has issue 'only one belt'.\nWarning 8: step 'place package' has issue 'didn't place'.\nWarning 9: step 'tape package' has issue 'didn't tape'.\nWarning 10: step 'wrap package' has issue 'wrapped only halfway'.\nWarning 11: step 'wrap package' has issue 'didn't wrap'.\nWarning 12: step 'label' has issue 'didn't label'.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "put on gloves",
+      "evidence_text": "Keystep 1: put on gloves.",
+      "sequence_index": 1,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "place package",
+      "evidence_text": "Keystep 2: place package.",
+      "sequence_index": 2,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "tape package",
+      "evidence_text": "Keystep 3: tape package.",
+      "sequence_index": 3,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "wrap package",
+      "evidence_text": "Keystep 4: wrap package.",
+      "sequence_index": 4,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "belt package",
+      "evidence_text": "Keystep 5: belt package.",
+      "sequence_index": 5,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "label",
+      "evidence_text": "Keystep 6: label.",
+      "sequence_index": 6,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "gloves",
+      "evidence_text": "gloves"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "package",
+      "evidence_text": "package"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    }
+  ],
+  "quality_results": [
+    {
+      "name": "not centered",
+      "evidence_text": "Warning 1: step 'place package' has issue 'not centered'.",
+      "status": "warning",
+      "step": "place package",
+      "run_id": "19_u01_u17_r08_m_04"
+    },
+    {
+      "name": "label not on package/label not secure",
+      "evidence_text": "Warning 2: step 'label' has issue 'label not on package/label not secure'.",
+      "status": "warning",
+      "step": "label",
+      "run_id": "19_u01_u17_r08_m_04"
+    },
+    {
+      "name": "didn't cut wrapping",
+      "evidence_text": "Warning 3: step 'wrap package' has issue 'didn't cut wrapping'.",
+      "status": "warning",
+      "step": "wrap package",
+      "run_id": "19_u01_u17_r08_m_06"
+    },
+    {
+      "name": "didn't belt",
+      "evidence_text": "Warning 4: step 'belt package' has issue 'didn't belt'.",
+      "status": "warning",
+      "step": "belt package",
+      "run_id": "19_u01_u17_r08_m_07"
+    },
+    {
+      "name": "label facedown/label not secure",
+      "evidence_text": "Warning 5: step 'label' has issue 'label facedown/label not secure'.",
+      "status": "warning",
+      "step": "label",
+      "run_id": "19_u01_u17_r08_m_07"
+    },
+    {
+      "name": "taped only halfway",
+      "evidence_text": "Warning 6: step 'tape package' has issue 'taped only halfway'.",
+      "status": "warning",
+      "step": "tape package",
+      "run_id": "19_u02_u14_r08_m_02"
+    },
+    {
+      "name": "only one belt",
+      "evidence_text": "Warning 7: step 'belt package' has issue 'only one belt'.",
+      "status": "warning",
+      "step": "belt package",
+      "run_id": "19_u02_u14_r08_m_02"
+    },
+    {
+      "name": "didn't place",
+      "evidence_text": "Warning 8: step 'place package' has issue 'didn't place'.",
+      "status": "warning",
+      "step": "place package",
+      "run_id": "19_u02_u14_r08_m_03"
+    },
+    {
+      "name": "didn't tape",
+      "evidence_text": "Warning 9: step 'tape package' has issue 'didn't tape'.",
+      "status": "warning",
+      "step": "tape package",
+      "run_id": "19_u02_u14_r08_m_03"
+    },
+    {
+      "name": "wrapped only halfway",
+      "evidence_text": "Warning 10: step 'wrap package' has issue 'wrapped only halfway'.",
+      "status": "warning",
+      "step": "wrap package",
+      "run_id": "19_u02_u14_r08_m_03"
+    },
+    {
+      "name": "didn't wrap",
+      "evidence_text": "Warning 11: step 'wrap package' has issue 'didn't wrap'.",
+      "status": "warning",
+      "step": "wrap package",
+      "run_id": "19_u02_u14_r08_m_04"
+    },
+    {
+      "name": "didn't label",
+      "evidence_text": "Warning 12: step 'label' has issue 'didn't label'.",
+      "status": "warning",
+      "step": "label",
+      "run_id": "19_u02_u14_r08_m_05"
+    }
+  ],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "This is a multi-run mistake template. Keysteps are prescribed, warnings retain run_id, and no cross-run BEFORE graph is created. Center reference, correct belt count, and material-instance roles are not inferred."
+}

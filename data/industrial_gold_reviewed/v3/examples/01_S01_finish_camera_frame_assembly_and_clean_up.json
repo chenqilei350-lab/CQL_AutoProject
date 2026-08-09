@@ -1,0 +1,46 @@
+{
+  "scene_id": "indego_7020e12d-d5a2-4f01-beab-94f38d887eca_s2",
+  "video_id": "7020e12d-d5a2-4f01-beab-94f38d887eca",
+  "category": "assembly",
+  "task": "finish camera-frame assembly and clean up",
+  "source_text": "Video 7020e12d-d5a2-4f01-beab-94f38d887eca, segment s2, 11:28.089-11:47.899.\nCategory: assembly.\nSource video file: 7020e12d-d5a2-4f01-beab-94f38d887eca_480.mp4.\nTranscript excerpt: so today we're going to assembly this frame and attach this camera to the frame so first step we will attach this short road to this long road and we need to tie this screw to fix this short part to the long part so we'll tie the screws or the other part so we can it could be more easier to tie the screws so that's the base we need and next step we need to attach this long rod to the base and with this connector we will connect this part here with another with another connector here like this so first we need to attach this round rod to the base so we need so we need a connector here and here first we have to align to the right position and try first to tie the bit So it's in the right position and we will tie the screws. And next we are going to we're going to connect this part this short road to the long road so we need another connector here at this angle so we flip it a bit and line first it's not lined it's lined and we tie the screws so the next step we are going to attach the camera to the frame so we need this part and attach the camera to this part so we first will attach this iron bar to the camera. yep and we'll tie it here so next step we will tie these rules so we can attach the camera to the frame and we'll flip it it's not steady we need to add this road here so that's a wrong move so we need to remove the connector So, first in line. And this one. so finally we attach the camera so it's attached and we need to check again for the auto scroll so it will not moving or Not fixing correctly. Yep. So it's steady and we'll take all the tools together apart aside. ...\nAnnotated keysteps:\nKeystep 1: connect base (11:28.089-11:34.433).\nKeystep 2: clean up (11:40.336-11:47.899).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nso today we're going to assembly this frame and attach this camera to the frame so first step we will attach this short road to this long road and we need to  tie this screw to fix this short part to the long part so we'll tie the screws  or the other part so we can it could be more easier to tie the screws  so that's the base we need and next step we need to attach this long rod to the base and with this connector we will connect this part here  with another with another connector here like this so first we need to attach this round rod to the base so we need  so we need a connector here and here first we have to align to the right position and try first to tie the bit  So it's in the right position and we will tie the screws. And next we are going to  we're going to connect this part this short road to the long road so we need another connector here at this angle so we flip it a bit and line first  it's not lined it's lined and we tie the screws  so the next step we are going to attach the camera to the frame so we need this part and attach the camera to this part so we first will attach this iron bar  to the camera.  yep and we'll tie it here so next step we will tie these rules so we can attach the camera to the frame and we'll flip it  it's not steady we need to add this road here so that's a wrong move so we need to remove the connector  So, first in line. And this one.  so finally we attach the camera so it's attached and we need to check again for the auto scroll so it will not moving or  Not fixing correctly.  Yep. So it's steady and we'll take all the tools together apart aside. And so we finished assembling the frame and attach the camera to the frame.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "connect base",
+      "evidence_text": "Keystep 1: connect base (11:28.089-11:34.433).",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "clean up",
+      "evidence_text": "Keystep 2: clean up (11:40.336-11:47.899).",
+      "sequence_index": 2
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "base",
+      "evidence_text": "Keystep 1: connect base"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The full video transcript was checked against the s2 boundary. Earlier camera installation, correction, and stability inspection are outside s2 and are deliberately excluded. Only connect base and cleanup belong to this segment; cleanup target/tool are not named."
+}

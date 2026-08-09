@@ -37,6 +37,13 @@ training/models/*
 outputs/
 artifacts/
 models/
+results/
+handoff_packages/
+EASG/
+raw/
+kg_ready_data/
+gold_case_admission_29366372/
+experiments/**/.work/
 !**/.gitkeep
 
 # IDE

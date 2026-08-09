@@ -1,0 +1,239 @@
+{
+  "scene_id": "indego_user_14_412_02024_2_s1",
+  "video_id": "user_14_412_02024_2",
+  "category": "logistics_organisation",
+  "task": "unload trolley and relocate bars",
+  "source_text": "Video user_14_412_02024_2, segment s1, 00:02.279-06:00.843.\nCategory: logistics_organisation.\nSource video file: User_14_412_02024_2_480.mp4.\nTranscript excerpt: So today I'm going to unload the trolley and this is my trolley. First I need to turn on the lights. And now I'm going to put on my working gloves. So I'm going to unload this trolley and it has a bunch of bars in it. So first I need to open the door. Now I'm going to take these bars out. Now I'm going to put them on the floor in order to remove this belt. Now I'm going to unbind it. I'm going to put this back here. So now I need to bring it back. So I'm going to put this trolley here. So I also need to put these bars back to another room. First I need to open the door. And I'm going to put them here. Now I'm going to remove my working gloves.\nAnnotated keysteps:\nKeystep 1: preparation (00:02.279-00:53.882).\nKeystep 2: unpack (00:55.136-02:24.920).\nKeystep 3: transport (04:48.288-05:29.612).\nKeystep 4: unpack (05:29.612-06:00.843).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nSo today I'm going to unload the trolley and this is my trolley. First I need to turn on the lights. And now I'm going to put on my working gloves.  So I'm going to unload this trolley and it has a bunch of bars in it. So first I need to open the door.  Now I'm going to take these bars out. Now I'm going to put them on the floor in order to remove this belt. Now I'm going to unbind it.  I'm going to put this back here.  So now I need to bring it back.  So I'm going to put this trolley here. So I also need to put these bars back to another room.  First I need to open the door. And I'm going to put them here.  Now I'm going to remove my working gloves.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "turn on lights",
+      "evidence_text": "turn on the lights",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "put on working gloves",
+      "evidence_text": "put on my working gloves",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "open door for unloading",
+      "evidence_text": "open the door",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "take bars out of trolley",
+      "evidence_text": "take these bars out",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "place bars on floor",
+      "evidence_text": "put them on the floor",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "unbind belt",
+      "evidence_text": "going to unbind it",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "return trolley",
+      "evidence_text": "put this trolley here",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "open destination door",
+      "evidence_text": "First I need to open the door",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "transport bars to another room",
+      "evidence_text": "put these bars back to another room",
+      "sequence_index": 9
+    },
+    {
+      "id": "action_10",
+      "label": "Action",
+      "name": "place bars at destination",
+      "evidence_text": "going to put them here",
+      "sequence_index": 10
+    },
+    {
+      "id": "action_11",
+      "label": "Action",
+      "name": "remove working gloves",
+      "evidence_text": "remove my working gloves",
+      "sequence_index": 11
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "lights",
+      "evidence_text": "lights"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "working gloves",
+      "evidence_text": "working gloves"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "door",
+      "evidence_text": "door"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "bars",
+      "evidence_text": "bars"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "trolley",
+      "evidence_text": "trolley"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "binding belt",
+      "evidence_text": "belt"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_9",
+      "relation": "BEFORE",
+      "target": "action_10"
+    },
+    {
+      "source": "action_10",
+      "relation": "BEFORE",
+      "target": "action_11"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_10",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_11",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "Lighting, both door operations, glove removal, and detailed unloading/placement actions are restored. The trolley is an acted-on transport container in this segment, not a USES_TOOL target. The ambiguous 'put this back here' remains excluded."
+}

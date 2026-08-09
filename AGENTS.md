@@ -293,3 +293,33 @@ python -m pytest tests/test_egocentric_workflow.py -v
   - 本地结构化抽取接口是否正确。
   - Ollama 服务是否可用。
   - 模型输出质量是否符合 schema 和评估标准。
+
+## 当前真实实验状态
+
+`2026-05-26` 已使用本地 `llama3.1:8b` 对五个 scene-description 场景执行
+第一次 `Raw` 与 `Unified` 单次对比试运行。结果文件位于：
+
+```text
+results/local_experiment_2026-05-26_r1_complete/
+docs/results/local_experiment_2026-05-26_r1.md
+```
+
+初步观察：
+
+- `Raw` 共 5 次运行，其中 3 次通过 schema；`Unified` 共 5 次运行，5 次通过 schema。
+- `Raw` 的 Node F1 为 `0.4638`，Relation F1 为 `0.1818`。
+- `Unified` 的 Node F1 为 `0.5000`，Relation F1 为 `0.0000`。
+- 当前只能说明统一格式文本提高了本轮结构可通过率，不能说明其提高了关系质量。
+- 因每种场景/输入只运行一次，当前稳定性重合指标不具有结论意义。
+
+真实实验前新增的工程能力：
+
+- `backend/pipeline/local_experiment.py`：可运行本地实验、逐条保存 checkpoint、
+  记录失败并导出结果报告。
+- `backend/schemas/expanded_egocentric_examples.py` 与
+  `backend/datasets/expanded_benchmark.py`：五场景人工初步 benchmark。
+- `backend/evaluation/reporting.py` 与 `backend/evaluation/stability.py`：
+  汇总对比表、错误分析与稳定性评价。
+
+下一项优先任务应是优化关系抽取方法，例如将实体与关系分阶段抽取并加入
+few-shot relation examples；之后再运行 `repetitions=5` 的稳定性实验。

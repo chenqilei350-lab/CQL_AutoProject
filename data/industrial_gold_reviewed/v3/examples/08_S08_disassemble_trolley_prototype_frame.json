@@ -1,0 +1,166 @@
+{
+  "scene_id": "indego_user_14_user_16_407_1712_1_s1",
+  "video_id": "user_14_user_16_407_1712_1",
+  "category": "disassembly",
+  "task": "disassemble trolley prototype frame",
+  "source_text": "Video user_14_user_16_407_1712_1, segment s1, 00:14.380-09:09.249.\nCategory: disassembly.\nSource video file: User_14_User_16_407_1712_1_480.mp4.\nTranscript excerpt: So first we need to find a tool. Maybe we'll be using this. We need this or we don't? I guess. So first we need to remove this vertical bar. This one. So now we need to remove these plates. Can I have that one? So you're blocking the camera, maybe you can... I guess, maybe later. Can you also remove this one? Can I have those screws? Yeah, this horizontal bar. So it's this one. Yeah. Can you hold it? Okay, it's in your ring. Yeah. And do I need to remove this? No. Yeah, but now we need to clean these blades. Great. It's okay. Yeah, that's it. Can I have those screws? Yeah. Can you put that on the desk?\nAnnotated keysteps:\nKeystep 1: put on gloves (00:14.380-00:32.386).\nKeystep 2: preparation (00:32.386-00:44.161).\nKeystep 3: remove vertical bar (00:44.161-01:27.281).\nKeystep 4: remove plates (01:27.281-04:08.099).\nKeystep 5: remove horizontal bar (04:08.099-05:12.731).\nKeystep 6: disassemble frame (05:12.731-06:50.942).\nKeystep 7: clean up (06:50.942-09:09.249).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nSo first we need to find a tool. Maybe we'll be using this. We need this or we don't? I guess.  So first we need to remove this vertical bar. This one.  So now we need to remove these plates. Can I have that one? So you're blocking the camera, maybe you can...  I guess, maybe later.  Can you also remove this one?  Can I have those screws? Yeah, this horizontal bar. So it's this one.  Yeah.  Can you hold it? Okay, it's in your ring. Yeah. And do I need to remove this? No.  Yeah, but now we need to clean these blades. Great.  It's okay.  Yeah, that's it. Can I have those screws? Yeah. Can you put that on the desk?",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "put on gloves",
+      "evidence_text": "Keystep 1: put on gloves",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "remove vertical bar",
+      "evidence_text": "remove this vertical bar",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "remove plates",
+      "evidence_text": "remove these plates",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "remove horizontal bar",
+      "evidence_text": "this horizontal bar",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "disassemble remaining frame",
+      "evidence_text": "Keystep 6: disassemble frame",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "clean plates",
+      "evidence_text": "clean these blades",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "gather screws",
+      "evidence_text": "Can I have those screws",
+      "sequence_index": 7
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "gloves",
+      "evidence_text": "gloves"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "vertical bar",
+      "evidence_text": "vertical bar"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "plates",
+      "evidence_text": "plates"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "horizontal bar",
+      "evidence_text": "horizontal bar"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "frame",
+      "evidence_text": "frame"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "screws",
+      "evidence_text": "screws"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The vague cleanup keystep is replaced by the explicit plate-cleaning action, followed by screw collection. The unnamed tentative tool is excluded because neither identity nor actual use is established."
+}

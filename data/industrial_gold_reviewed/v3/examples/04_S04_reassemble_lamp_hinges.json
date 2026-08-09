@@ -1,0 +1,228 @@
+{
+  "scene_id": "indego_user_14_user_15_2410_1_s1",
+  "video_id": "user_14_user_15_2410_1",
+  "category": "assembly",
+  "task": "reassemble lamp hinges",
+  "source_text": "Video user_14_user_15_2410_1, segment s1, 00:15.949-12:38.935.\nCategory: assembly.\nSource video file: User_14_User_15_2410_1_480.mp4.\nTranscript excerpt: Is it on? Yes. Okay. So we want to reassemble this lamp. And in order to do that, we want to give her the instructions to do so. So first, what you're going to do is you're going to take this mount and attach this hole to this one right here. It's a bit hard. It's a bit tricky because this one's a bit thicker. Yeah. And then you can take the shorter, the shorter Pull it in place. And then to really tighten it, you can just hold it back. put the screw in. And now you can just put this bolt into the white thing, into the hand twister, and then use that to tighten it. I know the other way around. And then put one screw with a bolt with none at the end screw. I thought the bigger one, yeah. Okay. Should I do this one first? like this. So first you're going to put this thing, it goes around inside here. And then through that you can, well, first you need, wait, let me see. Now you can turn it so that, so that it covers it like this. And then what we need is there's these square holes. So you put the plate with the square hole in here. And then you can stick the screw. And now on the other side, there's this plate. You can put that on there. And then again, put the plate with the square hole. And then just use that to tighten it. Yeah, and I'll just attach It has like a screw. I can't hold it It's because of my nails This also just needs to be a little bit tighter so that the lamp doesn't move around and then you can put the springs on here. That's the first one you need to install. Okay, so we now reassemble the lamp and it works. it should so we're done.\nAnnotated keysteps:\nKeystep 1: assemble lower hinge (00:15.949-02:48.612).\nKeystep 2: assemble middle hinge (02:48.612-06:38.758).\nKeystep 3: assemble lower hinge (06:38.758-06:54.667).\nKeystep 4: assemble upper hinge (06:54.667-11:16.163).\nKeystep 5: assemble middle hinge (11:16.163-11:32.648).\nKeystep 6: assemble upper hinge (11:32.648-11:39.963).\nKeystep 7: inspect (11:39.963-12:38.935).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nIs it on? Yes. Okay. So we want to reassemble this lamp. And in order to do that, we want to give her the instructions to do so. So first, what you're going to do is you're going to take this mount and attach this hole to this one right here. It's a bit hard. It's a bit tricky because this one's a bit thicker. Yeah. And then you can take the shorter, the shorter  Pull it in place. And then to really tighten it, you can just hold it back.  put the screw in. And now you can just put this bolt into the white thing, into the hand twister, and then use that to tighten it. I know the other way around.  And then put one screw with a bolt with none at the end screw.  I thought the bigger one, yeah. Okay.  Should I do this one first?  like this. So first you're going to put this thing, it goes around inside here. And then through that you can, well, first you need, wait, let me see. Now you can turn it so that, so that it covers it like this. And then what we need is there's these square holes. So you put the plate with the square hole in here.  And then you can stick the screw. And now on the other side, there's this plate. You can put that on there. And then again, put the plate with the square hole. And then just use that to tighten it.  Yeah, and I'll just attach  It has like a screw.  I can't hold it It's because of my nails  This also just needs to be a little bit tighter so that the lamp doesn't move around and then you can put the springs on here. That's the first one you need to install.  Okay, so we now reassemble the lamp and it works.  it should so we're done.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "attach lamp mount",
+      "evidence_text": "take this mount and attach this hole to this one right here",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "insert shorter part",
+      "evidence_text": "take the shorter, the shorter",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "insert mounting screw",
+      "evidence_text": "put the screw in",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "tighten bolt with hand twister",
+      "evidence_text": "put this bolt into the white thing, into the hand twister, and then use that to tighten it",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "install first square-hole plate",
+      "evidence_text": "put the plate with the square hole in here",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "insert connecting screw",
+      "evidence_text": "stick the screw",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "install opposite plates",
+      "evidence_text": "on the other side, there's this plate. You can put that on there",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "tighten lamp joint",
+      "evidence_text": "use that to tighten it",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "install springs",
+      "evidence_text": "put the springs on here",
+      "sequence_index": 9
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "lamp mount",
+      "evidence_text": "this mount"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "shorter part",
+      "evidence_text": "the shorter"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "mounting screw",
+      "evidence_text": "screw"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "bolt",
+      "evidence_text": "bolt"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "square-hole plate",
+      "evidence_text": "plate with the square hole"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "opposite plate",
+      "evidence_text": "on the other side, there's this plate"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "lamp joint",
+      "evidence_text": "lamp doesn't move around"
+    },
+    {
+      "id": "object_8",
+      "label": "Object",
+      "name": "springs",
+      "evidence_text": "springs"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "hand twister",
+      "evidence_text": "hand twister"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_4",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "Transcript-level actions replace opaque repeated hinge keysteps. The hand twister is explicitly retained as a tool using the source name. The hedged final statement is not accepted as a formal test result."
+}

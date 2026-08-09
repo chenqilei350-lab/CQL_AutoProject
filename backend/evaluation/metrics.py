@@ -4,7 +4,7 @@ Metrics computation — Precision, Recall, F1 at various levels.
 These are the core numbers for the paper.
 """
 
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel
 
 

@@ -1,0 +1,245 @@
+{
+  "scene_id": "indego_232cf338-98a7-4cdc-8683-417c0e2adf7a_s1",
+  "video_id": "232cf338-98a7-4cdc-8683-417c0e2adf7a",
+  "category": "disassembly",
+  "task": "disassemble camera frame",
+  "source_text": "Video 232cf338-98a7-4cdc-8683-417c0e2adf7a, segment s1, 00:07.323-03:38.637.\nCategory: disassembly.\nSource video file: 232cf338-98a7-4cdc-8683-417c0e2adf7a_480.mp4.\nTranscript excerpt: So today we are going to disassemble this frame and remove this camera from the frame. So first we have to remove the camera. So we will remove this screw first. And these two small screws. We put them aside and then we have to assemble this frame. So first we have to remove this connector and remove this long road from the base. So that's it. We removed the long rope from the base and next step we will remove this short rope from this long rope. So we have to remove this connector. so the last part we have to remove this short roll so we can disassemble the base there is only one screw here so we remove the screws loose it so we can remove it and finally we can remove this gap no it's a little tight so i think we finished disassemble this frame and remove the camera so yes\nAnnotated keysteps:\nKeystep 1: remove camera and plate (00:07.323-01:25.025).\nKeystep 2: remove vertical bar (01:25.045-02:09.760).\nKeystep 3: remove upper bar (02:09.760-02:56.281).\nKeystep 4: separate base (02:56.281-03:38.637).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nSo today we are going to disassemble this frame and remove this camera from the frame. So first we have to remove the camera. So we will remove this screw first.  And these two small screws.  We put them aside and then we have to assemble this frame. So first we have to remove this connector and remove this long road from the base.  So that's it. We removed the long rope from the base and next step we will remove this short rope from this long rope. So we have to remove this connector.  so the last part we have to remove this short roll so we can disassemble the base there is only one screw here so we remove the screws loose it so we can remove it  and finally we can remove this gap no it's a little tight so i think we finished disassemble this frame and remove the camera so yes",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "remove main camera screw",
+      "evidence_text": "remove this screw first",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "remove two small camera screws",
+      "evidence_text": "these two small screws",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "remove camera",
+      "evidence_text": "first we have to remove the camera",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "remove base connector",
+      "evidence_text": "remove this connector and remove this long road from the base",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "remove long rod from base",
+      "evidence_text": "removed the long rope from the base",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "remove rod connector",
+      "evidence_text": "remove this connector",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "separate short rod from long rod",
+      "evidence_text": "remove this short rope from this long rope",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "loosen base screw",
+      "evidence_text": "there is only one screw here so we remove the screws loose it",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "remove final short rod",
+      "evidence_text": "remove this short roll",
+      "sequence_index": 9
+    },
+    {
+      "id": "action_10",
+      "label": "Action",
+      "name": "separate base",
+      "evidence_text": "disassemble the base",
+      "sequence_index": 10
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "main camera screw",
+      "evidence_text": "this screw"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "two small camera screws",
+      "evidence_text": "two small screws"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "camera",
+      "evidence_text": "camera"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "base connector",
+      "evidence_text": "connector"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "long rod",
+      "evidence_text": "long road"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "rod connector",
+      "evidence_text": "connector"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "short rod",
+      "evidence_text": "short rope"
+    },
+    {
+      "id": "object_8",
+      "label": "Object",
+      "name": "base screw",
+      "evidence_text": "only one screw"
+    },
+    {
+      "id": "object_9",
+      "label": "Object",
+      "name": "base",
+      "evidence_text": "base"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_9",
+      "relation": "BEFORE",
+      "target": "action_10"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_9"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_10",
+      "relation": "ACTS_ON",
+      "target": "object_9"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The four coarse keysteps are expanded into screw, connector, rod, camera, and base operations. ASR road/rope/roll variants are normalized to rod only at the entity-name level. No tool is asserted because none is named."
+}

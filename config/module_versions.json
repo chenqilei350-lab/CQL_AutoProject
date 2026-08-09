@@ -1,0 +1,5 @@
+{
+  "data_cleaning": "1.0.0",
+  "text_preprocessing": "1.0.0",
+  "kg_extraction": "1.0.0"
+}

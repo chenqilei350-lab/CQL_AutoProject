@@ -4,10 +4,11 @@ Run: python -m pytest tests/test_eval.py -v
 Or just: python tests/test_eval.py
 """
 
-from backend.schemas.process_knowledge.entities import Tool, Material, Worker, Step
+from backend.schemas.process_knowledge.entities import Tool, Step
 from backend.schemas.process_knowledge.relations import StepOrder
 from backend.evaluation.matching import compare_values, MatchStrategy
 from backend.evaluation.metrics import PRF1, compute_prf1, format_prf1
+from backend.evaluation.ontology_validation import validate_egocentric_extraction
 from backend.evaluation.experiment import ExperimentConfig
 from backend.evaluation.evaluators import (
     evaluate_entity_detection,
@@ -15,6 +16,13 @@ from backend.evaluation.evaluators import (
     evaluate_relation_detection,
     evaluate_extraction_level,
 )
+from backend.schemas.egocentric_examples import WELDING_SCENE_EXPECTED, WELDING_SCENE_TEXT
+from backend.schemas.egocentric_video import (
+    Action,
+    EgocentricVideoExtraction,
+    UsesTool,
+)
+from backend.schemas.ontology import build_egocentric_ontology, compact_schema_guide
 
 
 def test_matching_strategies():
@@ -176,6 +184,62 @@ def test_evaluate_extraction_level():
     print("✅ Full level evaluation works.\n")
 
 
+def test_egocentric_ontology_introspection():
+    """Test Pydantic schemas can be summarized as an executable ontology."""
+    ontology = build_egocentric_ontology()
+
+    assert "Action" in ontology.entities
+    assert "Tool" in ontology.entities
+    assert ontology.relation_by_label("USES_TOOL").domain == "Action"
+    assert ontology.relation_by_label("USES_TOOL").range == "Tool"
+    assert ontology.entities["Tool"].identity_fields == ["manufacturer", "model", "name"]
+
+
+def test_schema_prompt_guidance_is_compact_and_informative():
+    """Test compact field guidance can be generated from Pydantic schema."""
+    guide = compact_schema_guide(EgocentricVideoExtraction)
+
+    assert "actions" in guide
+    assert "uses_tool" in guide
+    assert len(guide) < 3500
+
+
+def test_ontology_validation_reports_grounded_extraction():
+    """Test ontology conformance and grounding on a gold scene."""
+    report = validate_egocentric_extraction(
+        WELDING_SCENE_EXPECTED,
+        source_text=WELDING_SCENE_TEXT,
+    )
+
+    assert report.total_relations > 0
+    assert report.invalid_relations == 0
+    assert report.ontology_conformance == 1.0
+    assert report.subject_grounding_rate > 0.5
+    assert report.object_grounding_rate > 0.5
+
+
+def test_ontology_validation_detects_hallucinated_object():
+    """Test ungrounded relation endpoints are counted as hallucinations."""
+    extraction = EgocentricVideoExtraction(
+        source_text="Hans measures the gap with a caliper.",
+        uses_tool=[
+            UsesTool(
+                action=Action(name="measure gap"),
+                tool=Tool(name="laser scanner"),
+            )
+        ],
+    )
+
+    report = validate_egocentric_extraction(extraction)
+
+    assert report.total_relations == 1
+    assert report.invalid_relations == 0
+    assert report.ontology_conformance == 1.0
+    assert report.object_hallucinations == 1
+    assert report.object_grounding_rate == 0.0
+    assert report.filtered_relation_count >= 1
+
+
 if __name__ == "__main__":
     print("\n🧪 Testing Evaluation Pipeline\n" + "=" * 40 + "\n")
 
@@ -186,6 +250,10 @@ if __name__ == "__main__":
     test_evaluate_attributes()
     test_evaluate_relation_detection()
     test_evaluate_extraction_level()
+    test_egocentric_ontology_introspection()
+    test_schema_prompt_guidance_is_compact_and_informative()
+    test_ontology_validation_reports_grounded_extraction()
+    test_ontology_validation_detects_hallucinated_object()
 
     print("=" * 40)
     print("🎉 All tests passed!")

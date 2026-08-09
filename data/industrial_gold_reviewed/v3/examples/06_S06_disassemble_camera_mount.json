@@ -1,0 +1,269 @@
+{
+  "scene_id": "indego_user_15_411_2309_2_s1",
+  "video_id": "user_15_411_2309_2",
+  "category": "disassembly",
+  "task": "disassemble camera mount",
+  "source_text": "Video user_15_411_2309_2, segment s1, 00:07.242-04:21.973.\nCategory: disassembly.\nSource video file: User_15_411_2309_2_480.mp4.\nTranscript excerpt: Okay, so to disassemble this camera mount, I'm first going to start by unscrewing these small screws to unscrew the camera. And I'm going to do this by rotating this small Allen wrench counterclockwise. Maybe it's better this way. There we go. And the second one, which we have to be a bit careful that the camera does not fall down. And there's the screw. Okay, secondly, I'm going to detach this small metal part by also rotating the Allen key counterclockwise. There we go. All right, and then next we can slide this part out and unscrew this top part. by also going counterclockwise. It's a bit hard. There we go. Just unscrewing and you can use your hands to finish it. And then we're also going to unscrew this angle type thing. Maybe to make it a bit easier, I'm going to lay this down. There we go. And then just again going counterclockwise. And we can also slide this part out. Now to detach these two, I'm going to use this Allen key again counterclockwise to unscrew this screw. And to take this out. You can also slide this part out. And then use the Allen key again counterclockwise to unscrew this screw. And first I always use the short part and then I use a long part. And slide this part out. And now we only have this part left. And because the screw is inside to disassemble it, I'm going to use this screwdriver. Also again, counterclockwise. And slide this part out. And everything is disassembled.\nAnnotated keysteps:\nKeystep 1: remove camera and plate (00:07.242-01:06.368).\nKeystep 2: remove upper bar (01:06.368-02:41.765).\nKeystep 3: remove vertical bar (02:41.765-03:56.716).\nKeystep 4: separate base (03:56.716-04:21.973).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nOkay, so to disassemble this camera mount, I'm first going to start by unscrewing these small screws to unscrew the camera. And I'm going to do this by rotating this small Allen wrench counterclockwise. Maybe it's better this way. There we go. And the second one, which we have to be a bit careful that the camera does not fall down.  And there's the screw. Okay, secondly, I'm going to detach this small metal part by also rotating the Allen key counterclockwise. There we go. All right, and then next we can slide this part out and unscrew this top part.  by also going counterclockwise. It's a bit hard. There we go.  Just unscrewing and you can use your hands to finish it. And then we're also going to unscrew this angle type thing. Maybe to make it a bit easier, I'm going to lay this down.  There we go. And then just again going counterclockwise. And we can also slide this part out. Now to detach these two, I'm going to use this Allen key again counterclockwise to unscrew this screw.  And to take this out. You can also slide this part out. And then use the Allen key again counterclockwise to unscrew this screw. And first I always use the short part and then I use  a long part. And slide this part out. And now we only have this part left. And because the screw is inside to disassemble it, I'm going to use this screwdriver. Also again, counterclockwise. And slide this part out.  And everything is disassembled.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "unscrew camera screws",
+      "evidence_text": "unscrewing these small screws to unscrew the camera",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "remove camera",
+      "evidence_text": "careful that the camera does not fall down",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "detach small metal part",
+      "evidence_text": "detach this small metal part",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "remove top part",
+      "evidence_text": "unscrew this top part",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "remove angled part",
+      "evidence_text": "unscrew this angle type thing",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "separate first frame sections",
+      "evidence_text": "to detach these two",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "separate next frame section",
+      "evidence_text": "slide this part out",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "disassemble base section",
+      "evidence_text": "because the screw is inside to disassemble it",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "inspect disassembled parts",
+      "evidence_text": "everything is disassembled",
+      "sequence_index": 9
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "camera screws",
+      "evidence_text": "small screws"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "camera",
+      "evidence_text": "camera"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "small metal part",
+      "evidence_text": "small metal part"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "top part",
+      "evidence_text": "top part"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "angled part",
+      "evidence_text": "angle type thing"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "frame sections",
+      "evidence_text": "detach these two"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "base section",
+      "evidence_text": "only have this part left"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "small Allen wrench",
+      "evidence_text": "small Allen wrench"
+    },
+    {
+      "id": "tool_2",
+      "label": "Tool",
+      "name": "Allen key",
+      "evidence_text": "Allen key"
+    },
+    {
+      "id": "tool_3",
+      "label": "Tool",
+      "name": "screwdriver",
+      "evidence_text": "screwdriver"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_1",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_3",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_4",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_5",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_6",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_7",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_8",
+      "relation": "USES_TOOL",
+      "target": "tool_3"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "Intermediate part removals and the final completion inspection are restored. Small Allen wrench, Allen key, and screwdriver are bound to their explicit phases. Vague part identities remain source-faithful."
+}

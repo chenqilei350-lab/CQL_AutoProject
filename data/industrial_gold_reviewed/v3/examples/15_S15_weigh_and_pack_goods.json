@@ -1,0 +1,165 @@
+{
+  "scene_id": "indego_user_17_user_15_451_0402_1_s3",
+  "video_id": "user_17_user_15_451_0402_1",
+  "category": "logistics_organisation",
+  "task": "weigh and pack goods",
+  "source_text": "Video user_17_user_15_451_0402_1, segment s3, 02:24.476-09:07.087.\nCategory: logistics_organisation.\nSource video file: User_17_User_15_451_0402_1_480.mp4.\nTranscript excerpt: Go on, it's over This one? Mm-hmm. This one? Yeah. Can you set it down? This one's pretty good. and we still need some place here And this one. No, it's a trolley. He has to be able to somewhere here, I guess. Perhaps we'll just stand to wait for nowhere. There. I will look checked out of the elevator. Nope. I think they take some time. Let's take him some time. Perhaps he comes from there. Ah, this one. There's a... There's a double-size tape here. Do we need to... Yeah, there's also... Oh, already some double-size tape here. I would go downstairs and check about that. Can we lower it more? I don't know. Yeah. Yeah, I think. Can I move? Yeah, okay. Yep. I got it. Thank you. Yeah, it's over. That's okay. Thank you. you Bye. Yep.\nAnnotated actions:\nAction 1: drop pallet (02:42.211-02:46.716).\nAction 2: pick goods (02:52.354-02:58.169).\nAction 3: open scale (03:02.928-03:07.297).\nAction 4: take out goods (03:07.297-03:12.846).\nAction 5: weigh goods (03:12.846-03:18.541).\nAction 6: put back goods (03:18.541-03:21.471).\nAction 7: pack goods (03:21.471-03:27.359).\nAction 8: pick goods (03:27.794-03:35.614).\nAnnotated keysteps:\nKeystep 1: prepare shipment (02:24.476-09:07.087).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nGo on, it's over  This one? Mm-hmm. This one? Yeah. Can you set it down?  This one's pretty good.  and we still need some place here  And this one.  No, it's a trolley. He has to be able to somewhere here, I guess. Perhaps we'll just stand to wait for nowhere. There. I will look checked out of the elevator.  Nope. I think they take some time. Let's take him some time. Perhaps he comes from there.  Ah, this one. There's a... There's a double-size tape here. Do we need to... Yeah, there's also... Oh, already some double-size tape here.  I would go downstairs and check about that.  Can we lower it more? I don't know. Yeah.  Yeah, I think. Can I move? Yeah, okay. Yep.  I got it. Thank you. Yeah, it's over. That's okay.  Thank you.  you  Bye.  Yep.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "drop pallet",
+      "evidence_text": "Action 1: drop pallet (02:42.211-02:46.716).",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "pick goods",
+      "evidence_text": "Action 2: pick goods (02:52.354-02:58.169).",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "open scale",
+      "evidence_text": "Action 3: open scale (03:02.928-03:07.297).",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "take out goods",
+      "evidence_text": "Action 4: take out goods (03:07.297-03:12.846).",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "weigh goods",
+      "evidence_text": "Action 5: weigh goods (03:12.846-03:18.541).",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "put back goods",
+      "evidence_text": "Action 6: put back goods (03:18.541-03:21.471).",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "pack goods",
+      "evidence_text": "Action 7: pack goods (03:21.471-03:27.359).",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "pick goods",
+      "evidence_text": "Action 8: pick goods (03:27.794-03:35.614).",
+      "sequence_index": 8
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "pallet",
+      "evidence_text": "drop pallet"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "goods",
+      "evidence_text": "goods"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "scale",
+      "evidence_text": "open scale"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_5",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    }
+  ],
+  "quality_results": [],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The timed action annotations remain authoritative. Scale use is retained. Double-sided tape is mentioned conversationally but not explicitly used in the annotated packing action, so no tool edge is added."
+}

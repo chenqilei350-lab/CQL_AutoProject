@@ -9,7 +9,6 @@ Different strategies are appropriate for different field types:
   - Embedding similarity: semantically equivalent but differently worded
 """
 
-from typing import Optional
 from enum import Enum
 
 

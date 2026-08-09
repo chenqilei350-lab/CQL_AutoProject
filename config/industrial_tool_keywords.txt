@@ -1,0 +1,27 @@
+# Industrial tool keywords used by the conservative Tool/Object classifier.
+# One keyword per line. Keep terms source-observable and domain-neutral.
+allen key
+brush
+caliper
+cleaning brush
+cleaning cloth
+drill
+gauge
+hammer
+hex key
+measuring tape
+meter
+micrometer
+nylon brush
+pliers
+probe
+rag
+ruler
+scanner
+screwdriver
+sensor
+spanner
+torch
+torque wrench
+wire brush
+wrench

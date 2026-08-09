@@ -9,7 +9,8 @@ Complexity levels for extraction experiments:
 Reference: Carriero et al. (2025) — Procedural Knowledge Ontology (PKO)
 """
 
-from typing import Optional, List, Literal
+from typing import Any, Optional, List, Literal
+from pydantic import field_validator
 from backend.schemas.base import KGEntity
 
 
@@ -51,6 +52,15 @@ class Worker(KGEntity):
         "apprentice", "skilled", "expert", "master"
     ]] = None
     certifications: Optional[List[str]] = None
+
+    @field_validator("role", mode="before")
+    @classmethod
+    def normalize_role_label(cls, value: Any) -> Any:
+        """兼容模型将枚举角色写成带空格形式，例如 quality inspector。"""
+
+        if isinstance(value, str):
+            return value.lower().strip().replace(" ", "_")
+        return value
 
 
 class Step(KGEntity):
@@ -98,6 +108,13 @@ class ProcessParameter(KGEntity):
     nominal_value: Optional[float] = None
     min_value: Optional[float] = None
     max_value: Optional[float] = None
+
+    @field_validator("nominal_value", mode="before")
+    @classmethod
+    def normalize_nominal_value(cls, value: Any) -> Any:
+        """参数数值字段本身仍保持严格类型；为空字符串时按未给出处理。"""
+
+        return None if value == "" else value
 
 
 class QualityRequirement(KGEntity):

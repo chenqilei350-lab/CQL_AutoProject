@@ -1,0 +1,291 @@
+{
+  "scene_id": "indego_user_14_user_1_1410_2_s1",
+  "video_id": "user_14_user_1_1410_2",
+  "category": "assembly",
+  "task": "assemble camera-mount subassembly",
+  "source_text": "Video user_14_user_1_1410_2, segment s1, 00:05.071-26:41.961.\nCategory: assembly.\nSource video file: User_14_User_1_1410_2_480.mp4.\nTranscript excerpt: we're going to assemble this setup first what we'll do is inspect the structural integrity of this and I see that this is already a bit loose so the first thing that we can do is position this correctly into place and So I'm going to align the two holes and try and guide the bolt in properly. And you can see that it is aligning better now. and also do this on the other side so guide it in gently and fix it in place and I can also see that it is fixed into place next what we can do is position the bigger arm to get matched back in this fashion and for that we need Here you can see that on my side they're aligned. Are they aligned on your side? Yeah. Yeah, now they are aligned. Align and fix. So I'm trying to align this one, the other one. Fastening it now. the first thing that you can do is place them properly and align them and also try and guide them put them into place and move them properly i think they are I think you're going in the opposite direction. Yeah. because I see that it is not exactly straight because of some strange issue. I should try and remove this. It's still not straight, yeah. And I'll just align well. And I can maybe. longer and more time. Should go here. I'm pretty sure that it is aligned because... Yeah it's aligned. Because it did not fit very properly. We can try again. it's not blind or maybe it's not guided properly I'm going to pull the slot up and try again It's much better now. The next part was . There you go. So check again for the long end if you can tighten it further. So this corner is not straight? So I'm going to lose it. Losing it ...\nAnnotated keysteps:\nKeystep 1: preparation (00:05.071-02:01.621).\nKeystep 2: attach vertical bars (02:01.621-21:57.497).\nKeystep 3: attach base plate (21:57.497-23:36.436).\nKeystep 4: attach vertical bars (23:36.436-23:56.861).\nKeystep 5: clean up (24:19.122-26:41.961).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nwe're going to assemble this setup first what we'll do is inspect the structural integrity of this and I see that this is already a bit loose so the first thing that we can do is position this correctly into place and  So I'm going to align the two holes and try and guide the bolt in properly. And you can see that it is aligning better now.  and also do this on the other side so guide it in gently and fix it in place  and I can also see that it is fixed into place next what we can do is  position the bigger arm to get matched back in this fashion and for that we need  Here you can see that on my side they're aligned. Are they aligned on your side? Yeah. Yeah, now they are aligned.  Align and fix.  So I'm trying to align this one, the other one. Fastening it now.  the first thing that you can do is place them properly and align them  and also try and guide them put them into place and move them properly i think they are  I think you're going in the opposite direction.  Yeah.  because I see that it is not exactly straight because of some strange issue. I should try and remove this.  It's still not straight, yeah. And I'll just align well. And I can maybe.  longer and more time.  Should go here.  I'm pretty sure that it is aligned because... Yeah it's aligned. Because it did not fit very properly. We can try again.  it's not blind or maybe it's not guided properly I'm going to pull the slot up and try again  It's much better now. The next part was .  There you go. So check again for the long end if you can tighten it further. So this corner is not straight? So I'm going to lose it. Losing it again. And straighten it.  Now we should install that plate.  For the plates on the sides, like this, it is supposed to be here. And the other plate is supposed to be... That plate cover? Yeah, first you can install the side plates maybe, the bars.  They're situated like this. One side.  Thank you.  So there is an square missing here. Yeah, but that's okay. There are two and... That could not be a problem. Okay. What do you mean?  so last time when we checked the assembly automatically moved because of force so now it is more stable we can now fix the upper part here on this side  guided pin on this side but we're going to put the pin on the inner side and guide it  Should be like this? Yeah. This one is already aligned, so you can hold it. I need to align this.  So I'm using the bolt and I'm tightening it. I have to secure.  This is coming off.  I don't think it would be tight, so as long as it is in place, it should be okay. Putting back the cap.  I see that this one is still wobbly, yeah.  Thank you.  Orientation is correct.  these are the same ones or different for the remaining cap this belongs here and there is no extra which is the spare  Okay.  This one is still moving slightly but it is better than before. So now we can transfer the assembly back. I'm putting it on the trolley here.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "inspect structural integrity",
+      "evidence_text": "inspect the structural integrity",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "reposition loose component",
+      "evidence_text": "position this correctly into place",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "align holes and guide bolt",
+      "evidence_text": "align the two holes and try and guide the bolt in properly",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "position bigger arm",
+      "evidence_text": "position the bigger arm",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "correct misalignment",
+      "evidence_text": "Losing it again. And straighten it",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "install side plates and bars",
+      "evidence_text": "install the side plates maybe, the bars",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "fix upper part",
+      "evidence_text": "fix the upper part here on this side",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "insert guided pin",
+      "evidence_text": "put the pin on the inner side and guide it",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "tighten upper bolt",
+      "evidence_text": "using the bolt and I'm tightening it",
+      "sequence_index": 9
+    },
+    {
+      "id": "action_10",
+      "label": "Action",
+      "name": "replace cap",
+      "evidence_text": "Putting back the cap",
+      "sequence_index": 10
+    },
+    {
+      "id": "action_11",
+      "label": "Action",
+      "name": "inspect final stability",
+      "evidence_text": "This one is still moving slightly but it is better than before",
+      "sequence_index": 11
+    },
+    {
+      "id": "action_12",
+      "label": "Action",
+      "name": "transfer assembly on trolley",
+      "evidence_text": "putting it on the trolley here",
+      "sequence_index": 12
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "assembly",
+      "evidence_text": "assembly"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "loose component",
+      "evidence_text": "already a bit loose"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "holes",
+      "evidence_text": "two holes"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "bolt",
+      "evidence_text": "bolt"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "bigger arm",
+      "evidence_text": "bigger arm"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "side plates and bars",
+      "evidence_text": "side plates maybe, the bars"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "upper part",
+      "evidence_text": "upper part"
+    },
+    {
+      "id": "object_8",
+      "label": "Object",
+      "name": "guided pin",
+      "evidence_text": "guided pin"
+    },
+    {
+      "id": "object_9",
+      "label": "Object",
+      "name": "cap",
+      "evidence_text": "cap"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "trolley",
+      "evidence_text": "trolley"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_9",
+      "relation": "BEFORE",
+      "target": "action_10"
+    },
+    {
+      "source": "action_10",
+      "relation": "BEFORE",
+      "target": "action_11"
+    },
+    {
+      "source": "action_11",
+      "relation": "BEFORE",
+      "target": "action_12"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_10",
+      "relation": "ACTS_ON",
+      "target": "object_9"
+    },
+    {
+      "source": "action_11",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_12",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_12",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    }
+  ],
+  "quality_results": [
+    {
+      "name": "assembly stability improved but slight movement remains",
+      "evidence_text": "still moving slightly but it is better than before",
+      "status": "partial"
+    }
+  ],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The optimized graph includes the initial structural inspection, alignment correction, final stability inspection, and trolley transfer. The remaining slight movement is recorded as a partial quality result. Actor attribution and the formal identity of the bigger arm remain excluded."
+}

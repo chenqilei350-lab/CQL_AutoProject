@@ -1,0 +1,424 @@
+{
+  "scene_id": "indego_user_14_407_0110_1_s1",
+  "video_id": "user_14_407_0110_1",
+  "category": "inspection_repair",
+  "task": "inspect and repair projector",
+  "source_text": "Video user_14_407_0110_1, segment s1, 00:02.293-17:38.106.\nCategory: inspection_repair.\nSource video file: User_14_407_0110_1_480.mp4.\nTranscript excerpt: So today I'm going to disassemble a projector in order to inspect it. So this is my projector and I'm going to put it here on the table. So first I need to turn on the lights. So now I'm going to disassemble this projector and I need a screwdriver. So I'm looking for one here. Yeah, this is my screwdriver and this is the cable. So as I said, I'm going to inspect it by disassembling it. so it also has these two adjustable legs here when you press these buttons on the corners you can cut them out by pressing here so you can also remove this cover like this so now I am going to remove this cover Take it off. So now I'm also going to unscrew these screws in order to get this thing out. So this is a small bulb or a torch in it. Now I'm going to put it back like this. Now I'm tightening the screws. I'm also going to put this back. Like this. so there is a handle here you can press this button like this So now I'm going to remove this whole part. I need to remove three screws. In order to remove this cover, this bigger, I also need to unscrew this screw on the side and also this one. so i was doing it wrong so i think i need to take this cover off like this you can see so you can also separate these guys like this So everything seems perfect to me. Now I am going to reassemble it. First I am going to install this cover. Like this. Now I'm going to tighten this cover with these bigger screws. So I am holding it like this in order to align the holes. So now I'm going to check it if it works or not. But first I need to find a socket in order to plug it in. So I'm looking for a ...\nAnnotated keysteps:\nKeystep 1: preparation (00:02.293-01:10.322).\nKeystep 2: disassemble (01:10.322-04:26.052).\nKeystep 3: inspect (04:26.052-04:37.516).\nKeystep 4: assemble (04:37.516-05:45.335).\nKeystep 5: disassemble (05:45.335-09:41.278).\nKeystep 6: inspect (09:41.278-10:10.291).\nKeystep 7: assemble (10:10.291-15:27.101).\nKeystep 8: test (15:27.101-17:38.106).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nSo today I'm going to disassemble a projector in order to inspect it. So this is my projector and I'm going to put it here on the table. So first I need to turn on the lights. So now I'm going to disassemble this projector and I need a screwdriver.  So I'm looking for one here. Yeah, this is my screwdriver and this is the cable. So as I said, I'm going to inspect it by disassembling it.  so it also has these two adjustable legs here when you press these buttons on the corners you can cut them out by pressing here  so you can also remove this cover like this so now I am going to remove this cover  Take it off. So now I'm also going to unscrew these screws in order to get this thing out.  So this is a small bulb or a torch in it. Now I'm going to put it back like this. Now I'm tightening the screws.  I'm also going to put this back. Like this.  so there is a handle here you can press this button like this  So now I'm going to remove this whole part. I need to remove three screws.  In order to remove this cover, this bigger, I also need to unscrew this screw on the side and also this one.  so i was doing it wrong so i think i need to take this cover off like this you can see  so you can also separate these guys like this  So everything seems perfect to me. Now I am going to reassemble it. First I am going to install this cover. Like this.  Now I'm going to tighten this cover with these bigger screws.  So I am holding it like this in order to align the holes.  So now I'm going to check it if it works or not.  But first I need to find a socket in order to plug it in.  So I'm looking for a socket. They're disconnected here. Okay.  So I guess it's not working.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "place projector on table",
+      "evidence_text": "put it here on the table",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "retrieve screwdriver",
+      "evidence_text": "this is my screwdriver",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "remove small cover",
+      "evidence_text": "remove this cover",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "unscrew light-component screws",
+      "evidence_text": "unscrew these screws in order to get this thing out",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "remove internal light component",
+      "evidence_text": "this is a small bulb or a torch in it",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "reinstall internal light component",
+      "evidence_text": "put it back like this",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "tighten light-component screws",
+      "evidence_text": "Now I'm tightening the screws",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "reinstall small cover",
+      "evidence_text": "put this back",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "remove three upper-part screws",
+      "evidence_text": "remove three screws",
+      "sequence_index": 9
+    },
+    {
+      "id": "action_10",
+      "label": "Action",
+      "name": "remove side screws",
+      "evidence_text": "unscrew this screw on the side and also this one",
+      "sequence_index": 10
+    },
+    {
+      "id": "action_11",
+      "label": "Action",
+      "name": "remove large cover",
+      "evidence_text": "take this cover off",
+      "sequence_index": 11
+    },
+    {
+      "id": "action_12",
+      "label": "Action",
+      "name": "inspect projector internals",
+      "evidence_text": "everything seems perfect to me",
+      "sequence_index": 12
+    },
+    {
+      "id": "action_13",
+      "label": "Action",
+      "name": "install large cover",
+      "evidence_text": "install this cover",
+      "sequence_index": 13
+    },
+    {
+      "id": "action_14",
+      "label": "Action",
+      "name": "align cover holes",
+      "evidence_text": "holding it like this in order to align the holes",
+      "sequence_index": 14
+    },
+    {
+      "id": "action_15",
+      "label": "Action",
+      "name": "tighten large-cover screws",
+      "evidence_text": "tighten this cover with these bigger screws",
+      "sequence_index": 15
+    },
+    {
+      "id": "action_16",
+      "label": "Action",
+      "name": "find power socket",
+      "evidence_text": "find a socket in order to plug it in",
+      "sequence_index": 16
+    },
+    {
+      "id": "action_17",
+      "label": "Action",
+      "name": "connect projector to power",
+      "evidence_text": "plug it in",
+      "sequence_index": 17
+    },
+    {
+      "id": "action_18",
+      "label": "Action",
+      "name": "test projector",
+      "evidence_text": "check it if it works or not",
+      "sequence_index": 18
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "projector",
+      "evidence_text": "projector"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "table",
+      "evidence_text": "table"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "small cover",
+      "evidence_text": "this cover"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "light-component screws",
+      "evidence_text": "these screws"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "internal light component",
+      "evidence_text": "small bulb or a torch"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "three upper-part screws",
+      "evidence_text": "three screws"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "side screws",
+      "evidence_text": "screw on the side"
+    },
+    {
+      "id": "object_8",
+      "label": "Object",
+      "name": "large cover",
+      "evidence_text": "this bigger"
+    },
+    {
+      "id": "object_9",
+      "label": "Object",
+      "name": "cover holes",
+      "evidence_text": "align the holes"
+    },
+    {
+      "id": "object_10",
+      "label": "Object",
+      "name": "power socket",
+      "evidence_text": "socket"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "screwdriver",
+      "evidence_text": "screwdriver"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_9",
+      "relation": "BEFORE",
+      "target": "action_10"
+    },
+    {
+      "source": "action_10",
+      "relation": "BEFORE",
+      "target": "action_11"
+    },
+    {
+      "source": "action_11",
+      "relation": "BEFORE",
+      "target": "action_12"
+    },
+    {
+      "source": "action_12",
+      "relation": "BEFORE",
+      "target": "action_13"
+    },
+    {
+      "source": "action_13",
+      "relation": "BEFORE",
+      "target": "action_14"
+    },
+    {
+      "source": "action_14",
+      "relation": "BEFORE",
+      "target": "action_15"
+    },
+    {
+      "source": "action_15",
+      "relation": "BEFORE",
+      "target": "action_16"
+    },
+    {
+      "source": "action_16",
+      "relation": "BEFORE",
+      "target": "action_17"
+    },
+    {
+      "source": "action_17",
+      "relation": "BEFORE",
+      "target": "action_18"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_10",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_11",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_12",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_13",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_14",
+      "relation": "ACTS_ON",
+      "target": "object_9"
+    },
+    {
+      "source": "action_15",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_16",
+      "relation": "ACTS_ON",
+      "target": "object_10"
+    },
+    {
+      "source": "action_17",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_17",
+      "relation": "ACTS_ON",
+      "target": "object_10"
+    },
+    {
+      "source": "action_18",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_4",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_7",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_9",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_10",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_15",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    }
+  ],
+  "quality_results": [
+    {
+      "name": "projector internals appear acceptable",
+      "evidence_text": "everything seems perfect to me",
+      "status": "passed"
+    },
+    {
+      "name": "projector power test failed",
+      "evidence_text": "I guess it's not working",
+      "status": "failed"
+    }
+  ],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The optimized graph restores cover, screw, internal-component, inspection, alignment, power-connection, and failed-test actions. Screwdriver use is mapped to each explicit screw operation. The bulb/torch component remains generically named."
+}

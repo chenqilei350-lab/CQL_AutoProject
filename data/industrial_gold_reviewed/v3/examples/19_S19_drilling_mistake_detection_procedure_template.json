@@ -1,0 +1,183 @@
+{
+  "scene_id": "indego_warning_A_Task_08_s1",
+  "video_id": "warning_A_Task_08",
+  "category": "mistake_detection",
+  "task": "drilling mistake-detection procedure template",
+  "source_text": "Video warning_A_Task_08, segment s1, time unknown.\nCategory: mistake_detection.\nAnnotated keysteps:\nKeystep 1: mark hole.\nKeystep 2: clamp block.\nKeystep 3: plug in.\nKeystep 4: drill hole.\nWarnings:\nWarning 1: step 'mark hole' has issue 'didn't mark'.\nWarning 2: step 'clamp block' has issue 'didn't clamp securely'.\nWarning 3: step 'drill hole' has issue 'drilled at angle/applied no pressure'.\nWarning 4: step 'clamp block' has issue 'didn't clamp'.\nWarning 5: step 'drill hole' has issue 'left drill in block'.\nWarning 6: step 'plug in' has issue 'didn't plug in properly'.\nWarning 7: step 'drill hole' has issue 'wrong spot'.\nWarning 8: step 'drill hole' has issue 'applied no pressure'.\nWarning 9: step 'plug in' has issue 'didn't plug in'.\nWarning 10: step 'drill hole' has issue 'drilled at angle'.\nWarning 11: step 'drill hole' has issue 'drill broke off'.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "mark hole",
+      "evidence_text": "Keystep 1: mark hole.",
+      "sequence_index": 1,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "clamp block",
+      "evidence_text": "Keystep 2: clamp block.",
+      "sequence_index": 2,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "plug in",
+      "evidence_text": "Keystep 3: plug in.",
+      "sequence_index": 3,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "drill hole",
+      "evidence_text": "Keystep 4: drill hole.",
+      "sequence_index": 4,
+      "properties": {
+        "kind": "prescribed_step"
+      }
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "hole",
+      "evidence_text": "hole"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "block",
+      "evidence_text": "block"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "clamp",
+      "evidence_text": "clamp block"
+    },
+    {
+      "id": "tool_2",
+      "label": "Tool",
+      "name": "drill",
+      "evidence_text": "left drill in block"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_4",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    }
+  ],
+  "quality_results": [
+    {
+      "name": "didn't mark",
+      "evidence_text": "Warning 1: step 'mark hole' has issue 'didn't mark'.",
+      "status": "warning",
+      "step": "mark hole",
+      "run_id": "08_u01_r01_m_01"
+    },
+    {
+      "name": "didn't clamp securely",
+      "evidence_text": "Warning 2: step 'clamp block' has issue 'didn't clamp securely'.",
+      "status": "warning",
+      "step": "clamp block",
+      "run_id": "08_u01_r01_m_01"
+    },
+    {
+      "name": "drilled at angle/applied no pressure",
+      "evidence_text": "Warning 3: step 'drill hole' has issue 'drilled at angle/applied no pressure'.",
+      "status": "warning",
+      "step": "drill hole",
+      "run_id": "08_u01_r01_m_02"
+    },
+    {
+      "name": "didn't clamp",
+      "evidence_text": "Warning 4: step 'clamp block' has issue 'didn't clamp'.",
+      "status": "warning",
+      "step": "clamp block",
+      "run_id": "08_u01_r01_m_03"
+    },
+    {
+      "name": "left drill in block",
+      "evidence_text": "Warning 5: step 'drill hole' has issue 'left drill in block'.",
+      "status": "warning",
+      "step": "drill hole",
+      "run_id": "08_u01_r01_m_03"
+    },
+    {
+      "name": "didn't plug in properly",
+      "evidence_text": "Warning 6: step 'plug in' has issue 'didn't plug in properly'.",
+      "status": "warning",
+      "step": "plug in",
+      "run_id": "08_u01_r01_m_04"
+    },
+    {
+      "name": "wrong spot",
+      "evidence_text": "Warning 7: step 'drill hole' has issue 'wrong spot'.",
+      "status": "warning",
+      "step": "drill hole",
+      "run_id": "08_u01_r01_m_04"
+    },
+    {
+      "name": "applied no pressure",
+      "evidence_text": "Warning 8: step 'drill hole' has issue 'applied no pressure'.",
+      "status": "warning",
+      "step": "drill hole",
+      "run_id": "08_u02_r06_m_01"
+    },
+    {
+      "name": "didn't plug in",
+      "evidence_text": "Warning 9: step 'plug in' has issue 'didn't plug in'.",
+      "status": "warning",
+      "step": "plug in",
+      "run_id": "08_u02_r06_m_02"
+    },
+    {
+      "name": "drilled at angle",
+      "evidence_text": "Warning 10: step 'drill hole' has issue 'drilled at angle'.",
+      "status": "warning",
+      "step": "drill hole",
+      "run_id": "08_u02_r06_m_03"
+    },
+    {
+      "name": "drill broke off",
+      "evidence_text": "Warning 11: step 'drill hole' has issue 'drill broke off'.",
+      "status": "warning",
+      "step": "drill hole",
+      "run_id": "08_u14_r04_m_01"
+    }
+  ],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "This remains a multi-run mistake template. Clamp and drill are now retained as prescribed-step tools, while warnings remain run-separated. No plug-in target or cross-run temporal execution is inferred."
+}

@@ -9,9 +9,9 @@ Level 4: Structure-level — is the nesting correct?
 Each evaluator takes expected + extracted objects and returns PRF1 metrics.
 """
 
-from typing import List, Type, Optional, Tuple, Sequence
+from typing import List, Optional, Tuple, Sequence
 from pydantic import BaseModel
-from backend.evaluation.matching import compare_values, MatchStrategy, match_token_overlap
+from backend.evaluation.matching import compare_values, MatchStrategy
 from backend.evaluation.metrics import PRF1, compute_prf1
 
 
@@ -119,7 +119,7 @@ def evaluate_attributes(
     if fields is None:
         # Evaluate all fields that have a value in expected
         fields = [
-            f for f in expected.model_fields 
+            f for f in type(expected).model_fields
             if f not in ("source_text", "description") and getattr(expected, f) is not None
         ]
     

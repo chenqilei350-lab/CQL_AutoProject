@@ -29,20 +29,22 @@ T = TypeVar("T", bound=BaseModel)
 # Ollama runs an OpenAI-compatible API on localhost
 OLLAMA_BASE_URL = "http://localhost:11434/v1"
 DEFAULT_MODEL = "llama3.1:8b"
+DEFAULT_REQUEST_TIMEOUT_SECONDS = 120.0
 
 
-def get_openai_client() -> OpenAI:
+def get_openai_client(timeout: float = DEFAULT_REQUEST_TIMEOUT_SECONDS) -> OpenAI:
     """Raw OpenAI client pointing at Ollama."""
     return OpenAI(
         base_url=OLLAMA_BASE_URL,
         api_key="ollama",  # Ollama doesn't need a real key
+        timeout=timeout,
     )
 
 
-def get_client() -> instructor.Instructor:
+def get_client(timeout: float = DEFAULT_REQUEST_TIMEOUT_SECONDS) -> instructor.Instructor:
     """Instructor-wrapped client for structured output."""
     return instructor.from_openai(
-        get_openai_client(),
+        get_openai_client(timeout=timeout),
         mode=instructor.Mode.JSON,
     )
 
@@ -54,6 +56,7 @@ def extract_structured(
     system_prompt: str = "Extract structured information from the given text. Respond in the exact schema requested.",
     temperature: float = 0.0,
     max_retries: int = 3,
+    timeout: float = DEFAULT_REQUEST_TIMEOUT_SECONDS,
 ) -> T:
     """
     Extract structured data from text using an LLM.
@@ -69,7 +72,7 @@ def extract_structured(
     Returns:
         An instance of response_model filled with extracted data
     """
-    client = get_client()
+    client = get_client(timeout=timeout)
 
     return client.chat.completions.create(
         model=model,

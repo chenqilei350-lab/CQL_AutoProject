@@ -1,0 +1,246 @@
+{
+  "scene_id": "indego_user_15_411_2309_2_1_s1",
+  "video_id": "user_15_411_2309_2_1",
+  "category": "assembly",
+  "task": "assemble camera mount",
+  "source_text": "Video user_15_411_2309_2_1, segment s1, 00:06.066-05:35.270.\nCategory: assembly.\nSource video file: User_15_411_2309_2_1_480.mp4.\nTranscript excerpt: Alright, so now I'm going to reassemble the camera mount. And for that, I'm going to start by sliding... Let me see here. By sliding this piece into here. So that I can then put this on top. Put this screw in here. I'm going to put the screw in here and then use the screwdriver to fasten it and then to also fasten it here by rotating it clockwise. And then I'm going to fasten this big piece on top of here by again sliding one of these pieces in here. to where I want the big one to sit. And then I'm going to use one of these to fasten that to there by using I'm going to use one of these square brackets, put it in here, then use my screw, put it in there as well. I can again use the screwdriver to fasten it by turning it clockwise this time. And now we will do the same thing from here. We're going to slide this piece in like so. Hope that it lines up. Of course it does not. Slide that in there. Okay, we're going to loosen this again because it's smarter to maybe do it the other way around. So instead of like this, we'll fasten it to this piece first. Like this, we're going to slide the small piece in and then add the big one on top and screw it down. And then we will add this big piece onto here. Again, add one of the small brackets and a screw. And then we're going to screw it in with the screwdriver by going clockwise. Now that we have that, we can then do the same thing to attach this part, which we do by sliding one of these pieces in again. And then using this angled bracket, putting the square bracket in another screw and screwing that clockwise. And now we can put ...\nAnnotated keysteps:\nKeystep 1: connect base (00:06.066-00:59.047).\nKeystep 2: attach vertical bar (00:59.047-02:55.502).\nKeystep 3: attach upper bar (02:55.502-03:54.965).\nKeystep 4: attach camera and plate (03:54.965-05:35.270).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nAlright, so now I'm going to reassemble the camera mount. And for that, I'm going to start by sliding... Let me see here. By sliding this piece into here. So that I can then put this on top. Put this screw in here.  I'm going to put the screw in here and then use the screwdriver to fasten it and then to also fasten it here by rotating it clockwise. And then I'm going to fasten this big piece on top of here by again sliding one of these pieces in here.  to where I want the big one to sit. And then I'm going to use one of these to fasten that to there by using I'm going to use one of these square brackets, put it in here, then use my screw, put it in there as well. I can again use the screwdriver to fasten it by turning it clockwise this time.  And now we will do the same thing from here. We're going to slide this piece in like so. Hope that it lines up. Of course it does not. Slide that in there. Okay, we're going to loosen this again because it's smarter to maybe do it the other way around.  So instead of like this, we'll fasten it to this piece first. Like this, we're going to slide the small piece in and then add the big one on top and screw it down. And then we will add this big piece onto here. Again, add one of the small brackets and a screw.  And then we're going to screw it in with the screwdriver by going clockwise. Now that we have that, we can then do the same thing to attach this part, which we do by sliding one of these pieces in again. And then using this angled bracket, putting the square bracket in  another screw and screwing that clockwise. And now we can put this on here by sliding one of these pieces in. You can use the screwdriver to maybe help with that. And then we will again put one of these brackets  again a screw and tighten that as well okay now we have this big assembly again we're gonna take the last piece put it in there  It's better if we turn it around like this so that we have an even surface. We're going to slide this in here and we want to attach this part. So we are going to again put this on top, add the screw and screw that in like so. And now all that's left is to add the camera which  How do we do this? We can do that here and this time we will use the small screws and this allen key and we can just add the screws in here and then use the allen key  Tighten them, preferably like this. Maybe I'll use my hand first. Like so. Now I can tighten it with the Allen key and do the same on the other side.  There we go. And now the whole thing is put back together the way it was before. We have the camera at the top and we have now assembled a camera mount.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "connect base with screw",
+      "evidence_text": "put the screw in here and then use the screwdriver to fasten it",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "attach first support section",
+      "evidence_text": "fasten this big piece on top of here",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "loosen misaligned connection",
+      "evidence_text": "we're going to loosen this again",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "reattach support in corrected order",
+      "evidence_text": "we'll fasten it to this piece first",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "attach remaining frame sections",
+      "evidence_text": "Now that we have that, we can then do the same thing to attach this part",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "attach camera with small screws",
+      "evidence_text": "we will use the small screws and this allen key",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "tighten camera screws",
+      "evidence_text": "tighten it with the Allen key",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "inspect completed camera mount",
+      "evidence_text": "the whole thing is put back together the way it was before",
+      "sequence_index": 8
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "base",
+      "evidence_text": "connect base"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "support sections",
+      "evidence_text": "big piece"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "misaligned connection",
+      "evidence_text": "loosen this again"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "camera-mount frame",
+      "evidence_text": "big assembly"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "camera",
+      "evidence_text": "add the camera"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "small camera screws",
+      "evidence_text": "small screws"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "screwdriver",
+      "evidence_text": "use the screwdriver"
+    },
+    {
+      "id": "tool_2",
+      "label": "Tool",
+      "name": "Allen key",
+      "evidence_text": "Allen key"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_1",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_3",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_4",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_5",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_6",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_7",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    }
+  ],
+  "quality_results": [
+    {
+      "name": "camera mount reassembled",
+      "evidence_text": "the whole thing is put back together the way it was before",
+      "status": "passed"
+    }
+  ],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The full transcript adds the explicit loosen-and-retry correction and the final Allen-key camera installation. Screwdriver and Allen-key use are now attached to the actions they support. Size-based part names remain generic rather than being forced onto standard bar names."
+}

@@ -27,3 +27,18 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["backend"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "handoff_packages",
+    "results",
+    "docs",
+    "EASG",
+    "raw",
+    "kg_ready_data",
+    "gold_case_admission_29366372",
+]

@@ -1,0 +1,439 @@
+{
+  "scene_id": "indego_user_15_412_2509_1_s1",
+  "video_id": "user_15_412_2509_1",
+  "category": "disassembly",
+  "task": "disassemble camera-mount subassembly",
+  "source_text": "Video user_15_412_2509_1, segment s1, 00:00.000-15:55.094.\nCategory: disassembly.\nSource video file: User_15_412_2509_1_480.mp4.\nTranscript excerpt: Okay, so before I start doing anything, I'm going to again put on steel cap shoes. First, I'm going to take my own shoes off. And then I can put these on by sliding my foot in and then tightening them by turning this wheel to the right. So clockwise. And the same on the other foot, slide my foot in, press this button down and then turn it clockwise to tighten them. And now I'm first going to tidy up my workspace by removing this monitor and the mouse and putting them off to the side. and then we can go grab what we're going to disassemble. Okay. I'm going to use this big wagon to transport it. And I have to turn this around because I'm going to open this door. So now I can move this wagon in here and then open the clasps on either side. and then lift the assembly over into the wagon and close the latch again. And now we can bring the whole thing over to the other room. Okay. Now to bring it in here, I have to open the door first so that I have room to bring the big wagon in. And then close the door. Turn on the light. And we can bring this over here to the workstation. And I can open these latches to let down the door so I can more easily lift the assembly out. Going to take the tools. over to the workstation. And we're going to start by prying off all these caps using a screwdriver. And we'll start over here And also this one. I'm just using a screwdriver to leverage these caps off. Also on the bottom here. And over here. So I'm just using the screwdriver as a sort of lever to pry my caps off. And now we're first going to take off this big plate by I think using the red ...\nAnnotated keysteps:\nKeystep 1: preparation (00:00.000-04:08.818).\nKeystep 2: remove vertical bars (04:08.818-05:33.907).\nKeystep 3: remove base plate (05:33.907-06:47.896).\nKeystep 4: remove vertical bars (06:47.896-15:55.094).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nOkay, so before I start doing anything, I'm going to again put on steel cap shoes. First, I'm going to take my own shoes off. And then I can put these on by sliding my foot in and then tightening them by turning this wheel to the right. So clockwise.  And the same on the other foot, slide my foot in, press this button down and then turn it clockwise to tighten them. And now I'm first going to tidy up my workspace by removing this monitor and the mouse and putting them off to the side.  and then we can go grab what we're going to disassemble. Okay. I'm going to use this big wagon to transport it.  And I have to turn this around because I'm going to open this door. So now I can move this wagon in here and then open the clasps on either side.  and then lift the assembly over into the wagon and close the latch again. And now we can bring the whole thing over to the other room.  Okay. Now to bring it in here, I have to open the door first so that I have room to bring the big wagon in. And then close the door. Turn on the light. And we can bring this over here to the workstation.  And I can open these latches to let down the door so I can more easily lift the assembly out. Going to take the tools.  over to the workstation. And we're going to start by prying off all these caps using a screwdriver. And we'll start over here  And also this one. I'm just using a screwdriver to leverage these caps off. Also on the bottom here. And over here.  So I'm just using the screwdriver as a sort of lever to pry my caps off. And now we're first going to take off this big plate by I think using the red Allen key, which is a size five. I'm going to turn it counterclockwise to loosen the screws.  And so I'm using the short side first to have more force and then I can use the long side to turn it out quicker. Also on this side, again, the short side first and then the long side to unscrew the screw faster and I'm collecting them all over here.  And now we can take this plate off. Put it over here with the screws so that we know which parts belong together. And then I will use this purple key to detach this part. Or actually I will use the red key which is a size 5.  And again, going counterclockwise first to unscrew it.  Okay. And now the third screw. Again, to get this bracket off, just turn it counterclockwise. Oh my God.  Okay, so I am using the short side so that I can have more of a leverage power so that I can unscrew this and take off the screw as well as this little metal plate. And then I'm going to do the same down here again, going counterclockwise with the short side first to help me loosen it the first time. And then I can take this off.  and unscrew it properly. And now we have taken this bracket off and we will do the same on the other side. So again, first going counterclockwise with the short side so that I can loosen it and then I can unscrew it with the long side.  As well on the bottom, first the short side to loosen it, and then the long side to unscrew it faster. Again, using the short side to go counterclockwise to loosen it. And then the long side to unscrew it a bit faster.  Also on these two bottom screws.  Okay, now we have unscrewed both metal brackets. I'm gonna put each of the screws with each of the brackets so I know where they go when reassembling it. And then I'm now going to take this bracket off so that I can take this short metal rod off of the big long one. Again going... Now we'll need the purple key.  or not going counterclockwise.  Also on this one. And I will need a bigger key to take that off. So I'm going to use a size 6. Again going counterclockwise.  Like so. And now I've taken this part off. We can stir that over here. And we can disassemble these parts. By taking out this screw first.  And then this one so that I can loosen the small metal bar from this angled bracket.  So I can't really loosen the screw. So we're just going to leave that on there for now and move on to the other side, which we're going to do the same for. Again, loosening it, going counterclockwise.  So these ones down here and down here, I can't really loosen. So I'm just gonna put this one back as well. By turning it clockwise. And over here as well.  And I will instead try to take this off.  And now we have this big part loosened from this. And we will do the same on the other side. So loosening this screw by going counterclockwise. Then being careful not to drop it when it loosens.  And then we can take this part off too. All right, now to put it all back together, I'm",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "put on steel-cap shoes",
+      "evidence_text": "put on steel cap shoes",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "clear workstation",
+      "evidence_text": "tidy up my workspace by removing this monitor and the mouse",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "load assembly onto wagon",
+      "evidence_text": "lift the assembly over into the wagon",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "transport assembly to workstation",
+      "evidence_text": "bring the whole thing over to the other room",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "pry off caps",
+      "evidence_text": "prying off all these caps using a screwdriver",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "loosen big-plate screws",
+      "evidence_text": "using the red Allen key, which is a size five",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "remove big plate",
+      "evidence_text": "take this plate off",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "loosen metal-bracket screws",
+      "evidence_text": "get this bracket off, just turn it counterclockwise",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "remove metal brackets",
+      "evidence_text": "taken this bracket off",
+      "sequence_index": 9
+    },
+    {
+      "id": "action_10",
+      "label": "Action",
+      "name": "detach short metal rod",
+      "evidence_text": "take this short metal rod off of the big long one",
+      "sequence_index": 10
+    },
+    {
+      "id": "action_11",
+      "label": "Action",
+      "name": "loosen larger connector",
+      "evidence_text": "use a size 6. Again going counterclockwise",
+      "sequence_index": 11
+    },
+    {
+      "id": "action_12",
+      "label": "Action",
+      "name": "attempt to detach small metal bar",
+      "evidence_text": "can't really loosen the screw",
+      "sequence_index": 12
+    },
+    {
+      "id": "action_13",
+      "label": "Action",
+      "name": "restore unremovable screws",
+      "evidence_text": "put this one back as well. By turning it clockwise",
+      "sequence_index": 13
+    },
+    {
+      "id": "action_14",
+      "label": "Action",
+      "name": "detach first large section",
+      "evidence_text": "we have this big part loosened from this",
+      "sequence_index": 14
+    },
+    {
+      "id": "action_15",
+      "label": "Action",
+      "name": "detach matching section",
+      "evidence_text": "do the same on the other side",
+      "sequence_index": 15
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "steel-cap shoes",
+      "evidence_text": "steel cap shoes"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "monitor",
+      "evidence_text": "monitor"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "mouse",
+      "evidence_text": "mouse"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "assembly",
+      "evidence_text": "assembly"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "caps",
+      "evidence_text": "caps"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "big plate",
+      "evidence_text": "big plate"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "big-plate screws",
+      "evidence_text": "screws"
+    },
+    {
+      "id": "object_8",
+      "label": "Object",
+      "name": "metal-bracket screws",
+      "evidence_text": "bracket"
+    },
+    {
+      "id": "object_9",
+      "label": "Object",
+      "name": "metal brackets",
+      "evidence_text": "metal brackets"
+    },
+    {
+      "id": "object_10",
+      "label": "Object",
+      "name": "short metal rod",
+      "evidence_text": "short metal rod"
+    },
+    {
+      "id": "object_11",
+      "label": "Object",
+      "name": "larger connector",
+      "evidence_text": "bigger key"
+    },
+    {
+      "id": "object_12",
+      "label": "Object",
+      "name": "small metal bar",
+      "evidence_text": "small metal bar"
+    },
+    {
+      "id": "object_13",
+      "label": "Object",
+      "name": "large frame sections",
+      "evidence_text": "big part"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "transport wagon",
+      "evidence_text": "big wagon"
+    },
+    {
+      "id": "tool_2",
+      "label": "Tool",
+      "name": "screwdriver",
+      "evidence_text": "screwdriver"
+    },
+    {
+      "id": "tool_3",
+      "label": "Tool",
+      "name": "size-5 red Allen key",
+      "evidence_text": "red Allen key, which is a size five"
+    },
+    {
+      "id": "tool_4",
+      "label": "Tool",
+      "name": "size-6 Allen key",
+      "evidence_text": "size 6"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_9",
+      "relation": "BEFORE",
+      "target": "action_10"
+    },
+    {
+      "source": "action_10",
+      "relation": "BEFORE",
+      "target": "action_11"
+    },
+    {
+      "source": "action_11",
+      "relation": "BEFORE",
+      "target": "action_12"
+    },
+    {
+      "source": "action_12",
+      "relation": "BEFORE",
+      "target": "action_13"
+    },
+    {
+      "source": "action_13",
+      "relation": "BEFORE",
+      "target": "action_14"
+    },
+    {
+      "source": "action_14",
+      "relation": "BEFORE",
+      "target": "action_15"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_9"
+    },
+    {
+      "source": "action_10",
+      "relation": "ACTS_ON",
+      "target": "object_10"
+    },
+    {
+      "source": "action_11",
+      "relation": "ACTS_ON",
+      "target": "object_11"
+    },
+    {
+      "source": "action_12",
+      "relation": "ACTS_ON",
+      "target": "object_12"
+    },
+    {
+      "source": "action_13",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_14",
+      "relation": "ACTS_ON",
+      "target": "object_13"
+    },
+    {
+      "source": "action_15",
+      "relation": "ACTS_ON",
+      "target": "object_13"
+    },
+    {
+      "source": "action_3",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_4",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_5",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    },
+    {
+      "source": "action_6",
+      "relation": "USES_TOOL",
+      "target": "tool_3"
+    },
+    {
+      "source": "action_8",
+      "relation": "USES_TOOL",
+      "target": "tool_3"
+    },
+    {
+      "source": "action_9",
+      "relation": "USES_TOOL",
+      "target": "tool_3"
+    },
+    {
+      "source": "action_10",
+      "relation": "USES_TOOL",
+      "target": "tool_3"
+    },
+    {
+      "source": "action_11",
+      "relation": "USES_TOOL",
+      "target": "tool_4"
+    },
+    {
+      "source": "action_12",
+      "relation": "USES_TOOL",
+      "target": "tool_4"
+    },
+    {
+      "source": "action_13",
+      "relation": "USES_TOOL",
+      "target": "tool_4"
+    },
+    {
+      "source": "action_14",
+      "relation": "USES_TOOL",
+      "target": "tool_4"
+    },
+    {
+      "source": "action_15",
+      "relation": "USES_TOOL",
+      "target": "tool_4"
+    }
+  ],
+  "quality_results": [
+    {
+      "name": "small-bar screws could not be loosened",
+      "evidence_text": "can't really loosen the screw",
+      "status": "partial"
+    }
+  ],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "Preparation, transport, cap removal, bracket operations, tool sizes, failed loosening, and screw restoration are restored. The purple key is excluded because the operator immediately switches to a size-6 key."
+}

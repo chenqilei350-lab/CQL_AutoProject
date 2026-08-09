@@ -1,0 +1,341 @@
+{
+  "scene_id": "indego_user_14_user_15_411_1010_1_s1",
+  "video_id": "user_14_user_15_411_1010_1",
+  "category": "inspection_repair",
+  "task": "repair lamp",
+  "source_text": "Video user_14_user_15_411_1010_1, segment s1, 00:02.938-07:52.264.\nCategory: inspection_repair.\nSource video file: User_14_User_15_411_1010_1_480.mp4.\nTranscript excerpt: So last time I reassembled this lamp incorrectly. Now Yasmina, my colleague, is going to show me how to fix it. Okay, so first we can see where the problems are. We put this into here. You can't move it down. So the workspace for here, you can't move this part down. So this is wrong. Also, it usually should go this way over. this bottom part so that it moves correctly. So I'm going to take this out again. And we're probably first going to drag this part down here. So in order to do that, we're just going to unscrew this screw. Second, I have to take off my rings. Maybe you can already unscrew. Like this? Yeah. So I'm just going to put this over here. And then take one. Maybe I can write it here. Maybe I can remove it. And this one. Thank you. again making sure it's in the groove and then attaching it to this one here and now if we put it back in here on the clamp yeah this is already correct Unscrew these. And this. And this part. Okay, so. I'm just going to take this off. is that this round part goes on here. As you can see, there's the markings from where it's moved around. this came from, I think here? No. It should be here, like? In here? Yeah, maybe. No, no, it was. Where was it? I don't remember. Oh, no, I do. It should be in here. Okay, now we can put the top back on. No, the other way around, because it has these groovings for that to sit. Okay, yeah. And then I'm going to take these screws, put them in the holes, and then screw this part back on by rotating the screwdriver clockwise. The same over here. So again, just rotating the screwdriver clockwise. And now ...\nAnnotated keysteps:\nKeystep 1: inspect (00:02.938-00:47.028).\nKeystep 2: repair (00:47.028-06:56.033).\nKeystep 3: test (06:56.033-07:52.264).\n\nFull video transcript (used only when aligned with this scene's annotated actions/keysteps):\nSo last time I reassembled this lamp incorrectly. Now Yasmina, my colleague, is going to show me how to fix it. Okay, so first we can see where the problems are. We put this into here. You can't move it down. So the workspace for here, you can't move this part down. So this is wrong. Also, it usually should go this way over.  this bottom part so that it moves correctly. So I'm going to take this out again. And we're probably first going to drag this part down here. So in order to do that, we're just going to unscrew this screw. Second, I have to take off my rings. Maybe you can already unscrew.  Like this? Yeah. So I'm just going to put this over here. And then take one. Maybe I can write it here.  Maybe I can remove it.  And this one.  Thank you.  again making sure it's in the groove and then attaching it to this one here and now if we put it back in here on the clamp yeah this is already correct  Unscrew these. And this. And this part. Okay, so. I'm just going to take this off.  is that this round part goes on here. As you can see, there's the markings from where it's moved around.  this came from, I think here? No. It should be here, like? In here? Yeah, maybe. No, no, it was. Where was it? I don't remember. Oh, no, I do. It should be in here. Okay, now we can put the top back on. No, the other way around, because it has these groovings for that to sit. Okay, yeah.  And then I'm going to take these screws, put them in the holes, and then screw this part back on by rotating the screwdriver clockwise. The same over here.  So again, just rotating the screwdriver clockwise. And now all that's missing is that part. So it was like this? Yes. Okay.  it will move around. And if I loosen it, I can move it to like here or here, whatever I want.  No, it's not working. And now you can move this around again so that if I want to put light on something over here, I can just move it around like this. I can also, if I loosen this part a bit, if I loosen it, I can position it however I want and tighten it again by rotating clockwise. And now the whole round is fixed again.",
+  "gold_entities": [
+    {
+      "id": "action_1",
+      "label": "Action",
+      "name": "inspect incorrect lamp assembly",
+      "evidence_text": "first we can see where the problems are",
+      "sequence_index": 1
+    },
+    {
+      "id": "action_2",
+      "label": "Action",
+      "name": "test blocked lamp movement",
+      "evidence_text": "You can't move it down",
+      "sequence_index": 2
+    },
+    {
+      "id": "action_3",
+      "label": "Action",
+      "name": "unscrew adjustment screw",
+      "evidence_text": "unscrew this screw",
+      "sequence_index": 3
+    },
+    {
+      "id": "action_4",
+      "label": "Action",
+      "name": "remove misassembled lamp parts",
+      "evidence_text": "take this off",
+      "sequence_index": 4
+    },
+    {
+      "id": "action_5",
+      "label": "Action",
+      "name": "position connector in groove",
+      "evidence_text": "making sure it's in the groove",
+      "sequence_index": 5
+    },
+    {
+      "id": "action_6",
+      "label": "Action",
+      "name": "mount lamp assembly on clamp",
+      "evidence_text": "put it back in here on the clamp",
+      "sequence_index": 6
+    },
+    {
+      "id": "action_7",
+      "label": "Action",
+      "name": "remove round part and top",
+      "evidence_text": "this round part goes on here",
+      "sequence_index": 7
+    },
+    {
+      "id": "action_8",
+      "label": "Action",
+      "name": "reposition round part",
+      "evidence_text": "this round part goes on here",
+      "sequence_index": 8
+    },
+    {
+      "id": "action_9",
+      "label": "Action",
+      "name": "reinstall top in correct orientation",
+      "evidence_text": "put the top back on. No, the other way around",
+      "sequence_index": 9
+    },
+    {
+      "id": "action_10",
+      "label": "Action",
+      "name": "insert lamp screws",
+      "evidence_text": "take these screws, put them in the holes",
+      "sequence_index": 10
+    },
+    {
+      "id": "action_11",
+      "label": "Action",
+      "name": "tighten lamp screws",
+      "evidence_text": "rotating the screwdriver clockwise",
+      "sequence_index": 11
+    },
+    {
+      "id": "action_12",
+      "label": "Action",
+      "name": "reinstall adjustment part",
+      "evidence_text": "all that's missing is that part",
+      "sequence_index": 12
+    },
+    {
+      "id": "action_13",
+      "label": "Action",
+      "name": "test lamp adjustability",
+      "evidence_text": "now you can move this around again",
+      "sequence_index": 13
+    },
+    {
+      "id": "action_14",
+      "label": "Action",
+      "name": "tighten adjustment joint",
+      "evidence_text": "tighten it again by rotating clockwise",
+      "sequence_index": 14
+    },
+    {
+      "id": "object_1",
+      "label": "Object",
+      "name": "lamp",
+      "evidence_text": "lamp"
+    },
+    {
+      "id": "object_2",
+      "label": "Object",
+      "name": "adjustment screw",
+      "evidence_text": "this screw"
+    },
+    {
+      "id": "object_3",
+      "label": "Object",
+      "name": "misassembled lamp parts",
+      "evidence_text": "this part"
+    },
+    {
+      "id": "object_4",
+      "label": "Object",
+      "name": "groove",
+      "evidence_text": "groove"
+    },
+    {
+      "id": "object_5",
+      "label": "Object",
+      "name": "round part",
+      "evidence_text": "round part"
+    },
+    {
+      "id": "object_6",
+      "label": "Object",
+      "name": "top",
+      "evidence_text": "top"
+    },
+    {
+      "id": "object_7",
+      "label": "Object",
+      "name": "lamp screws",
+      "evidence_text": "these screws"
+    },
+    {
+      "id": "object_8",
+      "label": "Object",
+      "name": "adjustment part",
+      "evidence_text": "that part"
+    },
+    {
+      "id": "object_9",
+      "label": "Object",
+      "name": "adjustment joint",
+      "evidence_text": "loosen this part"
+    },
+    {
+      "id": "tool_1",
+      "label": "Tool",
+      "name": "clamp",
+      "evidence_text": "clamp"
+    },
+    {
+      "id": "tool_2",
+      "label": "Tool",
+      "name": "screwdriver",
+      "evidence_text": "screwdriver"
+    }
+  ],
+  "gold_relations": [
+    {
+      "source": "action_1",
+      "relation": "BEFORE",
+      "target": "action_2"
+    },
+    {
+      "source": "action_2",
+      "relation": "BEFORE",
+      "target": "action_3"
+    },
+    {
+      "source": "action_3",
+      "relation": "BEFORE",
+      "target": "action_4"
+    },
+    {
+      "source": "action_4",
+      "relation": "BEFORE",
+      "target": "action_5"
+    },
+    {
+      "source": "action_5",
+      "relation": "BEFORE",
+      "target": "action_6"
+    },
+    {
+      "source": "action_6",
+      "relation": "BEFORE",
+      "target": "action_7"
+    },
+    {
+      "source": "action_7",
+      "relation": "BEFORE",
+      "target": "action_8"
+    },
+    {
+      "source": "action_8",
+      "relation": "BEFORE",
+      "target": "action_9"
+    },
+    {
+      "source": "action_9",
+      "relation": "BEFORE",
+      "target": "action_10"
+    },
+    {
+      "source": "action_10",
+      "relation": "BEFORE",
+      "target": "action_11"
+    },
+    {
+      "source": "action_11",
+      "relation": "BEFORE",
+      "target": "action_12"
+    },
+    {
+      "source": "action_12",
+      "relation": "BEFORE",
+      "target": "action_13"
+    },
+    {
+      "source": "action_13",
+      "relation": "BEFORE",
+      "target": "action_14"
+    },
+    {
+      "source": "action_1",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_2",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_3",
+      "relation": "ACTS_ON",
+      "target": "object_2"
+    },
+    {
+      "source": "action_4",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_4"
+    },
+    {
+      "source": "action_5",
+      "relation": "ACTS_ON",
+      "target": "object_3"
+    },
+    {
+      "source": "action_6",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_7",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_8",
+      "relation": "ACTS_ON",
+      "target": "object_5"
+    },
+    {
+      "source": "action_9",
+      "relation": "ACTS_ON",
+      "target": "object_6"
+    },
+    {
+      "source": "action_10",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_11",
+      "relation": "ACTS_ON",
+      "target": "object_7"
+    },
+    {
+      "source": "action_12",
+      "relation": "ACTS_ON",
+      "target": "object_8"
+    },
+    {
+      "source": "action_13",
+      "relation": "ACTS_ON",
+      "target": "object_1"
+    },
+    {
+      "source": "action_14",
+      "relation": "ACTS_ON",
+      "target": "object_9"
+    },
+    {
+      "source": "action_6",
+      "relation": "USES_TOOL",
+      "target": "tool_1"
+    },
+    {
+      "source": "action_11",
+      "relation": "USES_TOOL",
+      "target": "tool_2"
+    }
+  ],
+  "quality_results": [
+    {
+      "name": "lamp adjustability restored",
+      "evidence_text": "now you can move this around again",
+      "status": "passed"
+    }
+  ],
+  "outcomes": [],
+  "review_status": "accepted",
+  "review_revision": "v3_optimized_full_transcript",
+  "reviewer_note": "The graph now includes pre-repair inspection, failed movement test, disassembly, groove/orientation correction, screw tightening, post-repair movement test, and final joint tightening. Clamp and screwdriver uses are explicit."
+}
