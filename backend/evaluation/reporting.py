@@ -1,19 +1,8 @@
-"""Raw 与 Unified 对比实验的结果表和错误分析输出模块。
+"""Result tables and error analysis for raw versus unified experiments.
 
-本模块位于实验链的最后汇总阶段：
-
-    数据集 -> 重复抽取 -> 稳定性评价 -> 结果表与错误分析
-
-它把模型生成的 graph 与人工 gold graph 进行对比，输出：
-
-- 节点检测 Precision / Recall / F1；
-- 关系检测 Precision / Recall / F1；
-- schema 与原文证据校验指标；
-- 重复运行的 graph stability 指标；
-- 便于人工阅读的典型错误记录。
-
-这里采用图事实比较，而不是只评价一种实体类型，因为本项目同时关注
-Action、Tool、Object 等多类节点，以及 USES_TOOL、CAUSES 等多种关系。
+The module compares generated graphs with human-authored Gold graphs and reports
+node and relation P/R/F1, schema and grounding validation, repeated-run stability,
+and human-readable error observations.
 """
 
 from __future__ import annotations
@@ -39,7 +28,7 @@ from backend.pipeline.experiment_runner import (
 
 
 class RunQualityResult(BaseModel):
-    """一次模型运行相对于人工 gold graph 的质量结果。"""
+    """Quality of one model run relative to the human-authored Gold graph."""
 
     scene_id: str
     condition: InputCondition
@@ -52,7 +41,7 @@ class RunQualityResult(BaseModel):
 
 
 class ErrorObservation(BaseModel):
-    """报告中可读的一条错误观察，用于后续 error analysis。"""
+    """One human-readable observation for later error analysis."""
 
     scene_id: str
     condition: InputCondition
@@ -62,7 +51,7 @@ class ErrorObservation(BaseModel):
 
 
 class ConditionComparisonRow(BaseModel):
-    """Raw 或 Unified 条件的总体结果行。"""
+    """Aggregate result row for a raw or unified condition."""
 
     condition: InputCondition
     run_count: int
@@ -77,7 +66,7 @@ class ConditionComparisonRow(BaseModel):
 
 
 class ExperimentComparisonReport(BaseModel):
-    """可导出的 Raw vs Unified 对比报告。"""
+    """Exportable raw-versus-unified comparison report."""
 
     dataset_name: str
     run_results: list[RunQualityResult] = Field(default_factory=list)
@@ -85,22 +74,22 @@ class ExperimentComparisonReport(BaseModel):
     error_observations: list[ErrorObservation] = Field(default_factory=list)
 
     def row_for(self, condition: InputCondition) -> ConditionComparisonRow:
-        """返回指定输入条件的汇总结果行。"""
+        """Return the summary row for one input condition."""
 
         for row in self.condition_rows:
             if row.condition == condition:
                 return row
-        raise KeyError(f"没有找到输入条件 {condition!r} 的结果表行")
+        raise KeyError(f"No result row found for input condition {condition!r}")
 
     def to_markdown(self) -> str:
-        """生成可直接放入项目文档或展示材料的 Markdown 表格。"""
+        """Generate Markdown suitable for project documents or slides."""
 
         lines = [
-            "# Raw vs Unified 实验结果",
+            "# Raw vs Unified Experiment Results",
             "",
-            "## 汇总对比表",
+            "## Aggregate Comparison",
             "",
-            "| 输入 | 运行数 | Node F1 | Relation F1 | Schema 合规率 | 对象证据率 | 需过滤关系均值 | Node overlap | Relation agreement | Graph overlap |",
+            "| Input | Runs | Node F1 | Relation F1 | Schema Conformance | Object Grounding | Mean Filtered Relations | Node Overlap | Relation Agreement | Graph Overlap |",
             "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
         ]
         for row in self.condition_rows:
@@ -113,9 +102,9 @@ class ExperimentComparisonReport(BaseModel):
                 f"{row.mean_relation_agreement:.4f} | {row.mean_graph_overlap:.4f} |"
             )
 
-        lines.extend(["", "## 错误分析", ""])
+        lines.extend(["", "## Error Analysis", ""])
         if not self.error_observations:
-            lines.append("- 当前运行未发现缺失、额外或无原文依据的图事实。")
+            lines.append("- No missing, extra, or ungrounded graph facts were found.")
         else:
             for observation in self.error_observations:
                 lines.append(
@@ -127,7 +116,7 @@ class ExperimentComparisonReport(BaseModel):
         return "\n".join(lines)
 
     def to_csv(self) -> str:
-        """生成仅包含总体指标的 CSV，便于制图或表格软件处理。"""
+        """Generate aggregate-only CSV for charts and spreadsheet tools."""
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
@@ -171,7 +160,7 @@ class ExperimentComparisonReport(BaseModel):
         return buffer.getvalue()
 
     def save_markdown(self, output_path: str | Path) -> Path:
-        """将可读报告保存为 Markdown 文件。"""
+        """Save the human-readable report as Markdown."""
 
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -179,7 +168,7 @@ class ExperimentComparisonReport(BaseModel):
         return path
 
     def save_csv(self, output_path: str | Path) -> Path:
-        """将汇总表保存为 CSV 文件。"""
+        """Save the aggregate table as CSV."""
 
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -192,7 +181,7 @@ def build_comparison_report(
     dataset: BenchmarkDataset = MVP_BENCHMARK,
     stability_report: StabilityReport | None = None,
 ) -> ExperimentComparisonReport:
-    """对全部运行结果做 gold 评价，并生成 Raw/Unified 汇总报告。"""
+    """Evaluate every run against Gold and build a raw/unified report."""
 
     stability_report = stability_report or evaluate_stability(batch_result)
     run_results: list[RunQualityResult] = []
@@ -222,7 +211,7 @@ def _evaluate_run_against_gold(
     run: ExtractionRunRecord,
     gold_graph: PropertyGraph,
 ) -> tuple[RunQualityResult, list[ErrorObservation]]:
-    """计算单次运行与标准图之间的差异，并收集错误解释。"""
+    """Compare one run with Gold and collect error explanations."""
 
     gold_nodes = _node_facts(gold_graph)
     extracted_nodes = _node_facts(run.graph)
@@ -244,18 +233,18 @@ def _evaluate_run_against_gold(
     observations: list[ErrorObservation] = []
 
     if run.execution_error:
-        observations.append(_observation(run, "运行失败", run.execution_error))
+        observations.append(_observation(run, "Execution failure", run.execution_error))
     for fact in sorted(gold_nodes - extracted_nodes):
-        observations.append(_observation(run, "缺失节点", fact))
+        observations.append(_observation(run, "Missing node", fact))
     for fact in sorted(extracted_nodes - gold_nodes):
-        observations.append(_observation(run, "额外节点", fact))
+        observations.append(_observation(run, "Extra node", fact))
     for fact in sorted(gold_relations - extracted_relations):
-        observations.append(_observation(run, "缺失关系", fact))
+        observations.append(_observation(run, "Missing relation", fact))
     for fact in sorted(extracted_relations - gold_relations):
-        observations.append(_observation(run, "额外关系", fact))
+        observations.append(_observation(run, "Extra relation", fact))
     for issue in run.validation.issues:
         observations.append(
-            _observation(run, f"校验问题:{issue.kind}", issue.message)
+            _observation(run, f"Validation issue:{issue.kind}", issue.message)
         )
 
     return quality, observations
@@ -266,7 +255,7 @@ def _build_condition_row(
     run_results: list[RunQualityResult],
     stability_report: StabilityReport,
 ) -> ConditionComparisonRow:
-    """将一种输入形式的多场景、多次运行指标汇总成表格一行。"""
+    """Aggregate multi-scene repeated-run metrics into one condition row."""
 
     selected = [result for result in run_results if result.condition == condition]
     stability_selected = [
@@ -309,7 +298,7 @@ def _build_condition_row(
 def _facts_to_prf1(
     category: str, expected: set[str], extracted: set[str]
 ) -> PRF1:
-    """把 gold 与抽取事实集合的交集/差集转换为 P/R/F1。"""
+    """Convert Gold/prediction set differences into P/R/F1."""
 
     return compute_prf1(
         category=category,
@@ -320,7 +309,7 @@ def _facts_to_prf1(
 
 
 def _node_facts(graph: PropertyGraph) -> set[str]:
-    """用节点类型和标准化名称表示一个图节点事实。"""
+    """Represent a node fact by label and normalized name."""
 
     return {
         f"{node.label}: {normalize_name(node.name)}"
@@ -329,7 +318,7 @@ def _node_facts(graph: PropertyGraph) -> set[str]:
 
 
 def _relation_facts(graph: PropertyGraph) -> set[str]:
-    """用可读三元组表示一个图关系事实。"""
+    """Represent a relation fact as a readable triple."""
 
     facts: set[str] = set()
     for edge in graph.edges:
@@ -345,7 +334,7 @@ def _relation_facts(graph: PropertyGraph) -> set[str]:
 def _observation(
     run: ExtractionRunRecord, error_type: str, detail: str
 ) -> ErrorObservation:
-    """为一条差异添加可追踪的场景、条件和运行次数信息。"""
+    """Attach traceable scene, condition, and run information to a difference."""
 
     return ErrorObservation(
         scene_id=run.scene_id,
@@ -357,7 +346,7 @@ def _observation(
 
 
 def _mean(values: list[float]) -> float:
-    """计算报告中的平均值，没有输入时返回 0。"""
+    """Return a report mean, or zero when no values are available."""
 
     if not values:
         return 0.0

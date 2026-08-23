@@ -92,6 +92,31 @@ _TOOL_OBJECT_TERMS = (
     "connector",
 )
 
+# 中文：该集合仅用于 IndEgo Adapter 将已解析名词标成 Tool/Object；它不参与
+# 原始文本清洗，也不是跨数据集工具本体。
+# English: This set types already parsed IndEgo mentions. It is neither a source
+# cleaner nor a cross-dataset tool ontology.
+_INDEGO_TOOL_TERMS = {
+    "allen wrench",
+    "torque wrench",
+    "screwdriver",
+    "drill machine",
+    "drilling machine",
+    "box cutter",
+    "cutter knife",
+    "spirit level",
+    "multimeter",
+    "protractor",
+    "caliper",
+    "hammer",
+    "hole puncher",
+    "sandpaper",
+    "clamp",
+    "cloth",
+    "gloves",
+    "safety shoes",
+}
+
 
 class IndEgoTemporalSegment(BaseModel):
     """One temporal action or keystep annotation from a VIA JSON file."""
@@ -141,8 +166,8 @@ class IndEgoStandardScene(BaseModel):
         if condition == "raw":
             return self.raw_text
         if condition == "unified":
-            return self.unified_record.to_prompt_text()
-        raise ValueError(f"不支持的输入条件: {condition!r}")
+            return self.unified_record.to_extraction_text()
+        raise ValueError(f"Unsupported input condition: {condition!r}")
 
 
 class IndEgoStandardDataset(BaseModel):
@@ -157,7 +182,7 @@ class IndEgoStandardDataset(BaseModel):
         for scene in self.scenes:
             if scene.scene_id == scene_id:
                 return scene
-        raise KeyError(f"IndEgo 标准输入中不存在场景: {scene_id!r}")
+        raise KeyError(f"Scene does not exist in the IndEgo standard input: {scene_id!r}")
 
     def inputs_for(self, condition: InputCondition) -> list[tuple[str, str]]:
         """Return `(scene_id, input_text)` pairs for one input condition."""
@@ -648,12 +673,20 @@ def _build_standard_scene(
 
     raw_text = "\n".join(raw_lines)
     action_entries = [
-        GroundedEntry(text=segment.label, evidence=line)
+        GroundedEntry(
+            text=segment.label,
+            evidence=line,
+            entry_type="action",
+        )
         for segment, line in zip(action_segments, action_evidence)
     ]
     if not action_entries:
         action_entries = [
-            GroundedEntry(text=segment.label, evidence=line)
+            GroundedEntry(
+                text=segment.label,
+                evidence=line,
+                entry_type="action",
+            )
             for segment, line in zip(keystep_segments, keystep_evidence)
         ]
     tool_object_entries = _infer_tool_object_entries(
@@ -665,6 +698,7 @@ def _build_standard_scene(
         GroundedEntry(
             text=f"warning: {warning.description}",
             evidence=line,
+            entry_type="quality",
         )
         for warning, line in zip(warnings, warning_evidence)
     ]
@@ -687,6 +721,12 @@ def _build_standard_scene(
         tools_objects=tool_object_entries,
         quality_results=warning_entries,
         uncertainty=uncertainty,
+        source_adapter="indego_adapter",
+        annotation_text="\n".join(
+            [*action_evidence, *keystep_evidence, *warning_evidence]
+        )
+        or None,
+        transcript_text=transcript_text or None,
     )
     description = f"{category} scene from {video_id}"
     return IndEgoStandardScene(
@@ -839,7 +879,15 @@ def _infer_tool_object_entries(
         label = segment.label.casefold()
         for term in _TOOL_OBJECT_TERMS:
             if term in label and term not in seen:
-                entries.append(GroundedEntry(text=term, evidence=evidence))
+                entries.append(
+                    GroundedEntry(
+                        text=term,
+                        evidence=evidence,
+                        entry_type=(
+                            "tool" if term in _INDEGO_TOOL_TERMS else "object"
+                        ),
+                    )
+                )
                 seen.add(term)
     return entries
 
@@ -849,7 +897,13 @@ def _actor_entries(video_id: str, raw_text: str) -> list[GroundedEntry]:
     for match in _USER_RE.finditer(video_id):
         evidence = match.group(0)
         if evidence in raw_text:
-            entries.append(GroundedEntry(text=f"User {match.group(1)}", evidence=evidence))
+            entries.append(
+                GroundedEntry(
+                    text=f"User {match.group(1)}",
+                    evidence=evidence,
+                    entry_type="role",
+                )
+            )
     return entries
 
 

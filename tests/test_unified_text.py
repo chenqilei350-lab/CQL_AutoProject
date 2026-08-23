@@ -1,4 +1,4 @@
-"""统一格式文本生成模块的功能测试。"""
+"""Tests for unified-format text generation."""
 
 import pytest
 
@@ -17,7 +17,7 @@ RAW_INSPECTION_TEXT = (
 
 
 def build_inspection_record() -> UnifiedTextRecord:
-    """构造一个可复用的质量检查场景，用于验证正常生成流程。"""
+    """Build a reusable quality-inspection record."""
 
     return build_unified_text(
         raw_text=RAW_INSPECTION_TEXT,
@@ -49,12 +49,12 @@ def build_inspection_record() -> UnifiedTextRecord:
                 evidence="records the result",
             )
         ],
-        evidence_uncertainty=["动作顺序由句中先后顺序提供支持。"],
+        evidence_uncertainty=["The sentence order supports the action sequence."],
     )
 
 
 def test_build_unified_text_preserves_scene_and_source_information():
-    """确认统一记录保存场景来源信息与完整原始文本。"""
+    """A unified record preserves provenance and complete source text."""
 
     record = build_inspection_record()
 
@@ -66,7 +66,7 @@ def test_build_unified_text_preserves_scene_and_source_information():
 
 
 def test_unified_text_can_be_saved_as_structured_json():
-    """确认记录能够作为后续 benchmark 的 JSON 数据保存。"""
+    """The record can be serialized as benchmark JSON."""
 
     record = build_inspection_record()
     data = record.model_dump(mode="json")
@@ -77,22 +77,22 @@ def test_unified_text_can_be_saved_as_structured_json():
 
 
 def test_to_prompt_text_renders_fixed_sections_and_action_order():
-    """确认模型输入文本具有固定栏目，并保留动作顺序。"""
+    """Prompt text has fixed sections and preserves action order."""
 
     prompt_text = build_inspection_record().to_prompt_text()
 
-    assert "[场景 / 片段]" in prompt_text
-    assert "[执行人员]" in prompt_text
-    assert "[动作顺序]" in prompt_text
+    assert "[SCENE / SEGMENT]" in prompt_text
+    assert "[ACTORS]" in prompt_text
+    assert "[ACTION SEQUENCE]" in prompt_text
     assert "1. place caliper on bracket" in prompt_text
     assert "2. measure gap" in prompt_text
     assert "3. record result" in prompt_text
-    assert "[原始文本]" in prompt_text
+    assert "[SOURCE TEXT]" in prompt_text
     assert RAW_INSPECTION_TEXT in prompt_text
 
 
 def test_optional_sections_can_be_empty_and_still_render():
-    """确认没有结果字段或不确定性记录时仍能生成统一文本。"""
+    """Optional sections render safely when empty."""
 
     record = build_unified_text(
         raw_text="Hans picks up the welding torch.",
@@ -109,13 +109,13 @@ def test_optional_sections_can_be_empty_and_still_render():
     )
     prompt_text = record.to_prompt_text()
 
-    assert "[工具 / 对象]\n无" in prompt_text
-    assert "[结果 / 参数]\n无" in prompt_text
-    assert "[证据 / 不确定性]\n无额外不确定性记录" in prompt_text
+    assert "[TOOLS / OBJECTS]\nNone" in prompt_text
+    assert "[OUTCOMES / PARAMETERS]\nNone" in prompt_text
+    assert "[EVIDENCE / UNCERTAINTY]\nNo additional uncertainty recorded" in prompt_text
 
 
 def test_evidence_not_found_in_source_text_is_rejected():
-    """确认不能把原文没有提到的工具加入统一格式输入。"""
+    """A tool absent from the source cannot enter the unified input."""
 
     with pytest.raises(EvidenceNotFoundError, match="laser scanner"):
         build_unified_text(

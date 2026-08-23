@@ -56,6 +56,13 @@ def test_easg_adapter_builds_standard_scene_without_video_files(tmp_path) -> Non
     assert scene.gold_extraction.actions[0].provenance.frame_start == 10
     assert scene.skipped_relations[0].relation == "near"
     assert "no video frames are used" in scene.input_text("unified")
+    normalized = scene.unified_record.normalized_segment
+    assert normalized is not None
+    assert normalized.source_adapter == "easg_adapter"
+    assert normalized.actions[0].direct_object_id == "O1"
+    assert [tool.text for tool in normalized.tools] == ["knife"]
+    assert [scene.mention_id for scene in normalized.scenes] == ["S1"]
+    assert "sentence=cut bread with knife." in scene.input_text("unified")
 
 
 def test_easg_adapter_falls_back_to_annotation_derived_text(tmp_path) -> None:
@@ -211,6 +218,44 @@ def test_easg_dataset_jsonl_roundtrip_and_benchmark_conversion(tmp_path) -> None
     assert loaded.scenes[0].scene_id == dataset.scenes[0].scene_id
     assert benchmark_scene.raw_text == loaded.scenes[0].raw_text
     assert benchmark_scene.gold_extraction.source_text == benchmark_scene.raw_text
+
+
+def test_legacy_easg_jsonl_migration_does_not_need_gold_fields(tmp_path) -> None:
+    """Pre-contract JSONL should receive typed slots from adapter text alone."""
+
+    record = {
+        "scene_id": "legacy_easg",
+        "video_id": "video_1",
+        "description": "legacy",
+        "source_path": "legacy.json",
+        "raw_text": "Annotation-derived text: action 'place' involves wood, right hand.",
+        "unified_record": {
+            "scene_id": "legacy_easg",
+            "segment_id": "a1",
+            "scene_segment": "legacy",
+            "action_sequence": [{"text": "place", "evidence": "place"}],
+            "tools_objects": [
+                {"text": "wood", "evidence": "wood"},
+                {"text": "right hand", "evidence": "right hand"},
+            ],
+            "source_text": (
+                "Annotation-derived text: action 'place' involves wood, right hand."
+            ),
+        },
+        "gold_extraction": {"source_text": "unused gold sentinel"},
+    }
+    path = tmp_path / "legacy.jsonl"
+    path.write_text(json.dumps(record) + "\n", encoding="utf-8")
+
+    scene = EASGStandardDataset.from_jsonl(path).scenes[0]
+    segment = scene.unified_record.normalized_segment
+
+    assert segment is not None
+    assert segment.source_adapter == "easg_adapter_legacy_migration"
+    assert segment.actions[0].verb == "place"
+    assert segment.actions[0].direct_object_id == "O1"
+    assert [item.mention_id for item in segment.scenes] == ["S1"]
+    assert "unused gold sentinel" not in scene.input_text("unified")
 
 
 def test_easg_adapter_limit_reads_subset(tmp_path) -> None:

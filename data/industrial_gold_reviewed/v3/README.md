@@ -1,28 +1,35 @@
-# Industrial Gold V3 全量优化版（20条）
+# Industrial Gold V3 Fully Reviewed Dataset (20 Records)
 
-本批次从完整 IndEgo 原始标准输入重新选取并人工整理，明确排除：
+This batch was reselected and manually reviewed from the complete standardized
+IndEgo inputs. It explicitly excludes:
 
-- 桌子/书桌拆卸场景；
-- 电脑、PC、工作站或嵌入式计算单元组装场景；
-- 上传参考 JSONL 中的全部 6 个 scene_id。
+- table or desk disassembly scenes;
+- computer, PC, workstation, or embedded-computing-unit assembly scenes;
+- all six `scene_id` values from the uploaded reference JSONL.
 
-## 文件
+## Files
 
-- `industrial_gold_v3_reviewed.jsonl`：20条最终 reviewed Gold，逐行 JSON。
-- `industrial_gold_v3_reviewed.json`：相同内容的 JSON 数组版。
-- `examples/`：按 01–20 编号的单条 Gold JSON。
-- `中文审核说明/`：按 01–20 编号的逐条中文审核说明。
-- `20个Gold样本中文审核说明_汇总.md`：所有中文说明的整体文件。
-- `Gold_V3全量优化报告.md`：动作、工具和关系的优化前后对照及逐样本统计。
-- `manifest.json`：编号、scene_id、类别、任务与文件路径对照表。
-- `validation_report.json`：数量、排除项、证据、关系端点等自动验证结果。
+- `industrial_gold_v3_reviewed.jsonl`: 20 final reviewed Gold records in JSONL.
+- `industrial_gold_v3_reviewed.json`: the same records as a JSON array.
+- `examples/`: individual Gold JSON files numbered 01 through 20.
+- A review-notes directory containing Chinese per-record notes numbered 01 through 20.
+- A combined Chinese review-notes document for all 20 records.
+- A full optimization report covering before/after action, tool, and relation analysis.
+- `manifest.json`: mapping of number, scene ID, category, task, and file path.
+- `validation_report.json`: automated counts, exclusions, evidence, and endpoint checks.
 
-## 审核原则
+## Review Rules
 
-1. 上传的 V2 文件只参考结构和审核写法，不复制或混入样本。
-2. 完整转录中明确出现的检查、清理、纠错、失败尝试、回装和收尾动作不得省略。
-3. 句子中明确实际使用的工具必须创建 Tool 与 `USES_TOOL`；仅出现但未使用的物品不误标工具关系。
-4. 只创建证据支持的相邻 `BEFORE`；警告模板来自多个 run，不创建跨 run 的 `BEFORE`。
-5. 含糊代词、部件身份、工具映射和结果缺失均写入中文说明，并从正式 Gold 事实中排除。
+1. V2 is used only as a structural and review-style reference; its records are
+   not copied or mixed into V3.
+2. Explicit inspections, cleaning, corrections, failed attempts, reassembly,
+   and cleanup actions in the full transcript must not be omitted.
+3. A tool explicitly used in a sentence requires a Tool node and a `USES_TOOL`
+   edge. Merely mentioned items must not be mislabeled as used tools.
+4. Create only evidence-supported adjacent `BEFORE` edges. Warning templates
+   combine multiple runs, so no cross-run `BEFORE` edge is allowed.
+5. Ambiguous pronouns, component identity, tool mapping, and missing outcomes
+   remain review notes and are excluded from formal Gold facts.
 
-自动验证状态：**passed**；Action **224** 个，Tool **34** 个，`USES_TOOL` **72** 条，待确认点 **35** 个。
+Automated validation status: **passed**. The dataset contains **224** Actions,
+**34** Tools, **72** `USES_TOOL` edges, and **35** items requiring confirmation.

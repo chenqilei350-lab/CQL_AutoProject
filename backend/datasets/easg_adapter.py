@@ -12,10 +12,15 @@ import re
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from backend.datasets.benchmark import BenchmarkScene, InputCondition
-from backend.preprocessing.unified_text import GroundedEntry, UnifiedTextRecord, build_industrial_unified_text
+from backend.preprocessing.unified_text import (
+    GroundedEntry,
+    UnifiedTextRecord,
+    build_industrial_unified_text,
+)
+from backend.preprocessing.normalized_segment import NormalizedMention
 from backend.schemas.egocentric_video import (
     Action,
     ActionObservedInScene,
@@ -93,14 +98,112 @@ class EASGStandardScene(BaseModel):
     skipped_relations: list[EASGSkippedRelation] = Field(default_factory=list)
     annotation_kind: str = "annotation-derived text"
 
+    @model_validator(mode="after")
+    def migrate_legacy_normalized_segment(self) -> "EASGStandardScene":
+        """Build the new adapter contract for checked-in pre-contract JSONL files.
+
+        Migration reads raw/unified adapter fields only and never Gold labels.
+        """
+
+        if self.unified_record.normalized_segment is not None:
+            segment = self.unified_record.normalized_segment
+            if not segment.scenes:
+                evidence = (
+                    segment.actions[0].evidence
+                    if segment.actions
+                    else self.raw_text
+                )
+                self.unified_record = self.unified_record.model_copy(
+                    update={
+                        "normalized_segment": segment.model_copy(
+                            update={
+                                "scenes": [
+                                    NormalizedMention(
+                                        mention_id="S1",
+                                        kind="scene",
+                                        text=self.scene_id,
+                                        evidence=evidence,
+                                        semantic_role="observed_scene",
+                                    )
+                                ]
+                            },
+                            deep=True,
+                        )
+                    },
+                    deep=True,
+                )
+            return self
+        old = self.unified_record
+        tools = [
+            entry.text for entry in old.tools_objects if _is_tool_name(entry.text)
+        ]
+        objects = [
+            entry.text for entry in old.tools_objects if entry.text not in tools
+        ]
+        direct_object = objects[0] if objects else None
+        tool = tools[0] if tools else None
+        role_match = re.search(r"\bcamera wearer\b", self.raw_text, re.IGNORECASE)
+        role = role_match.group(0) if role_match else None
+        action_entries = [
+            entry.model_copy(
+                update={
+                    "entry_type": "action",
+                    "verb": _legacy_action_verb(entry.text, self.raw_text, role),
+                    "direct_object": direct_object,
+                    "tool": tool,
+                    "role": role,
+                }
+            )
+            for entry in old.action_sequence
+        ]
+        typed_items: list[GroundedEntry] = []
+        for entry in old.tools_objects:
+            is_tool = entry.text in tools
+            typed_items.append(
+                entry.model_copy(
+                    update={
+                        "entry_type": "tool" if is_tool else "object",
+                        "role": (
+                            None
+                            if is_tool
+                            else "target"
+                            if entry.text == direct_object
+                            else "support"
+                        ),
+                    }
+                )
+            )
+        actors = (
+            [GroundedEntry(text=role, evidence=role, entry_type="role")]
+            if role
+            else []
+        )
+        rebuilt = build_industrial_unified_text(
+            raw_text=self.raw_text,
+            scene_id=old.scene_id,
+            segment_id=old.segment_id,
+            timestamp=old.timestamp,
+            scene=old.scene_segment,
+            actors=actors,
+            action_sequence=action_entries,
+            tools_objects=typed_items,
+            process_parameters=old.process_parameters,
+            quality_results=old.quality_results,
+            uncertainty=old.evidence_uncertainty,
+            source_adapter="easg_adapter_legacy_migration",
+            annotation_text=self.raw_text,
+        ).model_copy(update={"outcomes_parameters": old.outcomes_parameters})
+        self.unified_record = rebuilt
+        return self
+
     def input_text(self, condition: InputCondition) -> str:
         """Return raw or unified text for downstream extraction."""
 
         if condition == "raw":
             return self.raw_text
         if condition == "unified":
-            return self.unified_record.to_prompt_text()
-        raise ValueError(f"不支持的输入条件: {condition!r}")
+            return self.unified_record.to_extraction_text()
+        raise ValueError(f"Unsupported input condition: {condition!r}")
 
     def to_benchmark_scene(self) -> BenchmarkScene:
         """Convert to the existing benchmark scene container."""
@@ -126,7 +229,7 @@ class EASGStandardDataset(BaseModel):
         for scene in self.scenes:
             if scene.scene_id == scene_id:
                 return scene
-        raise KeyError(f"EASG 标准输入中不存在场景: {scene_id!r}")
+        raise KeyError(f"Scene does not exist in the EASG standard input: {scene_id!r}")
 
     def inputs_for(self, condition: InputCondition) -> list[tuple[str, str]]:
         """Return `(scene_id, input_text)` pairs for one input condition."""
@@ -289,6 +392,22 @@ def _record_to_scene(record: dict[str, Any], path: Path, root: Path) -> EASGStan
     ]
     action_order = _action_order(record, action, provenance)
     skipped_relations = _skipped_relations(record)
+    normalized_tool = next(
+        (name for name in object_names if _is_tool_name(name)),
+        None,
+    )
+    normalized_direct_object = next(
+        (
+            item["name"]
+            for item in object_roles
+            if _schema_object_role(item["role"]) == "target"
+            and not _is_tool_name(item["name"])
+        ),
+        None,
+    )
+    normalized_role = (
+        "Camera wearer" if "camera wearer" in raw_text.casefold() else None
+    )
 
     gold = EgocentricVideoExtraction(
         video_id=video_id,
@@ -315,11 +434,37 @@ def _record_to_scene(record: dict[str, Any], path: Path, root: Path) -> EASGStan
         segment_id=action_id,
         timestamp=timestamp,
         scene="EASG annotation-derived action scene graph",
-        action_sequence=[GroundedEntry(text=action_text, evidence=action_text)],
+        actors=(
+            [
+                GroundedEntry(
+                    text=normalized_role,
+                    evidence=normalized_role,
+                    entry_type="role",
+                )
+            ]
+            if normalized_role
+            else []
+        ),
+        action_sequence=[
+            GroundedEntry(
+                text=action_text,
+                evidence=action_text,
+                entry_type="action",
+                verb=_normalized_action_verb(record, action_text),
+                direct_object=normalized_direct_object,
+                tool=normalized_tool,
+                role=normalized_role,
+            )
+        ],
         tools_objects=[
-            GroundedEntry(text=name, evidence=name)
-            for name in object_names
-            if _contains_evidence(raw_text, name)
+            GroundedEntry(
+                text=item["name"],
+                evidence=item["name"],
+                entry_type=("tool" if _is_tool_name(item["name"]) else "object"),
+                role=_schema_object_role(item["role"]),
+            )
+            for item in object_roles
+            if _contains_evidence(raw_text, item["name"])
         ],
         uncertainty=[
             "This input is generated from EASG graph annotations/metadata only; no video frames are used.",
@@ -328,7 +473,41 @@ def _record_to_scene(record: dict[str, Any], path: Path, root: Path) -> EASGStan
                 for item in skipped_relations
             ],
         ],
+        source_adapter="easg_adapter",
+        annotation_text=raw_text,
+        transcript_text=(
+            action_text
+            if isinstance(
+                _first(record, "text", "narration", "narration_text", "description"),
+                str,
+            )
+            else None
+        ),
     )
+    if unified.normalized_segment is not None:
+        # 中文：EASG annotation 记录本身就是一个有稳定 segment provenance 的
+        # Scene，因此 Adapter 可以提供 S1；这不是从 Gold 关系反推答案。
+        # English: An EASG annotation record is itself a provenance-backed scene,
+        # so the adapter may expose S1 without reading the gold relation list.
+        unified = unified.model_copy(
+            update={
+                "normalized_segment": unified.normalized_segment.model_copy(
+                    update={
+                        "scenes": [
+                            NormalizedMention(
+                                mention_id="S1",
+                                kind="scene",
+                                text=scene_id,
+                                evidence=action_text,
+                                semantic_role="observed_scene",
+                            )
+                        ]
+                    },
+                    deep=True,
+                )
+            },
+            deep=True,
+        )
     return EASGStandardScene(
         scene_id=scene_id,
         video_id=video_id,
@@ -357,6 +536,33 @@ def _action_text(record: dict[str, Any]) -> str:
         if graph_action:
             action = graph_action
     return _clean_text(str(action))
+
+
+def _legacy_action_verb(
+    action_text: str,
+    raw_text: str,
+    role: str | None,
+) -> str:
+    """Recover an explicit verb from legacy EASG adapter text without gold."""
+
+    annotation_match = re.search(r"\baction\s+['\"]([^'\"]+)['\"]", raw_text, re.I)
+    if annotation_match:
+        return _clean_text(annotation_match.group(1))
+    phrase = action_text.strip()
+    if role and phrase.casefold().startswith(role.casefold()):
+        phrase = phrase[len(role) :].lstrip(" ,:-")
+    return phrase.split(maxsplit=1)[0].strip(".,") or action_text
+
+
+def _normalized_action_verb(record: dict[str, Any], action_text: str) -> str:
+    """Prefer an explicit annotation verb over parsing a narration sentence."""
+
+    action = _first(record, "action", "verb", "verb_label", "action_label")
+    if isinstance(action, dict):
+        action = _first(action, "label", "name", "verb")
+    if isinstance(action, str) and action.strip():
+        return _clean_text(action)
+    return _triplet_action(record) or _action_from_graph(record.get("graph", {})) or action_text
 
 
 def _object_names(record: dict[str, Any]) -> list[str]:

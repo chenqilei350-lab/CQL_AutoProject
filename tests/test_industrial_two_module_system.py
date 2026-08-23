@@ -63,9 +63,9 @@ def test_industrial_unified_text_keeps_source_supported_fields() -> None:
 
     prompt_text = record.to_prompt_text()
 
-    assert "[工艺参数]" in prompt_text
+    assert "[PROCESS PARAMETERS]" in prompt_text
     assert "torque: 12 Nm" in prompt_text
-    assert "[质量 / 结果]" in prompt_text
+    assert "[QUALITY / RESULTS]" in prompt_text
     assert "final fit checked" in prompt_text
     assert record.source_text == RAW_TEXT
 

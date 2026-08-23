@@ -1,17 +1,8 @@
-"""Raw 与 Unified 对比实验的重复抽取运行器。
+"""Repeated-extraction runner for raw versus unified experiments.
 
-本模块位于实验流程的中间位置：
-
-    小型数据集 -> 本运行器 -> 稳定性指标与结果表
-
-它负责用同一套抽取设置反复处理两种输入文本，并把每一次运行的
-结构化抽取、property graph 与 grounding 校验结果一起保存下来。
-这样下一阶段才能公平比较两种文本表示是否影响结果质量与稳定性。
-
-注意：
-- 本模块不负责自动生成统一格式文本，该工作由 preprocessing 模块完成。
-- 本模块不负责计算多次运行的重合度或方差，该工作留给稳定性评价模块。
-- 对统一格式输入的证据检查仍回到原始文本，避免格式化文本掩盖无依据事实。
+The runner applies identical extraction settings to both representations and
+stores structured output, property graphs, and grounding validation for every
+run. Preprocessing and stability aggregation remain separate concerns.
 """
 
 from __future__ import annotations
@@ -40,7 +31,7 @@ from backend.schemas.egocentric_video import EgocentricVideoExtraction
 
 
 class ExtractionBackend(Protocol):
-    """抽取后端的最小接口，便于真实 Ollama 与测试替身共用运行器。"""
+    """Minimal extraction interface shared by Ollama and test doubles."""
 
     def extract(
         self,
@@ -48,11 +39,11 @@ class ExtractionBackend(Protocol):
         response_model: type[EgocentricVideoExtraction],
         system_prompt: str | None = None,
     ) -> EgocentricVideoExtraction:
-        """根据给定 schema 从文本中抽取结构化结果。"""
+        """Extract structured output from text under the supplied schema."""
 
 
 class ExperimentRunConfig(BaseModel):
-    """一次 Raw/Unified 对比实验中保持固定的运行设置。"""
+    """Settings held constant during one raw/unified comparison."""
 
     experiment_name: str = "raw_vs_unified_mvp"
     model: str = DEFAULT_MODEL
@@ -65,7 +56,7 @@ class ExperimentRunConfig(BaseModel):
 
 
 class ExtractionRunRecord(BaseModel):
-    """保存一个场景在一种输入条件下的一次完整运行结果。"""
+    """Complete run record for one scene and input condition."""
 
     experiment_name: str
     scene_id: str
@@ -80,7 +71,7 @@ class ExtractionRunRecord(BaseModel):
 
 
 class ExperimentBatchResult(BaseModel):
-    """保存整个批量实验结果，并提供导出和筛选功能。"""
+    """Batch experiment results with export and filtering helpers."""
 
     config: ExperimentRunConfig
     dataset_name: str
@@ -89,7 +80,7 @@ class ExperimentBatchResult(BaseModel):
     def runs_for(
         self, scene_id: str, condition: InputCondition
     ) -> list[ExtractionRunRecord]:
-        """取得某个场景在指定输入条件下的全部重复运行记录。"""
+        """Return all repeated runs for one scene and condition."""
 
         return [
             run
@@ -98,7 +89,7 @@ class ExperimentBatchResult(BaseModel):
         ]
 
     def to_jsonl(self) -> str:
-        """将每次运行保存为一行 JSON，便于后续统计或人工检查。"""
+        """Serialize one run per JSON Lines row."""
 
         return "\n".join(
             json.dumps(run.model_dump(mode="json"), ensure_ascii=False)
@@ -106,7 +97,7 @@ class ExperimentBatchResult(BaseModel):
         )
 
     def save_jsonl(self, output_path: str | Path) -> Path:
-        """把批量结果写入 JSONL 文件，并返回实际输出路径。"""
+        """Write batch results to JSONL and return the output path."""
 
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -115,14 +106,14 @@ class ExperimentBatchResult(BaseModel):
 
 
 class RawUnifiedExperimentRunner:
-    """使用同一抽取设置执行 Raw 与 Unified 输入对比实验。"""
+    """Run raw and unified inputs under identical extraction settings."""
 
     def __init__(
         self,
         config: ExperimentRunConfig | None = None,
         extractor: ExtractionBackend | None = None,
     ) -> None:
-        """创建运行器；测试时可传入不调用真实 LLM 的替代抽取器。"""
+        """Create a runner; tests may inject a backend that does not call an LLM."""
 
         self.config = config or ExperimentRunConfig()
         self.extractor = extractor or Extractor(
@@ -135,7 +126,7 @@ class RawUnifiedExperimentRunner:
     def run(
         self, dataset: BenchmarkDataset = MVP_BENCHMARK
     ) -> ExperimentBatchResult:
-        """按场景、输入形式和重复次数执行完整抽取实验。"""
+        """Run extraction by scene, input condition, and repetition."""
 
         records = list(self.iter_runs(dataset))
         return ExperimentBatchResult(
@@ -147,7 +138,7 @@ class RawUnifiedExperimentRunner:
     def iter_runs(
         self, dataset: BenchmarkDataset = MVP_BENCHMARK
     ) -> Iterator[ExtractionRunRecord]:
-        """逐条产生运行结果，供长时间真实实验即时保存 checkpoint。"""
+        """Yield runs incrementally so long experiments can checkpoint promptly."""
 
         for scene in dataset.scenes:
             for condition in self.config.conditions:
@@ -174,7 +165,7 @@ class RawUnifiedExperimentRunner:
         condition: InputCondition,
         run_number: int,
     ) -> ExtractionRunRecord:
-        """完成单次抽取、构图和基于原文的证据校验。"""
+        """Perform one extraction, graph build, and source-grounding validation."""
 
         input_text = scene.input_text(condition)
         extraction = self.extractor.extract(
@@ -208,7 +199,7 @@ class RawUnifiedExperimentRunner:
         run_number: int,
         error: Exception,
     ) -> ExtractionRunRecord:
-        """把一次 schema/LLM 失败保存为可评价记录，而不是中断完整实验。"""
+        """Store a schema/LLM failure as an evaluable record instead of aborting."""
 
         error_message = f"{type(error).__name__}: {str(error).splitlines()[0]}"
         return ExtractionRunRecord(

@@ -1,15 +1,7 @@
-"""运行本地 Ollama Raw/Unified 对比实验的命令入口。
+"""Command entry point for local Ollama raw/unified comparison experiments.
 
-本模块把前面完成的多个功能串联成一次可以复现的真实实验：
-
-    五场景 benchmark
-    -> 本地 llama3.1:8b 结构化抽取
-    -> graph 与 grounding/schema 校验
-    -> 稳定性评价
-    -> Markdown / CSV / JSONL 结果文件
-
-第一次运行建议使用一次重复，先确认模型能够稳定返回符合 schema 的结果。
-确认正常后，再将重复次数提高到五次，以获得用于报告的稳定性指标。
+The module connects the five-scene benchmark, local structured extraction,
+graph and grounding validation, stability evaluation, and report exports.
 """
 
 from __future__ import annotations
@@ -42,7 +34,7 @@ def run_local_experiment(
     scene_ids: list[str] | None = None,
     conditions: tuple[InputCondition, ...] = ("raw", "unified"),
 ) -> ExperimentComparisonReport:
-    """执行真实或测试替代抽取器实验，并保存所有后续分析需要的输出。"""
+    """Run a real or test extraction experiment and save analysis artifacts."""
 
     scenes = (
         EXPANDED_BENCHMARK.scenes
@@ -78,7 +70,7 @@ def run_local_experiment(
         partial_result.save_jsonl(output_path / "extraction_runs.partial.jsonl")
         print(
             f"[{index}/{total_runs}] "
-            f"{'失败已记录' if record.execution_error else '已完成'} "
+            f"{'failure recorded' if record.execution_error else 'completed'} "
             f"{record.scene_id} / {record.condition} / run {record.run_number}",
             flush=True,
         )
@@ -107,43 +99,43 @@ def run_local_experiment(
 
 
 def main() -> None:
-    """读取终端参数，执行实验并在终端显示最终汇总表。"""
+    """Parse CLI arguments, run the experiment, and print its summary."""
 
     parser = argparse.ArgumentParser(
-        description="运行 AUT KG Extraction Pipeline 的 Raw/Unified 本地对比实验。"
+        description="Run a local raw/unified AUT KG Extraction Pipeline experiment."
     )
     parser.add_argument(
         "--repetitions",
         type=int,
         default=1,
-        help="每个场景、每种输入形式的重复抽取次数；首次运行建议为 1。",
+        help="Repeated extractions per scene and condition; start with 1.",
     )
     parser.add_argument(
         "--model",
         default=DEFAULT_MODEL,
-        help="Ollama 模型名称，项目当前默认使用 llama3.1:8b。",
+        help="Ollama model name; the project default is llama3.1:8b.",
     )
     parser.add_argument(
         "--output-dir",
         default="results/local_experiment",
-        help="实验结果保存目录。",
+        help="Directory for experiment results.",
     )
     parser.add_argument(
         "--max-retries",
         type=int,
         default=1,
-        help="单条 schema 校验失败后的重试次数；诊断试运行建议为 1。",
+        help="Retries after schema validation failure; use 1 for diagnostic runs.",
     )
     parser.add_argument(
         "--scene-id",
         action="append",
-        help="只运行指定场景编号；可以重复给出多个场景。默认运行全部场景。",
+        help="Run only the specified scene ID; repeat for multiple scenes.",
     )
     parser.add_argument(
         "--condition",
         action="append",
         choices=["raw", "unified"],
-        help="只运行指定输入形式；可以同时指定 raw 与 unified。默认运行两者。",
+        help="Run only the selected input condition; default runs both.",
     )
     args = parser.parse_args()
 
@@ -156,7 +148,7 @@ def main() -> None:
         conditions=tuple(args.condition) if args.condition else ("raw", "unified"),
     )
     print(report.to_markdown())
-    print(f"\n结果已保存到: {Path(args.output_dir).resolve()}")
+    print(f"\nResults saved to: {Path(args.output_dir).resolve()}")
 
 
 if __name__ == "__main__":

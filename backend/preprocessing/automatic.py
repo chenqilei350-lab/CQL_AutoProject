@@ -1,15 +1,6 @@
-"""
-面向工业原文的 LLM 辅助、证据约束文本预处理。
-LLM-assisted, evidence-grounded preprocessing for industrial source text.
+"""LLM-assisted, evidence-grounded preprocessing for industrial source text.
 
-初学者阅读提示：可以把本文件理解为“自动整理工作人员”。它依次完成：
-1. 让 LLM 把原文分成人物、动作、工具/对象、参数和质量结果；
-2. 删除 Evidence 不在原文中的条目；
-3. 把工具/对象名称与现有关键词库比较；
-4. 用向量找相近名称，再让 LLM 确认是否为同一个物品；
-5. 返回整理结果给 unified_text.py。
-
-Beginner guide: treat this file as the automatic preprocessing worker. It asks
+Treat this file as the automatic preprocessing worker. It asks
 the LLM for five categories, removes entries without source evidence, compares
 tool/object names with the known vocabulary, verifies similar names, and returns
 the organized result to unified_text.py.
@@ -35,12 +26,19 @@ from backend.preprocessing.unified_text import (
 DEFAULT_EMBEDDING_MODEL = (
     "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 )
+# 中文：7B 本地模型在约 800 字符且动作密集的工业转录上会反复超时；500
+# 字符保留完整句边界，同时限制一次结构化输出的动作数量。
+# English: Dense ~800-character industrial transcripts repeatedly time out on
+# local 7B models. A 500-character boundary keeps sentences intact while capping
+# the number of structured records requested per call.
+DEFAULT_PREPROCESSING_CHUNK_CHARS = 500
+DEFAULT_PREPROCESSING_CHUNK_ATTEMPTS = 2
 
 
 # [Block 05] 给 LLM 的固定分类表，只允许输出五个预设栏目。
 # [Block 05] Fixed LLM classification form with only five allowed categories.
 class PreprocessingDraft(BaseModel):
-    """一次 LLM 调用产生的五类结果。 / Five grounded LLM categories."""
+    """Five grounded categories produced by one LLM call."""
 
     actors: list[GroundedEntry] = Field(default_factory=list)
     action_sequence: list[GroundedEntry] = Field(default_factory=list)
@@ -50,14 +48,14 @@ class PreprocessingDraft(BaseModel):
 
 
 class _CatalogAliasDecision(BaseModel):
-    """名称到目录词的映射判断。 / Decision mapping a mention to a catalog term."""
+    """Decision that maps a mention to a catalog term."""
 
     same_entity: bool
     canonical_name: str | None = None
 
 
 class _PairAliasDecision(BaseModel):
-    """场景内两个名称的同一性判断。 / Same-entity decision for two mentions."""
+    """Same-entity decision for two mentions in one scene."""
 
     same_entity: bool
 
@@ -72,7 +70,24 @@ Return exactly the requested schema with five categories:
 
 For every entry:
 - text must be a short faithful description, not a new fact.
-- evidence must be an exact contiguous quote copied from the source text.
+- evidence must be the shortest exact contiguous quote that supports the entry.
+- set entry_type to role, action, tool, object, parameter, or quality. In the
+  tools_objects list, distinguish an actively used instrument (tool) from the
+  item being manipulated (object); do not rely on a closed vocabulary.
+- every action text must contain an explicit action verb. Include its direct target
+  when the target is stated, but do not omit an explicit action only because its
+  target is implicit.
+- for action entries, also fill verb, direct_object, tool, and role when explicitly
+  stated; leave an absent slot null instead of guessing.
+- action evidence must include that action verb and target, not a whole paragraph.
+- split coordinated or repeated events into separate actions when the source states
+  distinct verbs, sides, or steps; never combine "pick up ... and then start ...".
+- annotation-derived text such as "action 'place' involves wood" explicitly states
+  the Action "place"; its exact evidence may be the short span "action 'place'".
+- tools_objects evidence should be the shortest grounded noun phrase.
+- process_parameters are only explicit values/settings/conditions, not action names.
+- quality_results are only checks, warnings, defects, or outcomes, not instructions.
+- actors are named people or worker roles; body parts are tools_objects.
 - use uncertainty only when the source itself is unclear.
 - leave aliases and additional_evidence empty; they are filled later.
 Do not infer missing information. Return an empty list when a category is absent.
@@ -88,11 +103,9 @@ def automatically_preprocess_industrial_text(
     embedding_model: str = DEFAULT_EMBEDDING_MODEL,
     alias_candidate_threshold: float = 0.65,
     alias_top_k: int = 3,
+    chunk_max_chars: int = DEFAULT_PREPROCESSING_CHUNK_CHARS,
 ) -> tuple[PreprocessingDraft, list[str]]:
-    """
-    分类原文、过滤无证据条目并统一工具名称。
-    Classify source text, filter ungrounded entries, and normalize tool names.
-    """
+    """Classify source text, filter ungrounded entries, and normalize names."""
 
     if not raw_text.strip():
         raise ValueError("raw_text must not be empty.")
@@ -100,24 +113,74 @@ def automatically_preprocess_industrial_text(
         raise ValueError("alias_candidate_threshold must be between 0.0 and 1.0.")
     if alias_top_k < 1:
         raise ValueError("alias_top_k must be at least 1.")
+    if chunk_max_chars < 200:
+        raise ValueError("chunk_max_chars must be at least 200.")
 
-    # 第一步：一次 LLM 调用完成五个预设类别的初步分类。
-    # Step 1: One LLM call produces the five predefined categories.
-    try:
-        draft = _extract_structured_response(
-            text=raw_text,
-            response_model=PreprocessingDraft,
-            model=model,
-            system_prompt=_PREPROCESSING_SYSTEM_PROMPT,
+    # 第一步：长文本先按原文边界切块，避免一个大 JSON 输出耗尽本地模型超时。
+    # Step 1: Chunk long source text at source boundaries so one large JSON
+    # response cannot consume the entire local-model timeout budget.
+    chunks = _split_preprocessing_chunks(raw_text, chunk_max_chars)
+    notes = (
+        [f"Automatic preprocessing split the source into {len(chunks)} chunks."]
+        if len(chunks) > 1
+        else []
+    )
+    grounded_chunks: list[PreprocessingDraft] = []
+    last_error: Exception | None = None
+    for chunk_index, chunk in enumerate(chunks, start=1):
+        draft: PreprocessingDraft | None = None
+        # 中文：重试只针对当前原文块；它不会重跑已成功块，也不会因一块最终
+        # 失败而清空整个场景。English: Retry only the current source chunk;
+        # successful siblings are never repeated or discarded with a failed part.
+        for attempt in range(1, DEFAULT_PREPROCESSING_CHUNK_ATTEMPTS + 1):
+            try:
+                draft = _extract_structured_response(
+                    text=chunk,
+                    response_model=PreprocessingDraft,
+                    model=model,
+                    system_prompt=_PREPROCESSING_SYSTEM_PROMPT,
+                )
+                if attempt > 1:
+                    notes.append(
+                        "Automatic preprocessing chunk "
+                        f"{chunk_index}/{len(chunks)} succeeded on attempt "
+                        f"{attempt}/{DEFAULT_PREPROCESSING_CHUNK_ATTEMPTS}."
+                    )
+                break
+            except Exception as error:
+                last_error = error
+                notes.append(
+                    "Automatic preprocessing chunk "
+                    f"{chunk_index}/{len(chunks)} attempt "
+                    f"{attempt}/{DEFAULT_PREPROCESSING_CHUNK_ATTEMPTS} failed: "
+                    f"{type(error).__name__}: {str(error).splitlines()[0]}."
+                )
+        if draft is None:
+            notes.append(
+                "Automatic preprocessing chunk "
+                f"{chunk_index}/{len(chunks)} failed after "
+                f"{DEFAULT_PREPROCESSING_CHUNK_ATTEMPTS} attempts and was omitted."
+            )
+            continue
+
+        # 第二步：每块只保留能在该块原文中定位的 Evidence。
+        # Step 2: Keep only evidence that is grounded in that source chunk.
+        grounded, chunk_notes = _filter_and_order_grounded_entries(draft, chunk)
+        grounded_chunks.append(_apply_entry_types(grounded))
+        notes.extend(
+            f"Chunk {chunk_index}/{len(chunks)}: {note}" for note in chunk_notes
         )
-    except Exception as error:
+
+    if not grounded_chunks:
         raise AutomaticPreprocessingError(
             f"Automatic preprocessing with the local LLM failed (model: {model})."
-        ) from error
+        ) from last_error
 
-    # 第二步：检查每条 Evidence；找不到原文证据的条目会被过滤并记录。
-    # Step 2: Filter entries whose evidence cannot be found in the source text.
-    grounded_draft, notes = _filter_and_order_grounded_entries(draft, raw_text)
+    grounded_draft = _merge_preprocessing_drafts(grounded_chunks, raw_text)
+    # 中文：把栏目语义写入条目；工具/对象仍由 LLM 判断，缺失时保守按 Object。
+    # English: Persist column semantics. Tool/object is the LLM decision; a
+    # missing type defaults conservatively to Object.
+    grounded_draft = _apply_entry_types(grounded_draft)
     # 第三步：只对工具/对象做名称统一，人物、动作和参数保持原样。
     # Step 3: Canonicalize only tools/objects; keep other categories unchanged.
     normalized_tools, alias_notes = _canonicalize_tools_objects(
@@ -135,6 +198,111 @@ def automatically_preprocess_industrial_text(
     return grounded_draft, notes
 
 
+def _split_preprocessing_chunks(raw_text: str, max_chars: int) -> list[str]:
+    """Split source text without rewriting it or introducing overlap.
+
+    Prefer sentence/newline boundaries and use whitespace only for an
+    exceptionally long single sentence.
+    """
+
+    source = raw_text.strip()
+    if len(source) <= max_chars:
+        return [source]
+
+    chunks: list[str] = []
+    start = 0
+    while start < len(source):
+        remaining = len(source) - start
+        if remaining <= max_chars:
+            chunks.append(source[start:].strip())
+            break
+
+        window = source[start : start + max_chars + 1]
+        sentence_boundaries = [
+            match.end()
+            for match in re.finditer(r"[.!?;](?=\s)|\n", window)
+            if match.end() >= max_chars // 2
+        ]
+        if sentence_boundaries:
+            cut = sentence_boundaries[-1]
+        else:
+            whitespace = window.rfind(" ")
+            cut = whitespace if whitespace >= max_chars // 2 else max_chars
+        end = start + max(cut, 1)
+        chunk = source[start:end].strip()
+        if chunk:
+            chunks.append(chunk)
+        start = end
+        while start < len(source) and source[start].isspace():
+            start += 1
+    return chunks
+
+
+def _merge_preprocessing_drafts(
+    drafts: list[PreprocessingDraft],
+    raw_text: str,
+) -> PreprocessingDraft:
+    """Merge chunk results, deduplicate them, and restore global source order."""
+
+    categories = (
+        "actors",
+        "action_sequence",
+        "tools_objects",
+        "process_parameters",
+        "quality_results",
+    )
+    updates: dict[str, list[GroundedEntry]] = {}
+    for category in categories:
+        merged: list[GroundedEntry] = []
+        seen: set[tuple[str, str, str]] = set()
+        for draft in drafts:
+            for entry in getattr(draft, category):
+                key = (
+                    _normalize_text(entry.text),
+                    _normalize_text(entry.evidence),
+                    entry.entry_type or "",
+                )
+                if key in seen:
+                    continue
+                seen.add(key)
+                merged.append(entry)
+        updates[category] = sorted(
+            merged,
+            key=lambda item: _evidence_start(item, raw_text),
+        )
+    return PreprocessingDraft(**updates)
+
+
+def _apply_entry_types(draft: PreprocessingDraft) -> PreprocessingDraft:
+    """Attach normalized mention kinds without source-specific vocabularies."""
+
+    fixed_types = {
+        "actors": "role",
+        "action_sequence": "action",
+        "process_parameters": "parameter",
+        "quality_results": "quality",
+    }
+    updates: dict[str, list[GroundedEntry]] = {}
+    for category, entry_type in fixed_types.items():
+        updates[category] = [
+            entry.model_copy(update={"entry_type": entry_type})
+            for entry in getattr(draft, category)
+        ]
+    updates["tools_objects"] = [
+        entry.model_copy(
+            update={
+                "entry_type": (
+                    entry.entry_type
+                    if entry.entry_type in {"tool", "object"}
+                    else "object"
+                )
+            }
+        )
+        for entry in draft.tools_objects
+    ]
+    return draft.model_copy(update=updates, deep=True)
+
+
 def _extract_structured_response(
     *,
     text: str,
@@ -142,10 +310,7 @@ def _extract_structured_response(
     model: str,
     system_prompt: str,
 ) -> Any:
-    """
-    延迟导入 Ollama 客户端，保持确定性路径轻量。
-    Delay the Ollama import so deterministic preprocessing stays lightweight.
-    """
+    """Delay the Ollama import so deterministic preprocessing stays lightweight."""
 
     from backend.llm.client import extract_structured
 
@@ -155,7 +320,11 @@ def _extract_structured_response(
         model=model,
         system_prompt=system_prompt,
         temperature=0.0,
-        max_retries=3,
+        # EN: Full-corpus runs must expose a slow/invalid generation instead of
+        # multiplying it into several opaque multi-minute retries.
+        # ZH: 全量实测要显式暴露慢生成或非法输出，不能将其隐式放大为多轮、
+        # 数分钟的重试。
+        max_retries=0,
     )
 
 
@@ -165,10 +334,7 @@ def _filter_and_order_grounded_entries(
     draft: PreprocessingDraft,
     raw_text: str,
 ) -> tuple[PreprocessingDraft, list[str]]:
-    """
-    只过滤无原文支持的自动条目，并保留其余有效结果。
-    Drop unsupported automatic entries while preserving valid results.
-    """
+    """Drop unsupported automatic entries while preserving valid results."""
 
     notes: list[str] = []
     updates: dict[str, list[GroundedEntry]] = {}
@@ -181,7 +347,13 @@ def _filter_and_order_grounded_entries(
     ):
         valid: list[GroundedEntry] = []
         seen: set[tuple[str, str]] = set()
-        for entry in getattr(draft, category):
+        for raw_entry in getattr(draft, category):
+            # 中文：本地模型偶尔会在“精确引文”外再包一层引号。仅当去掉
+            # 外层引号后的内容能逐字定位到原文时才接受，内部文字绝不改写。
+            # English: Local models sometimes wrap an exact quote in one extra
+            # pair of quotes. Strip that wrapper only when the inner text occurs
+            # verbatim in the source; never rewrite the evidence itself.
+            entry = _normalize_grounded_entry_evidence(raw_entry, raw_text)
             invalid_evidence = [
                 evidence
                 for evidence in _entry_evidence(entry)
@@ -214,10 +386,7 @@ def _canonicalize_tools_objects(
     threshold: float,
     top_k: int,
 ) -> tuple[list[GroundedEntry], list[str]]:
-    """
-    先映射已知目录词，再合并场景内剩余别名。
-    Map mentions to known terms, then merge remaining scene-local aliases.
-    """
+    """Map mentions to known terms, then merge remaining scene-local aliases."""
 
     if not entries:
         return [], []
@@ -334,15 +503,12 @@ def _scene_alias_groups(
     top_k: int,
     notes: list[str],
 ) -> list[list[GroundedEntry]]:
-    """
-    使用向量候选和保守的 LLM 复核判断场景内别名。
-    Use vector candidates and conservative LLM checks for scene-local aliases.
-    """
+    """Use vector candidates and conservative LLM checks for local aliases."""
 
     parent = list(range(len(entries)))
 
     def find(index: int) -> int:
-        """查找合并组根节点。 / Find the root of an alias group."""
+        """Find the root of an alias group."""
 
         while parent[index] != index:
             parent[index] = parent[parent[index]]
@@ -350,7 +516,7 @@ def _scene_alias_groups(
         return index
 
     def union(left: int, right: int) -> None:
-        """合并两个别名组。 / Merge two alias groups."""
+        """Merge two alias groups."""
 
         left_root = find(left)
         right_root = find(right)
@@ -403,7 +569,7 @@ def _judge_catalog_alias(
     raw_text: str,
     model: str,
 ) -> _CatalogAliasDecision:
-    """复核名称是否对应目录候选。 / Verify a mention against catalog candidates."""
+    """Verify a mention against catalog candidates."""
 
     prompt = {
         "source_text": raw_text,
@@ -431,7 +597,7 @@ def _judge_scene_alias(
     raw_text: str,
     model: str,
 ) -> _PairAliasDecision:
-    """复核场景内两个名称是否同指。 / Verify two scene mentions are co-referent."""
+    """Verify whether two scene mentions are co-referent."""
 
     prompt = {
         "source_text": raw_text,
@@ -451,10 +617,7 @@ def _judge_scene_alias(
 
 @lru_cache(maxsize=1)
 def _load_default_tool_object_terms() -> tuple[str, ...]:
-    """
-    延迟加载 IndEgo 词表，避免导入循环。
-    Load the IndEgo vocabulary lazily to avoid an import-time cycle.
-    """
+    """Load the IndEgo vocabulary lazily to avoid an import-time cycle."""
 
     from backend.datasets.indego_adapter import _TOOL_OBJECT_TERMS
 
@@ -463,7 +626,7 @@ def _load_default_tool_object_terms() -> tuple[str, ...]:
 
 @lru_cache(maxsize=2)
 def _load_embedding_model(model_name: str):
-    """加载并缓存向量模型。 / Load and cache the embedding model."""
+    """Load and cache the embedding model."""
 
     from sentence_transformers import SentenceTransformer
 
@@ -471,7 +634,7 @@ def _load_embedding_model(model_name: str):
 
 
 def _encode_texts(texts: Sequence[str], model_name: str) -> np.ndarray:
-    """编码并归一化文本向量。 / Encode and normalize text embeddings."""
+    """Encode and normalize text embeddings."""
 
     model = _load_embedding_model(model_name)
     encoded = model.encode(
@@ -492,13 +655,13 @@ def _cached_catalog_embeddings(
     catalog: tuple[str, ...],
     model_name: str,
 ) -> np.ndarray:
-    """缓存目录词向量。 / Cache embeddings for catalog terms."""
+    """Cache embeddings for catalog terms."""
 
     return _encode_texts(catalog, model_name)
 
 
 def _encode_catalog(catalog: Sequence[str], model_name: str) -> np.ndarray:
-    """把目录词编码为向量。 / Encode catalog terms as vectors."""
+    """Encode catalog terms as vectors."""
 
     return _cached_catalog_embeddings(tuple(catalog), model_name)
 
@@ -511,7 +674,7 @@ def _top_candidates(
     threshold: float,
     top_k: int,
 ) -> list[str]:
-    """返回高于阈值的前 K 个候选。 / Return top-K candidates above threshold."""
+    """Return the top-K candidates above the threshold."""
 
     scores = catalog_embeddings @ mention_embedding
     ranked = np.argsort(-scores)[:top_k]
@@ -519,15 +682,11 @@ def _top_candidates(
 
 
 def _with_canonical_name(entry: GroundedEntry, canonical_name: str) -> GroundedEntry:
-    """采用标准名称并保留原别名。 / Apply a canonical name and retain aliases."""
+    """Store a canonical name without replacing the grounded text."""
 
-    aliases = list(entry.aliases)
-    if _normalize_text(entry.text) != _normalize_text(canonical_name):
-        aliases.append(entry.text)
     return entry.model_copy(
         update={
-            "text": canonical_name,
-            "aliases": _unique_texts(aliases, exclude=canonical_name),
+            "canonical_name": canonical_name,
         },
         deep=True,
     )
@@ -537,12 +696,14 @@ def _merge_same_names(
     entries: Iterable[GroundedEntry],
     raw_text: str,
 ) -> list[GroundedEntry]:
-    """合并标准化后名称相同的条目。 / Merge entries with the same normalized name."""
+    """Merge entries with the same normalized name."""
 
     grouped: dict[str, list[GroundedEntry]] = {}
     order: list[str] = []
     for entry in entries:
-        key = _normalize_text(entry.text)
+        # 中文：同一标准名可以合并证据，但最终显示仍采用最早的原文名称。
+        # English: Canonical identity may group evidence while display text stays sourced.
+        key = _normalize_text(entry.canonical_name or entry.text)
         if key not in grouped:
             grouped[key] = []
             order.append(key)
@@ -555,22 +716,36 @@ def _merge_entry_group(
     entries: list[GroundedEntry],
     raw_text: str,
 ) -> GroundedEntry:
-    """合并一组别名及其证据。 / Merge one alias group and its evidence spans."""
+    """Merge one alias group and its evidence spans."""
 
-    ordered = sorted(entries, key=lambda item: _evidence_start(item, raw_text))
+    # 中文：优先选择原文中真实出现的名称，避免用 LLM 改写名替换证据名称。
+    # English: Prefer a source-occurring mention over an LLM paraphrase.
+    ordered = sorted(
+        entries,
+        key=lambda item: (
+            not _evidence_is_grounded(item.text, raw_text),
+            _evidence_start(item, raw_text),
+        ),
+    )
     primary = ordered[0]
     aliases: list[str] = []
     evidence: list[str] = []
     uncertainties: list[str] = []
+    canonical_names: list[str] = []
     for entry in ordered:
         aliases.extend([entry.text, *entry.aliases])
         evidence.extend(_entry_evidence(entry))
+        if entry.canonical_name:
+            canonical_names.append(entry.canonical_name)
         if entry.uncertainty:
             uncertainties.append(entry.uncertainty)
     unique_evidence = _unique_texts(evidence)
     return primary.model_copy(
         update={
             "aliases": _unique_texts(aliases, exclude=primary.text),
+            "canonical_name": (
+                _unique_texts(canonical_names)[0] if canonical_names else None
+            ),
             "evidence": unique_evidence[0],
             "additional_evidence": unique_evidence[1:],
             "uncertainty": "; ".join(_unique_texts(uncertainties)) or None,
@@ -580,13 +755,47 @@ def _merge_entry_group(
 
 
 def _entry_evidence(entry: GroundedEntry) -> list[str]:
-    """返回条目的全部证据。 / Return all evidence spans for an entry."""
+    """Return all evidence spans for an entry."""
 
     return [entry.evidence, *entry.additional_evidence]
 
 
+def _normalize_grounded_entry_evidence(
+    entry: GroundedEntry,
+    raw_text: str,
+) -> GroundedEntry:
+    """Remove a model-added outer quote only when the inner span is grounded."""
+
+    evidence = _grounded_evidence_value(entry.evidence, raw_text)
+    additional = [
+        _grounded_evidence_value(value, raw_text)
+        for value in entry.additional_evidence
+    ]
+    if evidence == entry.evidence and additional == entry.additional_evidence:
+        return entry
+    return entry.model_copy(
+        update={"evidence": evidence, "additional_evidence": additional},
+        deep=True,
+    )
+
+
+def _grounded_evidence_value(evidence: str, raw_text: str) -> str:
+    """Return the smallest safely unwrapped source-grounded evidence value."""
+
+    cleaned = evidence.strip()
+    if _evidence_is_grounded(cleaned, raw_text):
+        return cleaned
+    quote_pairs = (("'", "'"), ('"', '"'), ("‘", "’"), ("“", "”"), ("`", "`"))
+    for opening, closing in quote_pairs:
+        if cleaned.startswith(opening) and cleaned.endswith(closing):
+            inner = cleaned[len(opening) : -len(closing)].strip()
+            if _evidence_is_grounded(inner, raw_text):
+                return inner
+    return cleaned
+
+
 def _evidence_is_grounded(evidence: str, raw_text: str) -> bool:
-    """检查证据是否来自原文。 / Check whether evidence occurs in source text."""
+    """Check whether evidence occurs in the source text."""
 
     normalized_evidence = _normalize_text(evidence)
     normalized_source = _normalize_text(raw_text)
@@ -594,7 +803,7 @@ def _evidence_is_grounded(evidence: str, raw_text: str) -> bool:
 
 
 def _evidence_start(entry: GroundedEntry, raw_text: str) -> int:
-    """定位证据在原文中的起点。 / Locate the evidence start in source text."""
+    """Locate the evidence start in the source text."""
 
     parts = [re.escape(part) for part in entry.evidence.split()]
     if not parts:
@@ -604,7 +813,7 @@ def _evidence_start(entry: GroundedEntry, raw_text: str) -> int:
 
 
 def _unique_texts(values: Iterable[str], *, exclude: str | None = None) -> list[str]:
-    """按标准化文本去重并保持顺序。 / Deduplicate normalized text in source order."""
+    """Deduplicate normalized text while preserving source order."""
 
     excluded = _normalize_text(exclude or "")
     seen: set[str] = set()

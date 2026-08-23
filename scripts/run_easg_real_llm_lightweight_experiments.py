@@ -938,7 +938,7 @@ def build_summary_md(
     lines = [
         "# Lightweight Real LLM Experiment Summary",
         "",
-        "Mode: `real_llm_lightweight` / 真实本地 LLM + 轻量 JSON schema。",
+        "Mode: `real_llm_lightweight`; real local LLM with a lightweight JSON schema.",
         "",
         f"- Dataset: `{dataset_name}`",
         f"- Input: `{input_path}`",
@@ -959,7 +959,7 @@ def build_summary_md(
     lines.extend(
         [
             "",
-            "Interpretation / 解释：",
+            "Interpretation:",
             "",
             "- Node/Edge F1 are measured against EASG gold graph annotations.",
             "- Graph overlap measures repeated-run stability.",

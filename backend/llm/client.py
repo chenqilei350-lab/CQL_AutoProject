@@ -38,6 +38,11 @@ def get_openai_client(timeout: float = DEFAULT_REQUEST_TIMEOUT_SECONDS) -> OpenA
         base_url=OLLAMA_BASE_URL,
         api_key="ollama",  # Ollama doesn't need a real key
         timeout=timeout,
+        # EN: Instructor owns schema retries. Disable hidden SDK network retries
+        # so one 120-second timeout cannot silently become six minutes.
+        # ZH: Schema 重试由 Instructor 负责；关闭 SDK 隐式网络重试，避免一次
+        # 120 秒超时在后台自动放大为六分钟。
+        max_retries=0,
     )
 
 
@@ -45,7 +50,9 @@ def get_client(timeout: float = DEFAULT_REQUEST_TIMEOUT_SECONDS) -> instructor.I
     """Instructor-wrapped client for structured output."""
     return instructor.from_openai(
         get_openai_client(timeout=timeout),
-        mode=instructor.Mode.JSON,
+        # EN: Native JSON Schema is more reliable for nested Ollama contracts.
+        # ZH: 对 Ollama 的嵌套抽取合同，原生 JSON Schema 比提示词 JSON 更稳定。
+        mode=instructor.Mode.JSON_SCHEMA,
     )
 
 

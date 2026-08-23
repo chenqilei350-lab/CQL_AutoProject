@@ -58,7 +58,7 @@ def build_package(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="验证并生成 Industrial Gold v2 统一评估包。"
+        description="Validate and build the unified Industrial Gold V2 evaluation package."
     )
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--reviewed", type=Path, default=DEFAULT_REVIEWED_GOLD_PATH)

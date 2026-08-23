@@ -38,7 +38,7 @@ def test_egocentric_schema_validation():
 
 
 def test_schema_normalizes_common_local_model_field_aliases():
-    """确认本地小模型的常见等价字段能够进入严格 schema。"""
+    """Common local-model aliases should satisfy the strict schema."""
 
     extraction = EgocentricVideoExtraction.model_validate(
         {
@@ -67,7 +67,7 @@ def test_schema_normalizes_common_local_model_field_aliases():
 
 
 def test_schema_normalizes_inspection_style_local_model_output():
-    """确认模型以 id、type 和空格角色输出时仍可保留显式事实。"""
+    """Inspection-style ID, type, and spaced-role output retains facts."""
 
     extraction = EgocentricVideoExtraction.model_validate(
         {
@@ -94,7 +94,7 @@ def test_schema_normalizes_inspection_style_local_model_output():
 
 
 def test_schema_normalizes_string_relation_endpoints_from_local_model():
-    """确认小模型以字符串表示显式关系端点时仍能构建类型化关系。"""
+    """String relation endpoints from a small model become typed relations."""
 
     extraction = EgocentricVideoExtraction.model_validate(
         {

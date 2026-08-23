@@ -1,13 +1,9 @@
-"""
-小型实验数据集模块。
+"""Small benchmark dataset for controlled raw/unified experiments.
 
-本模块把同一个场景的三类内容绑定在一起：
-1. 原始场景描述（raw input）；
-2. 由原文事实整理出的统一格式文本（unified input）；
-3. 人工编写的标准抽取结果（gold extraction）。
-
-后续实验运行器可以读取本模块，并保证 raw 与 unified 条件使用同一个模型、
-同一个提示词、同一个抽取格式和同一个图构建方法，仅改变输入文本表示形式。
+Each scene binds the raw description, an evidence-grounded unified input, and a
+human-authored Gold extraction. Experiment runners can therefore change only the
+input representation while keeping model, prompt, schema, and graph construction
+constant.
 """
 
 from __future__ import annotations
@@ -36,16 +32,7 @@ InputCondition = Literal["raw", "unified"]
 
 
 class BenchmarkScene(BaseModel):
-    """
-    单个实验场景的完整输入与标准答案。
-
-    字段作用：
-        scene_id: 实验中稳定使用的场景编号。
-        description: 便于阅读的场景简介。
-        raw_text: 直接来自场景描述的原始输入。
-        unified_record: 经过固定栏目整理、并通过证据检查的统一输入。
-        gold_extraction: 人工标准答案，用于后续评价模型抽取结果。
-    """
+    """Complete inputs and Gold extraction for one benchmark scene."""
 
     scene_id: str
     description: str
@@ -55,71 +42,57 @@ class BenchmarkScene(BaseModel):
 
     @model_validator(mode="after")
     def validate_source_alignment(self) -> "BenchmarkScene":
-        """
-        检查原始文本是否在统一输入和标准答案中保持一致。
-
-        这样可以避免实验中不小心比较了两个内容不同的场景。
-        """
+        """Ensure raw, unified, and Gold records refer to identical source text."""
 
         if self.unified_record.source_text != self.raw_text:
-            raise ValueError("统一格式记录的原始文本必须与 raw_text 完全一致。")
+            raise ValueError("Unified-record source text must exactly match raw_text.")
         if self.gold_extraction.source_text != self.raw_text:
-            raise ValueError("人工标准答案的原始文本必须与 raw_text 完全一致。")
+            raise ValueError("Gold-extraction source text must exactly match raw_text.")
         return self
 
     def input_text(self, condition: InputCondition) -> str:
-        """
-        返回指定实验条件下送入抽取模型的文本。
-
-        ``raw`` 返回原始描述；``unified`` 返回固定栏目文本。
-        后续实验运行器会调用此函数来公平切换两种输入形式。
-        """
+        """Return model input for the requested raw or unified condition."""
 
         if condition == "raw":
             return self.raw_text
         if condition == "unified":
-            return self.unified_record.to_prompt_text()
-        raise ValueError(f"不支持的输入条件: {condition!r}")
+            return self.unified_record.to_extraction_text()
+        raise ValueError(f"Unsupported input condition: {condition!r}")
 
 
 class BenchmarkDataset(BaseModel):
-    """
-    可重复使用的场景基准数据集。
-
-    同一个容器既可承载最初的两条 MVP 示例，也可承载扩展后的人工审核数据。
-    """
+    """Reusable scene benchmark for seed examples and reviewed datasets."""
 
     name: str
     scenes: list[BenchmarkScene] = Field(default_factory=list)
 
     def get_scene(self, scene_id: str) -> BenchmarkScene:
-        """按编号取得一个场景；编号不存在时明确报告错误。"""
+        """Return a scene by ID and report a missing ID clearly."""
 
         for scene in self.scenes:
             if scene.scene_id == scene_id:
                 return scene
-        raise KeyError(f"数据集中不存在场景: {scene_id!r}")
+        raise KeyError(f"Scene does not exist in dataset: {scene_id!r}")
 
     def inputs_for(self, condition: InputCondition) -> list[tuple[str, str]]:
-        """
-        批量获得某种输入条件的文本。
-
-        输出为 ``(scene_id, input_text)`` 列表，下一模块的实验运行器可以直接循环使用。
-        """
+        """Return ``(scene_id, input_text)`` pairs for one input condition."""
 
         return [(scene.scene_id, scene.input_text(condition)) for scene in self.scenes]
 
     def to_jsonl(self) -> str:
-        """
-        将数据集导出为 JSON Lines 文本。
-
-        每行对应一个场景，便于以后保存为文件、检查标注或交给实验脚本加载。
-        """
+        """Serialize one benchmark scene per JSON Lines row."""
 
         records = []
         for scene in self.scenes:
-            record = scene.model_dump(mode="json")
-            record["unified_text"] = scene.input_text("unified")
+            # 中文：Gold/benchmark JSONL 保持历史可复现格式；运行时受控文本由
+            # `scene.input_text("unified")` 动态生成，不写回 reviewed 数据包。
+            # English: Preserve byte-reproducible benchmark packages. Controlled
+            # extraction text is generated at runtime and is not written into gold.
+            record = scene.model_dump(
+                mode="json",
+                exclude={"unified_record": {"normalized_segment"}},
+            )
+            record["unified_text"] = scene.unified_record.to_prompt_text()
             records.append(json.dumps(record, ensure_ascii=False))
         return "\n".join(records)
 
@@ -130,7 +103,7 @@ class BenchmarkDataset(BaseModel):
         *,
         name: str | None = None,
     ) -> "BenchmarkDataset":
-        """从导出的 JSONL 文件恢复完整基准数据集。"""
+        """Restore a complete benchmark dataset from exported JSONL."""
 
         input_path = Path(path)
         scenes: list[BenchmarkScene] = []
@@ -143,11 +116,11 @@ class BenchmarkDataset(BaseModel):
                 record = json.loads(line)
             except json.JSONDecodeError as error:
                 raise ValueError(
-                    f"无效 JSONL：{input_path}:{line_number}: {error}"
+                    f"Invalid JSONL at {input_path}:{line_number}: {error}"
                 ) from error
             if not isinstance(record, dict):
                 raise ValueError(
-                    f"JSONL 每一行必须是对象：{input_path}:{line_number}"
+                    f"Every JSONL row must be an object: {input_path}:{line_number}"
                 )
             # ``unified_text`` 是供人工检查的冗余导出字段，不属于模型合同。
             record.pop("unified_text", None)
@@ -155,7 +128,7 @@ class BenchmarkDataset(BaseModel):
         return cls(name=name or input_path.stem, scenes=scenes)
 
     def save_jsonl(self, path: str | Path) -> Path:
-        """将数据集保存为可由 :meth:`from_jsonl` 直接加载的文件。"""
+        """Save a dataset in a format directly loadable by :meth:`from_jsonl`."""
 
         output_path = Path(path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -165,12 +138,7 @@ class BenchmarkDataset(BaseModel):
 
 
 def build_mvp_benchmark() -> BenchmarkDataset:
-    """
-    创建当前 MVP 使用的小型基准数据集。
-
-    这里复用已经人工确认过的 gold extraction，只补充 raw/unified 输入对。
-    每条 unified 信息都通过 ``build_unified_text`` 进行原文证据检查。
-    """
+    """Build the MVP benchmark from reviewed Gold and grounded input pairs."""
 
     # 场景一：焊接准备，覆盖工具使用、动作顺序与因果关系。
     welding_unified = build_unified_text(
@@ -179,27 +147,40 @@ def build_mvp_benchmark() -> BenchmarkDataset:
         segment_id="s1",
         timestamp="00:00-00:20",
         scene_segment="root welding preparation",
-        actors=[GroundedEntry(text="Hans", evidence="Hans")],
+        actors=[GroundedEntry(text="Hans", evidence="Hans", entry_type="role")],
         action_sequence=[
             GroundedEntry(
                 text="pick up Fronius TPS 400i torch",
                 evidence="Hans picks up the Fronius TPS 400i torch",
+                entry_type="action",
+                verb="pick up",
+                tool="Fronius TPS 400i torch",
             ),
             GroundedEntry(
                 text="align steel plate on table",
                 evidence="aligns the steel plate on the table",
+                entry_type="action",
+                verb="align",
+                direct_object="steel plate",
             ),
             GroundedEntry(
                 text="start root weld",
                 evidence="starts the root weld",
+                entry_type="action",
+                verb="start",
             ),
         ],
         tools_objects=[
             GroundedEntry(
                 text="Fronius TPS 400i torch",
                 evidence="Fronius TPS 400i torch",
+                entry_type="tool",
             ),
-            GroundedEntry(text="steel plate", evidence="steel plate"),
+            GroundedEntry(
+                text="steel plate",
+                evidence="steel plate",
+                entry_type="object",
+            ),
         ],
         outcomes_parameters=[
             GroundedEntry(
@@ -207,7 +188,9 @@ def build_mvp_benchmark() -> BenchmarkDataset:
                 evidence="The alignment step prepares the plate for the root weld",
             )
         ],
-        evidence_uncertainty=["动作顺序与准备关系均由原文明确描述。"],
+        evidence_uncertainty=[
+            "The source explicitly states the action order and preparation relation."
+        ],
     )
 
     # 场景二：质量检查，覆盖测量工具、记录动作与因果关系。
@@ -221,20 +204,40 @@ def build_mvp_benchmark() -> BenchmarkDataset:
             GroundedEntry(
                 text="quality inspector Maria",
                 evidence="quality inspector Maria",
+                entry_type="role",
             )
         ],
         action_sequence=[
             GroundedEntry(
                 text="place caliper on bracket",
                 evidence="places the caliper on the bracket",
+                entry_type="action",
+                verb="place",
+                direct_object="caliper",
             ),
-            GroundedEntry(text="measure gap", evidence="measures the gap"),
-            GroundedEntry(text="record result", evidence="records the result"),
+            GroundedEntry(
+                text="measure gap",
+                evidence="measures the gap",
+                entry_type="action",
+                verb="measure",
+                direct_object="gap",
+                tool="caliper",
+            ),
+            GroundedEntry(
+                text="record result",
+                evidence="records the result",
+                entry_type="action",
+                verb="record",
+            ),
         ],
         tools_objects=[
-            GroundedEntry(text="caliper", evidence="caliper"),
-            GroundedEntry(text="bracket", evidence="bracket"),
-            GroundedEntry(text="gap", evidence="gap"),
+            GroundedEntry(text="caliper", evidence="caliper", entry_type="tool"),
+            GroundedEntry(
+                text="bracket",
+                evidence="bracket",
+                entry_type="object",
+            ),
+            GroundedEntry(text="gap", evidence="gap", entry_type="object"),
         ],
         outcomes_parameters=[
             GroundedEntry(
@@ -242,7 +245,9 @@ def build_mvp_benchmark() -> BenchmarkDataset:
                 evidence="The measurement causes the documentation step",
             )
         ],
-        evidence_uncertainty=["测量与记录之间的关系由原文明确描述。"],
+        evidence_uncertainty=[
+            "The source explicitly states the relation between measurement and recording."
+        ],
     )
 
     return BenchmarkDataset(
@@ -250,14 +255,14 @@ def build_mvp_benchmark() -> BenchmarkDataset:
         scenes=[
             BenchmarkScene(
                 scene_id="weld_demo_01",
-                description="焊接准备：拿取焊枪、对齐钢板并开始根焊。",
+                description="Welding preparation: pick up the torch, align the plate, and start the root weld.",
                 raw_text=WELDING_SCENE_TEXT,
                 unified_record=welding_unified,
                 gold_extraction=WELDING_SCENE_EXPECTED,
             ),
             BenchmarkScene(
                 scene_id="inspect_demo_01",
-                description="质量检查：放置卡尺、测量间隙并记录结果。",
+                description="Quality inspection: place the caliper, measure the gap, and record the result.",
                 raw_text=INSPECTION_SCENE_TEXT,
                 unified_record=inspection_unified,
                 gold_extraction=INSPECTION_SCENE_EXPECTED,

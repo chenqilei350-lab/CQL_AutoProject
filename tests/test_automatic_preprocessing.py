@@ -20,6 +20,16 @@ RAW_TEXT = (
 )
 
 
+def test_automatic_prompt_preserves_implicit_and_annotation_actions() -> None:
+    """Cross-source action wording must not be filtered by an industrial-only rule."""
+
+    prompt = automatic._PREPROCESSING_SYSTEM_PROMPT
+
+    assert "target is implicit" in prompt
+    assert "action 'place' involves wood" in prompt
+    assert "split coordinated or repeated events" in prompt
+
+
 def test_explicit_groups_do_not_invoke_automatic_preprocessing(monkeypatch) -> None:
     def fail_if_called(**_kwargs):
         raise AssertionError("automatic preprocessing must not run")
@@ -85,6 +95,133 @@ def test_missing_groups_trigger_one_llm_classification_and_filter_bad_evidence(
     assert [entry.text for entry in record.actors] == ["Operator Lena"]
     assert [entry.text for entry in record.process_parameters] == ["width = 12 mm"]
     assert any("temperature = 42 C" in note for note in record.evidence_uncertainty)
+
+
+def test_long_source_is_split_and_partial_chunk_failure_is_preserved(
+    monkeypatch,
+) -> None:
+    source = " ".join(
+        [
+            "Operator opens the maintenance cover before inspecting the long assembly area carefully and checking every visible fastener.",
+            "FAIL chunk describes unrelated noisy speech that the local model cannot structure safely despite the repeated explanation.",
+            "Operator closes the maintenance cover after completing the inspection carefully and documenting the final condition.",
+        ]
+    )
+    calls: list[str] = []
+
+    def fake_extract(**kwargs):
+        chunk = kwargs["text"]
+        calls.append(chunk)
+        if "FAIL chunk" in chunk:
+            raise TimeoutError("simulated chunk timeout")
+        if "opens the maintenance cover" in chunk:
+            return PreprocessingDraft(
+                action_sequence=[
+                    GroundedEntry(
+                        text="open maintenance cover",
+                        evidence="opens the maintenance cover",
+                    )
+                ]
+            )
+        return PreprocessingDraft(
+            action_sequence=[
+                GroundedEntry(
+                    text="close maintenance cover",
+                    evidence="closes the maintenance cover",
+                )
+            ]
+        )
+
+    monkeypatch.setattr(automatic, "_extract_structured_response", fake_extract)
+
+    draft, notes = automatic.automatically_preprocess_industrial_text(
+        raw_text=source,
+        model="fake",
+        chunk_max_chars=200,
+    )
+
+    assert len(calls) == 4
+    assert all(len(chunk) <= 200 for chunk in calls)
+    assert [entry.text for entry in draft.action_sequence] == [
+        "open maintenance cover",
+        "close maintenance cover",
+    ]
+    assert any("2/3 failed after 2 attempts" in note for note in notes)
+    assert any("2/3 attempt 1/2 failed" in note for note in notes)
+    assert any("split the source into 3 chunks" in note for note in notes)
+
+
+def test_preprocessing_chunk_retry_recovers_without_repeating_siblings(
+    monkeypatch,
+) -> None:
+    attempts = 0
+
+    def transient_failure(**_kwargs):
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            raise TimeoutError("temporary timeout")
+        return PreprocessingDraft(
+            action_sequence=[
+                GroundedEntry(text="align plate", evidence="aligns the plate")
+            ]
+        )
+
+    monkeypatch.setattr(
+        automatic,
+        "_extract_structured_response",
+        transient_failure,
+    )
+
+    draft, notes = automatic.automatically_preprocess_industrial_text(
+        raw_text="The worker aligns the plate.",
+        model="fake",
+    )
+
+    assert attempts == 2
+    assert [entry.text for entry in draft.action_sequence] == ["align plate"]
+    assert any("succeeded on attempt 2/2" in note for note in notes)
+
+
+def test_chunk_splitter_keeps_every_chunk_grounded_in_source() -> None:
+    source = (
+        "First the worker aligns the plate. "
+        "Then the worker tightens the mounting screws. "
+        "Finally the worker checks the completed assembly."
+    )
+
+    chunks = automatic._split_preprocessing_chunks(source, 200)
+
+    assert chunks == [source]
+    assert all(chunk in source for chunk in chunks)
+
+
+def test_model_added_outer_quotes_are_removed_before_grounding() -> None:
+    """Formatting quotes must not erase an otherwise exact source span."""
+
+    source = "Hans aligns the steel plate and starts the root weld."
+    draft = PreprocessingDraft(
+        action_sequence=[
+            GroundedEntry(
+                text="align steel plate",
+                evidence="'aligns the steel plate'",
+            )
+        ]
+    )
+
+    grounded, notes = automatic._filter_and_order_grounded_entries(draft, source)
+
+    assert notes == []
+    assert grounded.action_sequence[0].evidence == "aligns the steel plate"
+
+
+def test_real_source_quotes_are_preserved_when_already_grounded() -> None:
+    source = "Annotation-derived text: action 'place' involves wood."
+    entry = GroundedEntry(text="place", evidence="'place'")
+
+    normalized = automatic._normalize_grounded_entry_evidence(entry, source)
+
+    assert normalized.evidence == "'place'"
 
 
 def test_automatic_llm_failure_has_clear_domain_error(monkeypatch) -> None:
@@ -167,10 +304,11 @@ def test_vector_candidate_and_llm_judge_merge_catalog_aliases(monkeypatch) -> No
 
     assert notes == []
     assert len(entries) == 1
-    assert entries[0].text == "caliper"
-    assert entries[0].aliases == ["measuring gauge", "vernier caliper"]
-    assert entries[0].evidence == "measures the cover plate"
-    assert entries[0].additional_evidence == ["vernier caliper"]
+    assert entries[0].text == "vernier caliper"
+    assert entries[0].canonical_name == "caliper"
+    assert entries[0].aliases == ["measuring gauge"]
+    assert entries[0].evidence == "vernier caliper"
+    assert entries[0].additional_evidence == ["measures the cover plate"]
 
 
 def test_scene_alias_judge_can_keep_similar_objects_separate(monkeypatch) -> None:
@@ -247,5 +385,5 @@ def test_rendered_entry_includes_aliases_and_all_grounded_evidence() -> None:
     )
 
     prompt = record.to_prompt_text()
-    assert "别名: vernier caliper" in prompt
-    assert "证据: vernier caliper; measures the cover plate" in prompt
+    assert "Aliases: vernier caliper" in prompt
+    assert "Evidence: vernier caliper; measures the cover plate" in prompt

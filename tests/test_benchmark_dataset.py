@@ -1,4 +1,4 @@
-"""小型实验数据集模块的功能测试。"""
+"""Tests for the small benchmark dataset module."""
 
 import json
 
@@ -14,7 +14,7 @@ from backend.schemas.egocentric_examples import WELDING_SCENE_EXPECTED, WELDING_
 
 
 def test_mvp_benchmark_contains_two_seed_scenes():
-    """确认当前数据集包含焊接与质量检查两个起始场景。"""
+    """The MVP benchmark contains welding and inspection seed scenes."""
 
     assert MVP_BENCHMARK.name == "egocentric_raw_unified_mvp"
     assert [scene.scene_id for scene in MVP_BENCHMARK.scenes] == [
@@ -24,17 +24,17 @@ def test_mvp_benchmark_contains_two_seed_scenes():
 
 
 def test_each_scene_provides_raw_unified_and_gold_inputs():
-    """确认每个场景都具备后续公平比较所需要的三类内容。"""
+    """Each scene supplies raw, unified, and Gold content."""
 
     for scene in MVP_BENCHMARK.scenes:
         assert scene.input_text("raw") == scene.raw_text
-        assert "[动作顺序]" in scene.input_text("unified")
+        assert "[ACTION SEQUENCE]" in scene.input_text("unified")
         assert scene.input_text("unified") != scene.input_text("raw")
         assert scene.gold_extraction.source_text == scene.raw_text
 
 
 def test_gold_extractions_can_be_turned_into_queryable_graphs():
-    """确认数据集中人工标准答案能够继续接入现有图构建模块。"""
+    """Gold extractions can be converted into queryable graphs."""
 
     welding_scene = MVP_BENCHMARK.get_scene("weld_demo_01")
     welding_graph = build_property_graph(welding_scene.gold_extraction)
@@ -48,7 +48,7 @@ def test_gold_extractions_can_be_turned_into_queryable_graphs():
 
 
 def test_dataset_exports_json_lines_with_both_input_forms():
-    """确认数据集可导出为便于保存和检查的逐行 JSON 文本。"""
+    """The dataset exports both input forms as JSON Lines."""
 
     lines = MVP_BENCHMARK.to_jsonl().splitlines()
     records = [json.loads(line) for line in lines]
@@ -56,12 +56,13 @@ def test_dataset_exports_json_lines_with_both_input_forms():
     assert len(records) == 2
     assert records[0]["scene_id"] == "weld_demo_01"
     assert records[0]["raw_text"] == WELDING_SCENE_TEXT
-    assert "[场景 / 片段]" in records[0]["unified_text"]
+    assert "[SCENE / SEGMENT]" in records[0]["unified_text"]
+    assert "[ACTION SEQUENCE]" in records[0]["unified_text"]
     assert records[0]["gold_extraction"]["video_id"] == "weld_demo_01"
 
 
 def test_scene_rejects_unaligned_raw_and_unified_source_text():
-    """确认一个场景不能错误绑定来自不同原文的统一输入。"""
+    """A scene rejects unified input bound to different source text."""
 
     unrelated_unified = build_unified_text(
         raw_text="Maria measures a gap.",
@@ -78,7 +79,7 @@ def test_scene_rejects_unaligned_raw_and_unified_source_text():
     with pytest.raises(ValueError, match="raw_text"):
         BenchmarkScene(
             scene_id="weld_demo_01",
-            description="错误绑定测试",
+            description="incorrect binding test",
             raw_text=WELDING_SCENE_TEXT,
             unified_record=unrelated_unified,
             gold_extraction=WELDING_SCENE_EXPECTED,
@@ -86,9 +87,9 @@ def test_scene_rejects_unaligned_raw_and_unified_source_text():
 
 
 def test_unknown_input_condition_is_rejected():
-    """确认实验运行器以后不能意外使用未定义的输入条件。"""
+    """The experiment runner rejects undefined input conditions."""
 
     scene = MVP_BENCHMARK.get_scene("inspect_demo_01")
 
-    with pytest.raises(ValueError, match="不支持的输入条件"):
+    with pytest.raises(ValueError, match="Unsupported input condition"):
         scene.input_text("noisy")  # type: ignore[arg-type]

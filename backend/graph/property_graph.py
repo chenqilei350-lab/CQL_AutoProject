@@ -2,13 +2,6 @@
 In-memory property graph for MVP graph construction and querying.
 
 The project can later swap this layer for LadybugDB or Neo4j/Cypher export.
-
-中文说明：
-这个文件实现一个轻量的“内存版知识图谱”。
-它不依赖 Neo4j/LadybugDB，主要用于 MVP 阶段验证：
-1. Pydantic 抽取结果能不能变成 graph nodes/edges。
-2. 重复节点能不能合并。
-3. 能不能查询动作顺序、工具使用和因果关系。
 """
 
 from typing import Any, Iterable, Optional

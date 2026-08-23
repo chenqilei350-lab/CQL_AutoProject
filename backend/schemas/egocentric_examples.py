@@ -1,9 +1,8 @@
 """
 Gold-standard examples for egocentric video procedural knowledge extraction.
 
-中文说明：
-这个文件放的是手写的标准答案 examples。
-它们不调用 LLM，而是用来测试 schema、graph construction 和后续 evaluation 是否工作正常。
+These hand-authored expected results do not call an LLM. They verify schemas,
+graph construction, and downstream evaluation.
 """
 
 from backend.schemas.egocentric_video import (

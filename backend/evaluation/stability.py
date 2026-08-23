@@ -1,17 +1,7 @@
-"""重复抽取结果的稳定性评价指标。
+"""Stability metrics for repeated extraction results.
 
-本模块回答实验中的稳定性问题：
-
-    同一个场景、同一种输入表示重复送给模型时，
-    模型生成的节点和关系是否保持一致？
-
-它读取 experiment_runner 产生的批量运行结果，不再调用 LLM。
-指标设计保持简单、可解释，便于在项目报告中说明：
-
-- Node overlap：两次运行抽到的节点集合重合程度。
-- Relation agreement：两次运行抽到的关系三元组重合程度。
-- Graph overlap：节点与关系合并后的整体图重合程度。
-- Repeated-run variation：多次运行中图规模和校验指标的均值与方差。
+The module reads batch results without calling an LLM and reports node overlap,
+relation agreement, graph overlap, and repeated-run metric variation.
 """
 
 from __future__ import annotations
@@ -30,7 +20,7 @@ from backend.pipeline.experiment_runner import (
 
 
 class PairwiseGraphAgreement(BaseModel):
-    """同一场景同一条件下，两次运行之间的图一致性比较结果。"""
+    """Pairwise graph agreement for one scene and condition."""
 
     first_run_number: int
     second_run_number: int
@@ -40,7 +30,7 @@ class PairwiseGraphAgreement(BaseModel):
 
 
 class MetricVariation(BaseModel):
-    """某个数值指标在重复运行中的均值、方差和标准差。"""
+    """Mean, variance, and standard deviation of a repeated metric."""
 
     metric_name: str
     values: list[float]
@@ -50,7 +40,7 @@ class MetricVariation(BaseModel):
 
 
 class StabilitySummary(BaseModel):
-    """一个场景在一种输入条件下的稳定性汇总。"""
+    """Stability summary for one scene and input condition."""
 
     scene_id: str
     condition: InputCondition
@@ -64,7 +54,7 @@ class StabilitySummary(BaseModel):
 
 
 class StabilityReport(BaseModel):
-    """整个 benchmark 的稳定性报告。"""
+    """Stability report for an entire benchmark."""
 
     dataset_name: str
     summaries: list[StabilitySummary] = Field(default_factory=list)
@@ -72,16 +62,18 @@ class StabilityReport(BaseModel):
     def summary_for(
         self, scene_id: str, condition: InputCondition
     ) -> StabilitySummary:
-        """按场景编号与输入类型取回一条稳定性汇总。"""
+        """Return one stability summary by scene ID and input condition."""
 
         for summary in self.summaries:
             if summary.scene_id == scene_id and summary.condition == condition:
                 return summary
-        raise KeyError(f"未找到场景 {scene_id!r} 的 {condition!r} 稳定性结果")
+        raise KeyError(
+            f"No stability result found for scene {scene_id!r} and condition {condition!r}"
+        )
 
 
 def jaccard_similarity(left: set[str], right: set[str]) -> float:
-    """计算两个事实集合的重合度；两者都为空时视为完全一致。"""
+    """Compute set overlap; two empty sets are treated as identical."""
 
     union = left | right
     if not union:
@@ -95,7 +87,7 @@ def compare_graphs(
     first_run_number: int,
     second_run_number: int,
 ) -> PairwiseGraphAgreement:
-    """比较两次抽取生成的 graph nodes 与 relation triples。"""
+    """Compare graph nodes and relation triples from two runs."""
 
     first_nodes = _node_signatures(first)
     second_nodes = _node_signatures(second)
@@ -120,7 +112,7 @@ def compare_graphs(
 
 
 def evaluate_stability(batch_result: ExperimentBatchResult) -> StabilityReport:
-    """按场景与输入条件汇总批量重复实验的稳定性指标。"""
+    """Aggregate repeated-run stability by scene and input condition."""
 
     summaries: list[StabilitySummary] = []
     scene_conditions = {
@@ -145,7 +137,7 @@ def _summarize_runs(
     condition: InputCondition,
     runs: list[ExtractionRunRecord],
 ) -> StabilitySummary:
-    """生成单个场景和单种输入形式的重复运行汇总。"""
+    """Summarize repeated runs for one scene and input representation."""
 
     pairwise_scores = [
         compare_graphs(
@@ -203,7 +195,7 @@ def _summarize_runs(
 
 
 def _node_signatures(graph: PropertyGraph) -> set[str]:
-    """把节点转成与内部 id 无关的可比较事实表示。"""
+    """Convert nodes to comparable signatures independent of internal IDs."""
 
     return {
         f"{node.label}|{normalize_name(node.name)}"
@@ -212,7 +204,7 @@ def _node_signatures(graph: PropertyGraph) -> set[str]:
 
 
 def _relation_signatures(graph: PropertyGraph) -> set[str]:
-    """把边转成 source-type-target 三元组，比较关系是否重复出现。"""
+    """Convert edges into source-type-target signatures."""
 
     signatures: set[str] = set()
     for edge in graph.edges:
@@ -233,7 +225,7 @@ def _relation_signatures(graph: PropertyGraph) -> set[str]:
 
 
 def _variation(metric_name: str, values: list[float]) -> MetricVariation:
-    """计算总体方差；实验报告中数值越低表示重复运行越稳定。"""
+    """Compute population variance; lower values indicate greater stability."""
 
     if not values:
         return MetricVariation(
@@ -255,7 +247,7 @@ def _variation(metric_name: str, values: list[float]) -> MetricVariation:
 
 
 def _mean_or_perfect(values: list[float]) -> float:
-    """汇总成平均一致性；没有比较对时返回基线值 1.0。"""
+    """Return mean agreement, or the 1.0 baseline when no pairs exist."""
 
     if not values:
         return 1.0

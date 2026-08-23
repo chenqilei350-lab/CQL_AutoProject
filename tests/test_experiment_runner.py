@@ -1,7 +1,7 @@
-"""重复抽取实验运行器的测试。
+"""Tests for the repeated extraction experiment runner.
 
-这些测试使用假抽取器代替 Ollama，因此可以快速检查实验组织逻辑，
-而不会依赖本地模型服务是否正在运行。
+These tests use fake extractors instead of Ollama so experiment orchestration
+can be checked without depending on a running local model service.
 """
 
 import json
@@ -26,7 +26,7 @@ from backend.schemas.process_knowledge.entities import Tool
 
 
 class FakeExtractor:
-    """按输入中的场景编号返回 gold 结果，并记录实际调用文本。"""
+    """Return Gold by scene ID and record the actual input text."""
 
     def __init__(self) -> None:
         self.calls: list[tuple[str, type[EgocentricVideoExtraction]]] = []
@@ -44,7 +44,7 @@ class FakeExtractor:
 
 
 class HallucinatingUnifiedExtractor(FakeExtractor):
-    """仅在统一格式条件下加入一个原文不支持的工具关系。"""
+    """Add one source-unsupported tool relation only for unified input."""
 
     def extract(
         self,
@@ -53,7 +53,7 @@ class HallucinatingUnifiedExtractor(FakeExtractor):
         system_prompt: str | None = None,
     ) -> EgocentricVideoExtraction:
         extraction = super().extract(text, response_model, system_prompt)
-        if "[场景 / 片段]" in text and "inspect_demo_01" in text:
+        if "[NORMALIZED SEGMENT]" in text and "inspect_demo_01" in text:
             extraction.uses_tool.append(
                 UsesTool(
                     action=Action(name="measure gap"),
@@ -65,7 +65,7 @@ class HallucinatingUnifiedExtractor(FakeExtractor):
 
 
 def test_runner_executes_each_scene_condition_and_repeat() -> None:
-    """两个场景、两种输入、两次重复应形成八条运行记录。"""
+    """Two scenes, two inputs, and two repeats should produce eight runs."""
 
     extractor = FakeExtractor()
     runner = RawUnifiedExperimentRunner(
@@ -83,7 +83,7 @@ def test_runner_executes_each_scene_condition_and_repeat() -> None:
 
 
 def test_runner_only_switches_input_representation() -> None:
-    """同一场景的 Raw 与 Unified 运行使用相同 schema，但输入文本不同。"""
+    """Raw and unified use the same schema but different text forms."""
 
     result = RawUnifiedExperimentRunner(extractor=FakeExtractor()).run(
         MVP_BENCHMARK
@@ -95,13 +95,13 @@ def test_runner_only_switches_input_representation() -> None:
     assert raw_run.input_text == MVP_BENCHMARK.get_scene(
         "inspect_demo_01"
     ).raw_text
-    assert "[动作顺序]" in unified_run.input_text
+    assert "[ACTION SEQUENCE]" in unified_run.input_text
     assert raw_run.input_text != unified_run.input_text
     assert raw_run.model == unified_run.model == "llama3.1:8b"
 
 
 def test_runner_attaches_graph_and_validation_report() -> None:
-    """每条抽取记录都应包含图结果与 ontology/grounding 校验报告。"""
+    """Each run includes its graph and ontology/grounding validation."""
 
     result = RawUnifiedExperimentRunner(extractor=FakeExtractor()).run(
         MVP_BENCHMARK
@@ -115,7 +115,7 @@ def test_runner_attaches_graph_and_validation_report() -> None:
 
 
 def test_unified_validation_still_uses_original_source_text() -> None:
-    """统一格式输入引入的新工具关系仍会被原始证据检查发现。"""
+    """Original evidence checks still detect unsupported unified facts."""
 
     result = RawUnifiedExperimentRunner(
         extractor=HallucinatingUnifiedExtractor()
@@ -127,7 +127,7 @@ def test_unified_validation_still_uses_original_source_text() -> None:
 
 
 def test_batch_result_can_be_saved_as_jsonl(tmp_path) -> None:
-    """实验输出可以保存，供下一阶段统计指标和制作结果表。"""
+    """Experiment output can be saved for metrics and result tables."""
 
     result = RawUnifiedExperimentRunner(extractor=FakeExtractor()).run(
         MVP_BENCHMARK
@@ -145,14 +145,14 @@ def test_batch_result_can_be_saved_as_jsonl(tmp_path) -> None:
 
 
 def test_repetition_count_must_be_positive() -> None:
-    """没有运行次数就无法比较结果，因此次数不得为零。"""
+    """The repetition count must be positive for comparisons."""
 
     with pytest.raises(ValueError):
         ExperimentRunConfig(repetitions=0)
 
 
 def test_runner_can_record_failed_extraction_and_continue() -> None:
-    """真实批量实验可把单条失败记入结果，而不丢弃其他场景。"""
+    """Batch experiments record one failure without dropping other scenes."""
 
     class FailingExtractor(FakeExtractor):
         def extract(
@@ -161,8 +161,8 @@ def test_runner_can_record_failed_extraction_and_continue() -> None:
             response_model: type[EgocentricVideoExtraction],
             system_prompt: str | None = None,
         ) -> EgocentricVideoExtraction:
-            if "inspect_demo_01" in text and "[场景 / 片段]" not in text:
-                raise ValueError("模型输出没有通过 schema")
+            if "inspect_demo_01" in text and "[NORMALIZED SEGMENT]" not in text:
+                raise ValueError("Model output did not satisfy the schema")
             return super().extract(text, response_model, system_prompt)
 
     result = RawUnifiedExperimentRunner(

@@ -1,10 +1,8 @@
-"""扩展实验使用的 egocentric video 人工标准示例。
+"""Human-authored egocentric-video examples for expanded experiments.
 
-前两个基础场景已经覆盖焊接与卡尺检查。本文件补充三个小场景，
-使初步 Raw/Unified 实验能够覆盖装配、维护清洁和温度检查任务。
-
-这些文字是 MVP 阶段的可核查 scene descriptions，并非真实视频转写结果。
-正式实验获得视频资料后，应以真实描述替换或补充这些种子样例。
+Three seed scenes extend welding and caliper inspection with assembly,
+maintenance cleaning, and temperature inspection. These are verifiable MVP scene
+descriptions rather than real video transcripts.
 """
 
 from backend.schemas.egocentric_video import (

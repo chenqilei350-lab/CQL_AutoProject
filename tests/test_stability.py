@@ -1,7 +1,7 @@
-"""稳定性指标模块测试。
+"""Tests for graph stability metrics.
 
-测试通过可控的假抽取器制造“重复输出一致”与“重复输出变化”两种情况，
-验证指标能够真实反映 graph 与 grounding 结果的波动。
+Controlled fake extractors create identical and variable repeated outputs so
+the metrics can be checked against graph and grounding variation.
 """
 
 from backend.datasets.benchmark import MVP_BENCHMARK
@@ -24,7 +24,7 @@ from backend.schemas.process_knowledge.entities import Tool
 
 
 class StableExtractor:
-    """每次返回同一个 gold graph，用来验证完全稳定的情况。"""
+    """Return the same Gold graph on every call."""
 
     def extract(
         self,
@@ -38,7 +38,7 @@ class StableExtractor:
 
 
 class VariableExtractor:
-    """只在检查场景 Unified 的第二次运行加入无依据工具关系。"""
+    """Add one unsupported relation to the second unified inspection run."""
 
     def __init__(self) -> None:
         self.unified_inspection_calls = 0
@@ -53,7 +53,7 @@ class VariableExtractor:
             return WELDING_SCENE_EXPECTED.model_copy(deep=True)
 
         result = INSPECTION_SCENE_EXPECTED.model_copy(deep=True)
-        if "[场景 / 片段]" in text:
+        if "[NORMALIZED SEGMENT]" in text:
             self.unified_inspection_calls += 1
             if self.unified_inspection_calls == 2:
                 result.uses_tool.append(
@@ -66,7 +66,7 @@ class VariableExtractor:
 
 
 def test_identical_repeated_runs_receive_perfect_overlap() -> None:
-    """重复输出完全相同时，三个重合指标均应为 1。"""
+    """Identical repeated output receives perfect overlap scores."""
 
     batch = RawUnifiedExperimentRunner(
         config=ExperimentRunConfig(repetitions=2),
@@ -85,7 +85,7 @@ def test_identical_repeated_runs_receive_perfect_overlap() -> None:
 
 
 def test_graph_comparison_detects_changed_relation() -> None:
-    """只增加一条关系时，节点和关系重合度都应下降。"""
+    """Adding one relation reduces both node and relation overlap."""
 
     first = INSPECTION_SCENE_EXPECTED.model_copy(deep=True)
     second = INSPECTION_SCENE_EXPECTED.model_copy(deep=True)
@@ -109,7 +109,7 @@ def test_graph_comparison_detects_changed_relation() -> None:
 
 
 def test_variable_output_produces_stability_variation() -> None:
-    """一次无依据抽取应降低 Unified 的一致性并产生校验指标波动。"""
+    """One unsupported extraction reduces unified stability."""
 
     batch = RawUnifiedExperimentRunner(
         config=ExperimentRunConfig(repetitions=2),
@@ -128,7 +128,7 @@ def test_variable_output_produces_stability_variation() -> None:
 
 
 def test_one_run_is_marked_as_without_pairwise_comparison() -> None:
-    """仅运行一次时仍可生成报告，但会明确没有比较对。"""
+    """A single run is reportable but has no comparison pair."""
 
     batch = RawUnifiedExperimentRunner(extractor=StableExtractor()).run(
         MVP_BENCHMARK

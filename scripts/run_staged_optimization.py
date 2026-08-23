@@ -63,6 +63,8 @@ def main() -> None:
             "entity_first_relation_second_with_fewshot",
             "minimal_entity_relation",
             "minimal_entity_relation_with_validation",
+            "llm_relation_proposal",
+            "llm_relation_proposal_with_repair",
             "minimal_candidate_relation",
             "minimal_candidate_relation_with_validation",
             "validation_driven_refinement",

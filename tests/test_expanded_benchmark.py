@@ -1,4 +1,4 @@
-"""扩展五场景 benchmark 的测试。"""
+"""Tests for the expanded five-scene benchmark."""
 
 import json
 
@@ -8,7 +8,7 @@ from backend.graph.property_graph import build_property_graph
 
 
 def test_expanded_benchmark_contains_five_grounded_scenes() -> None:
-    """扩展数据集应保留基础样例并增加三个不同任务场景。"""
+    """The expanded dataset keeps seed examples and adds three task types."""
 
     assert [scene.scene_id for scene in EXPANDED_BENCHMARK.scenes] == [
         "weld_demo_01",
@@ -24,7 +24,7 @@ def test_expanded_benchmark_contains_five_grounded_scenes() -> None:
 
 
 def test_additional_gold_graphs_cover_tool_order_causality_and_parameter() -> None:
-    """新增人工标准图应覆盖本项目需要比较的重要知识类型。"""
+    """Additional Gold graphs cover the project's key knowledge types."""
 
     assembly_graph = build_property_graph(
         EXPANDED_BENCHMARK.get_scene("assembly_demo_01").gold_extraction
@@ -51,7 +51,7 @@ def test_additional_gold_graphs_cover_tool_order_causality_and_parameter() -> No
 
 
 def test_additional_gold_relations_follow_ontology_contract() -> None:
-    """新增 gold relations 的 domain/range 必须符合既有 ontology schema。"""
+    """Additional Gold relations comply with ontology domain/range contracts."""
 
     for scene_id in [
         "assembly_demo_01",
@@ -68,7 +68,7 @@ def test_additional_gold_relations_follow_ontology_contract() -> None:
 
 
 def test_expanded_dataset_exports_all_raw_unified_gold_records() -> None:
-    """扩展数据集导出后可作为真实模型实验的输入清单。"""
+    """The expanded export can drive real-model experiments."""
 
     records = [
         json.loads(line) for line in EXPANDED_BENCHMARK.to_jsonl().splitlines()
@@ -79,5 +79,5 @@ def test_expanded_dataset_exports_all_raw_unified_gold_records() -> None:
         record for record in records if record["scene_id"] == "thermal_demo_01"
     )
     assert "42 degrees" in thermal["raw_text"]
-    assert "[结果 / 参数]" in thermal["unified_text"]
+    assert "[OUTCOMES / PARAMETERS]" in thermal["unified_text"]
     assert thermal["gold_extraction"]["parameters"][0]["nominal_value"] == 42.0

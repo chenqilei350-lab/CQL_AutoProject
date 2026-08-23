@@ -381,7 +381,7 @@ def build_markdown_summary(
     lines = [
         "# EASG Module Experiment Summary",
         "",
-        "Mode: `module_simulation` / 模块模拟实验，不调用真实 LLM。",
+        "Mode: `module_simulation`; no real LLM is called.",
         "",
         f"- Input: `{input_path}`",
         f"- Output directory: `{output_dir}`",
@@ -401,7 +401,7 @@ def build_markdown_summary(
     lines.extend(
         [
             "",
-            "Interpretation / 解释：",
+            "Interpretation:",
             "",
             "- Higher F1 means better correctness/completeness against EASG gold graph.",
             "- Higher graph overlap means better repeated-run stability.",

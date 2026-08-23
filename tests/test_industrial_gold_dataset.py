@@ -1,4 +1,4 @@
-"""人工审核 Industrial Gold v2 的合同与实验集成测试。"""
+"""Contract and experiment integration tests for reviewed Industrial Gold v2."""
 
 import json
 from pathlib import Path

@@ -23,12 +23,10 @@ class KGEntity(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def normalize_common_llm_fields(cls, data: Any) -> Any:
-        """
-        接受小模型常见的等价字段写法，同时仍由 schema 检查最终结构。
+        """Normalize unambiguous small-model aliases before schema validation.
 
-        本地模型有时会把实体名称输出为 ``description``，把证据输出为
-        ``evidence``。它们的语义可以无歧义映射到现有字段，因此在进入
-        graph 和 evaluation 前统一转换，而不新增任何原文之外的事实。
+        Local models may emit an entity name as ``description`` or grounding as
+        ``evidence``. These aliases are mapped without adding source-external facts.
         """
 
         if not isinstance(data, dict):
@@ -67,7 +65,7 @@ class KGRelation(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def normalize_evidence_field(cls, data: Any) -> Any:
-        """将模型输出的 ``evidence`` 别名保存为统一证据字段。"""
+        """Store the model's ``evidence`` alias in the canonical evidence field."""
 
         if not isinstance(data, dict):
             return data

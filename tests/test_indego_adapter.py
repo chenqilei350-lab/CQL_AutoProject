@@ -104,9 +104,14 @@ def test_load_indego_standard_dataset_builds_raw_and_unified_inputs(tmp_path) ->
     assert first.category == "assembly"
     assert "Annotated actions:" in first.raw_text
     assert "Action 2: tighten screw with allen wrench" in first.raw_text
-    assert "[动作顺序]" in first.input_text("unified")
+    assert "[ACTION SEQUENCE]" in first.input_text("unified")
     assert first.unified_record.action_sequence[1].text == "tighten screw with allen wrench"
     assert any(entry.text == "allen wrench" for entry in first.unified_record.tools_objects)
+    normalized = first.unified_record.normalized_segment
+    assert normalized is not None
+    assert normalized.source_adapter == "indego_adapter"
+    assert [tool.text for tool in normalized.tools] == ["gloves", "allen wrench"]
+    assert "sentence=tighten screw with allen wrench." in first.input_text("unified")
 
 
 def test_warning_annotations_become_quality_warning_inputs(tmp_path) -> None:

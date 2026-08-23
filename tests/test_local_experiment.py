@@ -1,4 +1,4 @@
-"""本地实验入口的文件输出测试，不调用真实 Ollama。"""
+"""File-output tests for the local experiment entry point without Ollama."""
 
 from backend.pipeline.local_experiment import run_local_experiment
 from backend.schemas.egocentric_examples import (
@@ -14,7 +14,7 @@ from backend.schemas.expanded_egocentric_examples import (
 
 
 class ExpandedGoldExtractor:
-    """根据输入场景返回人工 gold 结果，以便只测试实验保存流程。"""
+    """Return human-authored Gold by scene to test experiment persistence."""
 
     def extract(
         self,
@@ -32,11 +32,11 @@ class ExpandedGoldExtractor:
         for scene_id, expected in examples.items():
             if scene_id in text:
                 return expected.model_copy(deep=True)
-        raise ValueError("测试输入中没有已知场景编号。")
+        raise ValueError("No known scene ID was found in the test input.")
 
 
 class FailsInspectionRawExtractor(ExpandedGoldExtractor):
-    """模拟某一次真实模型输出无法通过 schema 的情况。"""
+    """Simulate one real model output that fails schema validation."""
 
     def extract(
         self,
@@ -44,13 +44,13 @@ class FailsInspectionRawExtractor(ExpandedGoldExtractor):
         response_model: type[EgocentricVideoExtraction],
         system_prompt: str | None = None,
     ) -> EgocentricVideoExtraction:
-        if "inspect_demo_01" in text and "[场景 / 片段]" not in text:
-            raise ValueError("输出字段结构不合规")
+        if "inspect_demo_01" in text and "[NORMALIZED SEGMENT]" not in text:
+            raise ValueError("Output fields do not satisfy the schema")
         return super().extract(text, response_model, system_prompt)
 
 
 def test_local_experiment_saves_full_result_bundle(tmp_path) -> None:
-    """一次五场景实验应保存原始记录、稳定性和两种报告格式。"""
+    """A five-scene run saves raw records, stability, and both report formats."""
 
     report = run_local_experiment(
         repetitions=1,
@@ -69,7 +69,7 @@ def test_local_experiment_saves_full_result_bundle(tmp_path) -> None:
 
 
 def test_local_experiment_can_limit_scene_and_condition_for_diagnosis(tmp_path) -> None:
-    """诊断真实模型问题时，可以只重跑一个场景的一种输入。"""
+    """Diagnostics can rerun one scene under one input condition."""
 
     report = run_local_experiment(
         output_dir=tmp_path,
@@ -83,7 +83,7 @@ def test_local_experiment_can_limit_scene_and_condition_for_diagnosis(tmp_path) 
 
 
 def test_local_experiment_counts_failed_run_in_error_report(tmp_path) -> None:
-    """某条抽取失败时，完整试验继续，并将失败作为结果问题记录。"""
+    """A failed extraction is recorded while the full experiment continues."""
 
     report = run_local_experiment(
         output_dir=tmp_path,
@@ -91,6 +91,6 @@ def test_local_experiment_counts_failed_run_in_error_report(tmp_path) -> None:
     )
 
     markdown = report.to_markdown()
-    assert "运行失败" in markdown
+    assert "Execution failure" in markdown
     assert "inspect_demo_01" in markdown
     assert len((tmp_path / "extraction_runs.jsonl").read_text().splitlines()) == 10

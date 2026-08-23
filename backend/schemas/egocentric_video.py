@@ -3,10 +3,6 @@ Schemas for egocentric video scene descriptions.
 
 These models are the MVP extraction contract for the project route:
 scene descriptions -> typed procedural knowledge -> property graph.
-
-中文说明：
-这个文件定义“第一人称专家视频场景描述”要抽取成什么结构。
-LLM 的输出会被 Instructor 校验成这些 Pydantic 类，后续 graph 层再把这些类转换成节点和边。
 """
 
 from typing import Any, Literal, Optional
@@ -50,12 +46,7 @@ class Scene(KGEntity):
     @model_validator(mode="before")
     @classmethod
     def normalize_scene_fields(cls, data: Any) -> Any:
-        """
-        把模型常用的 ``scene_id`` 对应到现有视频片段字段。
-
-        Scene 的节点名称采用片段编号构成稳定名称，避免仅使用泛化的
-        description 导致不同视频片段在图中被错误合并。
-        """
+        """Map common ``scene_id`` output to stable video-segment fields."""
 
         if not isinstance(data, dict):
             return data
@@ -88,7 +79,7 @@ class SceneObject(KGEntity):
     @model_validator(mode="before")
     @classmethod
     def normalize_object_fields(cls, data: Any) -> Any:
-        """当模型把对象名称写在 ``type`` 中时，保留其显式对象名称。"""
+        """Preserve an explicit object name emitted in the ``type`` field."""
 
         if not isinstance(data, dict):
             return data
@@ -128,7 +119,7 @@ class Action(KGEntity):
     @model_validator(mode="before")
     @classmethod
     def normalize_action_fields(cls, data: Any) -> Any:
-        """将模型输出的动作别名对应为 graph 使用的名称和顺序字段。"""
+        """Map action aliases to graph name and sequence fields."""
 
         if not isinstance(data, dict):
             return data
@@ -164,7 +155,7 @@ class UsesTool(KGRelation):
     @model_validator(mode="before")
     @classmethod
     def normalize_string_endpoints(cls, data: Any) -> Any:
-        """把模型明确输出的动作名与工具名包装成 relation endpoint 实体。"""
+        """Wrap explicit action and tool names as relation endpoint entities."""
 
         if not isinstance(data, dict):
             return data
@@ -187,7 +178,7 @@ class ActsOnObject(KGRelation):
     @model_validator(mode="before")
     @classmethod
     def normalize_string_endpoints(cls, data: Any) -> Any:
-        """把字符串动作与对象端点转为现有 schema 所需的实体对象。"""
+        """Convert string action/object endpoints into schema entities."""
 
         if not isinstance(data, dict):
             return data
@@ -209,12 +200,7 @@ class ActionOrder(KGRelation):
     @model_validator(mode="before")
     @classmethod
     def normalize_order_endpoints(cls, data: Any) -> Any:
-        """
-        兼容模型输出的 ``action`` / ``following_action`` 顺序表示。
-
-        若模型只给出 preceding 与当前 action，也可直接还原为 BEFORE 边；
-        这里仅改写已经被模型显式表达的先后关系。
-        """
+        """Normalize explicit ``action``/``following_action`` order aliases."""
 
         if not isinstance(data, dict):
             return data
@@ -245,7 +231,7 @@ class ActionCauses(KGRelation):
     @model_validator(mode="before")
     @classmethod
     def normalize_causal_endpoints(cls, data: Any) -> Any:
-        """兼容 ``causing_action`` 导致 ``action`` 的因果表示。"""
+        """Normalize an explicit ``causing_action`` to ``action`` relation."""
 
         if not isinstance(data, dict):
             return data
@@ -271,7 +257,7 @@ class ActionPartOfProcedure(KGRelation):
     @model_validator(mode="before")
     @classmethod
     def normalize_string_endpoints(cls, data: Any) -> Any:
-        """把明确给出的动作名和流程名转换为嵌套实体端点。"""
+        """Convert explicit action and procedure names into endpoint entities."""
 
         if not isinstance(data, dict):
             return data
@@ -293,7 +279,7 @@ class ActionObservedInScene(KGRelation):
     @model_validator(mode="before")
     @classmethod
     def normalize_string_endpoints(cls, data: Any) -> Any:
-        """把明确给出的动作和场景名称转换为嵌套实体端点。"""
+        """Convert explicit action and scene names into endpoint entities."""
 
         if not isinstance(data, dict):
             return data
@@ -326,7 +312,7 @@ class EgocentricVideoExtraction(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def add_scene_context_from_root(cls, data: Any) -> Any:
-        """将顶层视频编号传给只返回 segment `id` 的场景对象。"""
+        """Propagate the root video ID to scenes that only return a segment ID."""
 
         if not isinstance(data, dict):
             return data
@@ -366,7 +352,7 @@ class EgocentricVideoExtraction(BaseModel):
 
 
 def _as_named_entity(value: Any) -> Any:
-    """将模型已经给出的端点名称字符串包装成实体对象，不创建新事实。"""
+    """Wrap an explicit endpoint string as an entity without adding facts."""
 
     if isinstance(value, str):
         return {"name": value}

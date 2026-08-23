@@ -317,7 +317,7 @@ def build_summary_md(
     lines = [
         "# EASG Real LLM Experiment Summary",
         "",
-        "Mode: `real_llm` / 真实本地 LLM 实验。",
+        "Mode: `real_llm`; real local-LLM experiment.",
         "",
         f"- Input: `{input_path}`",
         f"- Output directory: `{output_dir}`",
@@ -337,7 +337,7 @@ def build_summary_md(
     lines.extend(
         [
             "",
-            "Interpretation / 解释：",
+            "Interpretation:",
             "",
             "- Node/Edge F1 are measured against EASG gold graph annotations.",
             "- Graph overlap measures repeated-run stability; with one repetition it is 1.0 by definition.",

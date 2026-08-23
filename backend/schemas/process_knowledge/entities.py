@@ -56,7 +56,7 @@ class Worker(KGEntity):
     @field_validator("role", mode="before")
     @classmethod
     def normalize_role_label(cls, value: Any) -> Any:
-        """兼容模型将枚举角色写成带空格形式，例如 quality inspector。"""
+        """Normalize spaced role labels such as ``quality inspector``."""
 
         if isinstance(value, str):
             return value.lower().strip().replace(" ", "_")
@@ -112,7 +112,7 @@ class ProcessParameter(KGEntity):
     @field_validator("nominal_value", mode="before")
     @classmethod
     def normalize_nominal_value(cls, value: Any) -> Any:
-        """参数数值字段本身仍保持严格类型；为空字符串时按未给出处理。"""
+        """Treat an empty numeric field as absent while preserving strict typing."""
 
         return None if value == "" else value
 

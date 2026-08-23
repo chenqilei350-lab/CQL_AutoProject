@@ -1,58 +1,54 @@
-"""
-统一格式文本生成模块。
-Unified-format text generation module.
+"""Unified-format text generation for grounded industrial extraction.
 
-本模块位于实验流程的输入准备阶段：
-原始场景描述 -> 统一格式记录 -> 供同一个抽取模型读取的统一文本。
-This module prepares experiment input:
+This module prepares experiment input through the following path:
 raw scene description -> unified record -> unified text for the same extractor.
 
-它的目的不是让语言模型润色或补充事实，而是把人工确认过的信息放入固定栏目，
-并强制每条整理后的事实保留原文证据。这样，后续可以公平比较：
-“原始文本输入”与“统一格式文本输入”对知识图谱抽取质量和稳定性的影响。
 It does not ask an LLM to polish text or add facts. It places reviewed facts into
 fixed sections and requires every fact to retain source evidence, enabling a fair
 comparison between raw and unified inputs for KG quality and stability.
 
-初学者阅读提示：可以把本文件理解为“文本预处理管理员”。
-它先判断调用方是否已经分好类别：如果已经分好，就直接检查并生成统一文本；
-如果没有分好，就调用 automatic.py 自动分类。阅读时先看
-``build_industrial_unified_text()``，其他以下划线开头的函数暂时可以跳过。
-
-Beginner guide: treat this file as the preprocessing coordinator. If category
-lists are already supplied, it validates and renders them directly. If no lists
-are supplied, it calls automatic.py. Start with ``build_industrial_unified_text()``
-and skip underscore-prefixed helpers on the first read.
+Treat this file as the preprocessing coordinator. If category lists are already
+supplied, it validates and renders them directly. If no lists are supplied, it
+calls ``automatic.py``. Start with ``build_industrial_unified_text()`` and skip
+underscore-prefixed helpers on the first read.
 """
 
 from __future__ import annotations
 
-from typing import Iterable
+import re
+from typing import Iterable, Literal
 
 from pydantic import BaseModel, Field
 
+from backend.preprocessing.normalized_segment import (
+    NormalizedAction,
+    NormalizedMention,
+    NormalizedSegment,
+)
+
+
+GroundedEntryType = Literal[
+    "action",
+    "object",
+    "tool",
+    "role",
+    "parameter",
+    "quality",
+]
+
 
 class EvidenceNotFoundError(ValueError):
-    """整理事实的证据不在原文中时抛出。 / Raised when evidence is absent."""
+    """Raised when evidence for an organized fact is absent from the source."""
 
 
 class AutomaticPreprocessingError(RuntimeError):
-    """自动预处理失败时抛出。 / Raised when automatic preprocessing fails."""
+    """Raised when automatic preprocessing fails."""
 
 
 # [Block 01] 一张保存“整理结果 + 原文证据”的事实卡片。
 # [Block 01] One fact card that stores an organized fact plus source evidence.
 class GroundedEntry(BaseModel):
-    """
-    一条有原文支撑的整理信息。
-    One organized fact grounded in the original source text.
-
-    参数：
-        text: 放入统一格式文本中的简洁事实，例如“measure gap”。
-        evidence: 原始场景描述中支持该事实的原文片段。
-        uncertainty: 人工发现的不确定之处，例如“工具型号不可见”。
-        aliases: 名称统一前保留下来的其他名称。
-        additional_evidence: 别名条目合并后保留的其他原文证据。
+    """One organized fact grounded in the original source text.
 
     Args:
         text: A concise fact rendered in the unified text.
@@ -65,22 +61,39 @@ class GroundedEntry(BaseModel):
     text: str
     evidence: str
     uncertainty: str | None = None
+    # 中文：标准名只作为附加属性保存，不能覆盖原文中有证据的名称。
+    # English: A canonical name is metadata and never replaces the grounded mention.
+    canonical_name: str | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
     aliases: list[str] = Field(default_factory=list, exclude_if=lambda value: not value)
     additional_evidence: list[str] = Field(
         default_factory=list,
         exclude_if=lambda value: not value,
     )
+    # 中文：这些可选字段让 Adapter 明确提供类型和动作槽位，避免 Renderer
+    # 根据某个数据集的词表猜测 Tool/Object/Role。
+    # English: Optional type and action slots let adapters provide semantics
+    # explicitly instead of making the renderer guess from dataset vocabularies.
+    entry_type: GroundedEntryType | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
+    verb: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    direct_object: str | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
+    tool: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    role: str | None = Field(default=None, exclude_if=lambda value: value is None)
 
 
 # [Block 02] 一个场景的统一记录，以及生成固定栏目文本的方法。
 # [Block 02] One unified scene record and its fixed-section text renderer.
 class UnifiedTextRecord(BaseModel):
-    """
-    一个场景的统一格式文本记录。
-    A unified-format text record for one scene.
+    """A unified-format text record for one scene.
 
-    该对象既能保存为 JSON 作为实验数据，也能通过 ``to_prompt_text()``
-    生成固定栏目文本，作为后续抽取模型的 unified 输入。
     The object can be saved as experiment JSON or rendered through
     ``to_prompt_text()`` as fixed-section input for the downstream extractor.
     """
@@ -97,42 +110,55 @@ class UnifiedTextRecord(BaseModel):
     outcomes_parameters: list[GroundedEntry] = Field(default_factory=list)
     evidence_uncertainty: list[str] = Field(default_factory=list)
     source_text: str
+    normalized_segment: NormalizedSegment | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
 
     def to_prompt_text(self) -> str:
-        """
-        把记录渲染成给抽取模型读取的固定栏目文本。
-        Render the record as fixed-section text for the extraction model.
+        """Render the record as fixed-section text for the extraction model.
 
-        固定栏目让 raw 与 unified 实验的唯一区别保持在输入表示方式上；
-        原始文本始终保留在末尾，便于模型和后续验证器追踪证据。
         Fixed sections isolate the experimental difference to input representation.
         The original source remains at the end for model and validator grounding.
         """
 
         scene_lines = [
-            f"场景编号: {self.scene_id}",
-            f"片段编号: {self.segment_id}",
-            f"场景说明: {self.scene_segment}",
+            f"Scene ID: {self.scene_id}",
+            f"Segment ID: {self.segment_id}",
+            f"Scene Description: {self.scene_segment}",
         ]
         if self.timestamp:
-            scene_lines.append(f"时间范围: {self.timestamp}")
+            scene_lines.append(f"Time Range: {self.timestamp}")
 
         sections = [
-            ("[场景 / 片段]", scene_lines),
-            ("[执行人员]", _render_entries(self.actors)),
-            ("[动作顺序]", _render_entries(self.action_sequence, numbered=True)),
-            ("[工具 / 对象]", _render_entries(self.tools_objects)),
-            ("[工艺参数]", _render_entries(self.process_parameters)),
-            ("[质量 / 结果]", _render_entries(self.quality_results)),
-            ("[结果 / 参数]", _render_entries(self.outcomes_parameters)),
-            ("[证据 / 不确定性]", self.evidence_uncertainty or ["无额外不确定性记录"]),
-            ("[原始文本]", [self.source_text]),
+            ("[SCENE / SEGMENT]", scene_lines),
+            ("[ACTORS]", _render_entries(self.actors)),
+            ("[ACTION SEQUENCE]", _render_entries(self.action_sequence, numbered=True)),
+            ("[TOOLS / OBJECTS]", _render_entries(self.tools_objects)),
+            ("[PROCESS PARAMETERS]", _render_entries(self.process_parameters)),
+            ("[QUALITY / RESULTS]", _render_entries(self.quality_results)),
+            ("[OUTCOMES / PARAMETERS]", _render_entries(self.outcomes_parameters)),
+            (
+                "[EVIDENCE / UNCERTAINTY]",
+                self.evidence_uncertainty or ["No additional uncertainty recorded"],
+            ),
+            ("[SOURCE TEXT]", [self.source_text]),
         ]
 
         return "\n\n".join(
             "\n".join([title, *content])
             for title, content in sections
         )
+
+    def to_extraction_text(self) -> str:
+        """Render the six-layer pipeline input consumed by entity extraction.
+
+        The legacy renderer remains for historical comparisons. Production
+        extraction uses this controlled representation.
+        """
+
+        segment = self.normalized_segment or _normalized_segment_from_record(self)
+        return segment.to_controlled_text()
 
 
 # [Block 03] 人工/规则模式：严格检查证据后组装统一记录。
@@ -148,32 +174,22 @@ def build_unified_text(
     tools_objects: list[GroundedEntry],
     outcomes_parameters: list[GroundedEntry],
     evidence_uncertainty: list[str] | None = None,
+    *,
+    source_adapter: str = "generic",
+    annotation_text: str | None = None,
+    transcript_text: str | None = None,
 ) -> UnifiedTextRecord:
-    """
-    从人工整理的场景字段构建统一格式文本记录。
-    Build a unified record from manually organized scene fields.
+    """Build a unified record from manually organized scene fields.
 
-    输入：
-        raw_text: 原始视频场景描述，是所有整理信息的证据来源。
-        scene_id / segment_id / timestamp: 场景来源信息。
-        各条目列表: 人工从原文中整理出的事实及证据。
-
-    输出：
-        可以保存为 JSON、也可以渲染成模型输入文本的 ``UnifiedTextRecord``。
-
-    重要约束：
-        本函数不会调用 LLM，也不会自动新增事实；
-        如果某条事实提供的证据不存在于原始文本中，函数会拒绝生成记录。
-
-    Inputs:
+    Args:
         raw_text: The original scene description and evidence source.
         scene_id / segment_id / timestamp: Scene provenance information.
         Entry lists: Human-organized facts and their source evidence.
 
-    Output:
+    Returns:
         A ``UnifiedTextRecord`` that can be serialized or rendered for extraction.
 
-    Constraint:
+    Notes:
         This function never calls an LLM or adds facts. Missing evidence rejects
         the record.
     """
@@ -188,7 +204,7 @@ def build_unified_text(
 
     # 保留完整原文与片段信息，供后续 grounding/hallucination 校验使用。
     # Keep source text and segment metadata for downstream grounding checks.
-    return UnifiedTextRecord(
+    record = UnifiedTextRecord(
         scene_id=scene_id,
         segment_id=segment_id,
         timestamp=timestamp,
@@ -199,6 +215,16 @@ def build_unified_text(
         outcomes_parameters=outcomes_parameters,
         evidence_uncertainty=evidence_uncertainty or [],
         source_text=raw_text,
+    )
+    return record.model_copy(
+        update={
+            "normalized_segment": _normalized_segment_from_record(
+                record,
+                source_adapter=source_adapter,
+                annotation_text=annotation_text,
+                transcript_text=transcript_text,
+            )
+        }
     )
 
 
@@ -217,18 +243,17 @@ def build_industrial_unified_text(
     actors: list[GroundedEntry] | None = None,
     uncertainty: list[str] | None = None,
     *,
+    source_adapter: str = "industrial_text",
+    annotation_text: str | None = None,
+    transcript_text: str | None = None,
     model: str = "llama3.1:8b",
     embedding_model: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     alias_candidate_threshold: float = 0.65,
     alias_top_k: int = 3,
+    preprocessing_chunk_chars: int = 500,
 ) -> UnifiedTextRecord:
-    """
-    构建工业数据清洗模块的统一文本记录。
-    Build a unified record for industrial text preprocessing.
+    """Build a unified record for industrial text preprocessing.
 
-    该入口面向最终工业数据，而不是医院 pilot 数据。显式提供任意分类列表时，
-    它继续使用确定性的人工/规则辅助流程。所有分类列表都为 ``None`` 时，它会
-    调用本地 LLM 自动分类，再过滤无原文证据的条目并统一工具/对象名称。
     Explicit category lists keep the deterministic manual/rule-assisted path.
     When every category is ``None``, the local LLM classifies the source, invalid
     evidence is filtered, and tool/object mentions are canonicalized.
@@ -254,6 +279,7 @@ def build_industrial_unified_text(
             embedding_model=embedding_model,
             alias_candidate_threshold=alias_candidate_threshold,
             alias_top_k=alias_top_k,
+            chunk_max_chars=preprocessing_chunk_chars,
         )
         actors = draft.actors
         action_sequence = draft.action_sequence
@@ -282,6 +308,9 @@ def build_industrial_unified_text(
         tools_objects=tools_objects,
         outcomes_parameters=[],
         evidence_uncertainty=[*(uncertainty or []), *preprocessing_notes],
+        source_adapter=source_adapter,
+        annotation_text=annotation_text,
+        transcript_text=transcript_text,
     ).model_copy(
         update={
             "process_parameters": process_parameters,
@@ -291,13 +320,13 @@ def build_industrial_unified_text(
 
 
 def _all_entries(*entry_groups: list[GroundedEntry]) -> list[GroundedEntry]:
-    """合并栏目供统一校验。 / Flatten category groups for shared validation."""
+    """Flatten category groups for shared validation."""
 
     return [entry for group in entry_groups for entry in group]
 
 
 def _validate_evidence(entries: Iterable[GroundedEntry], raw_text: str) -> None:
-    """检查证据是否在原文中。 / Verify that every evidence span is in source."""
+    """Verify that every evidence span occurs in the source text."""
 
     normalized_source = _normalize_text(raw_text)
     for entry in entries:
@@ -312,23 +341,296 @@ def _validate_evidence(entries: Iterable[GroundedEntry], raw_text: str) -> None:
 
 
 def _render_entries(entries: list[GroundedEntry], numbered: bool = False) -> list[str]:
-    """渲染栏目条目。 / Render category entries and optional uncertainty notes."""
+    """Render category entries and optional uncertainty notes."""
 
     if not entries:
-        return ["无"]
+        return ["None"]
 
     lines = []
     for index, entry in enumerate(entries, start=1):
         prefix = f"{index}. " if numbered else "- "
         line = f"{prefix}{entry.text}"
+        if entry.canonical_name:
+            line += f" | Canonical Name: {entry.canonical_name}"
         if entry.aliases:
-            line += f" | 别名: {', '.join(entry.aliases)}"
+            line += f" | Aliases: {', '.join(entry.aliases)}"
         evidence = "; ".join([entry.evidence, *entry.additional_evidence])
-        line += f" | 证据: {evidence}"
+        line += f" | Evidence: {evidence}"
         if entry.uncertainty:
-            line += f" | 不确定性: {entry.uncertainty}"
+            line += f" | Uncertainty: {entry.uncertainty}"
         lines.append(line)
     return lines
+
+
+def _normalized_segment_from_record(
+    record: UnifiedTextRecord,
+    *,
+    source_adapter: str = "legacy_unified_record",
+    annotation_text: str | None = None,
+    transcript_text: str | None = None,
+) -> NormalizedSegment:
+    """Convert grounded columns into the common Normalized Segment contract.
+
+    Link existing grounded entries only. Explicit adapter metadata wins
+    over source-independent lexical matching.
+    """
+
+    roles = [
+        _normalized_mention(entry, "role", index)
+        for index, entry in enumerate(record.actors, start=1)
+    ]
+    tool_entries = [
+        entry
+        for entry in record.tools_objects
+        if _entry_is_explicit_or_legacy_tool(entry, record.action_sequence)
+    ]
+    object_entries = [
+        entry for entry in record.tools_objects if entry not in tool_entries
+    ]
+    tools = [
+        _normalized_mention(entry, "tool", index)
+        for index, entry in enumerate(tool_entries, start=1)
+    ]
+    objects = [
+        _normalized_mention(entry, "object", index)
+        for index, entry in enumerate(object_entries, start=1)
+    ]
+    # 中文：Scene/Procedure 只有在输入来源提供可追溯证据时才进入合同；
+    # 否则关系层不会开放 OBSERVED_IN/PART_OF。
+    # English: Scene/Procedure enter the contract only with traceable source
+    # evidence; otherwise their relation types remain unavailable downstream.
+    scene_evidence = _first_exact_context_evidence(
+        record.source_text,
+        (record.scene_id, record.segment_id),
+    )
+    procedure_evidence = _first_exact_context_evidence(
+        record.source_text,
+        (record.scene_segment,),
+    )
+    scenes = (
+        [
+            NormalizedMention(
+                mention_id="S1",
+                kind="scene",
+                text=record.scene_id,
+                evidence=scene_evidence,
+            )
+        ]
+        if scene_evidence
+        else []
+    )
+    procedures = (
+        [
+            NormalizedMention(
+                mention_id="P1",
+                kind="procedure",
+                text=record.scene_segment,
+                evidence=procedure_evidence,
+            )
+        ]
+        if procedure_evidence
+        else []
+    )
+
+    actions: list[NormalizedAction] = []
+    for index, entry in enumerate(record.action_sequence, start=1):
+        direct_object = _select_action_mention(
+            entry,
+            [*objects, *tools],
+            explicit_name=entry.direct_object,
+            preferred_roles={"target", "direct_object", "dobj"},
+            allow_single=len(record.action_sequence) == 1,
+        )
+        tool = _select_action_mention(
+            entry,
+            tools,
+            explicit_name=entry.tool,
+            allow_single=len(record.action_sequence) == 1,
+        )
+        role = _select_action_mention(
+            entry,
+            roles,
+            explicit_name=entry.role,
+            allow_single=len(roles) == 1,
+        )
+        if direct_object and tool and direct_object.mention_id == tool.mention_id:
+            # 中文：同一 Tool 不能同时渲染成直接对象和 "with tool"，否则会生成
+            # "pick up drill with drill"。显式槽位优先，推断槽位清空。
+            # English: Never render one Tool twice as both object and instrument.
+            if entry.tool and not entry.direct_object:
+                direct_object = None
+            else:
+                tool = None
+        actions.append(
+            NormalizedAction(
+                action_id=f"A{index}",
+                text=entry.text,
+                verb=entry.verb
+                or _infer_verb_phrase(
+                    entry.text,
+                    direct_object.text if direct_object else None,
+                    tool.text if tool else None,
+                    role.text if role else None,
+                ),
+                evidence=entry.evidence,
+                direct_object_id=(
+                    direct_object.mention_id if direct_object else None
+                ),
+                tool_id=tool.mention_id if tool else None,
+                role_id=role.mention_id if role else None,
+                uncertainty=entry.uncertainty,
+            )
+        )
+
+    return NormalizedSegment(
+        source_adapter=source_adapter,
+        scene_id=record.scene_id,
+        segment_id=record.segment_id,
+        timestamp=record.timestamp,
+        annotation_text=annotation_text,
+        transcript_text=transcript_text,
+        actions=actions,
+        objects=objects,
+        tools=tools,
+        roles=roles,
+        scenes=scenes,
+        procedures=procedures,
+        uncertainty=record.evidence_uncertainty,
+        source_text=record.source_text,
+    )
+
+
+def _normalized_mention(
+    entry: GroundedEntry,
+    kind: Literal["object", "tool", "role", "scene", "procedure"],
+    index: int,
+) -> NormalizedMention:
+    prefix = {
+        "object": "O",
+        "tool": "T",
+        "role": "R",
+        "scene": "S",
+        "procedure": "P",
+    }[kind]
+    return NormalizedMention(
+        mention_id=f"{prefix}{index}",
+        kind=kind,
+        text=entry.text,
+        evidence=entry.evidence,
+        canonical_name=entry.canonical_name,
+        semantic_role=entry.role if kind == "object" else None,
+        uncertainty=entry.uncertainty,
+    )
+
+
+def _first_exact_context_evidence(
+    source_text: str,
+    candidates: tuple[str, ...],
+) -> str | None:
+    """Return an exact source-backed context label without semantic guessing."""
+
+    normalized_source = source_text.casefold()
+    for candidate in candidates:
+        value = candidate.strip()
+        if value and value.casefold() in normalized_source:
+            return value
+    return None
+
+
+def _entry_is_explicit_or_legacy_tool(
+    entry: GroundedEntry,
+    actions: list[GroundedEntry],
+) -> bool:
+    """Migrate legacy mixed columns using generic grammatical tool cues only."""
+
+    if entry.entry_type == "tool":
+        return True
+    if entry.entry_type == "object":
+        return False
+    escaped = re.escape(entry.text.strip())
+    tool_pattern = re.compile(
+        rf"\b(?:with|using|use|uses|used)\s+(?:a\s+|an\s+|the\s+)?{escaped}\b",
+        re.IGNORECASE,
+    )
+    return any(
+        tool_pattern.search(f"{action.text} {action.evidence}")
+        for action in actions
+    )
+
+
+def _select_action_mention(
+    action: GroundedEntry,
+    mentions: list[NormalizedMention],
+    *,
+    explicit_name: str | None,
+    preferred_roles: set[str] | None = None,
+    allow_single: bool = False,
+) -> NormalizedMention | None:
+    if explicit_name:
+        explicit = _normalize_text(explicit_name)
+        for mention in mentions:
+            if explicit in {
+                _normalize_text(mention.text),
+                _normalize_text(mention.canonical_name or ""),
+            }:
+                return mention
+
+    searchable = _normalize_text(f"{action.text} {action.evidence}")
+    lexical_matches = [
+        mention
+        for mention in mentions
+        if _normalize_text(mention.text) in searchable
+        or (
+            mention.canonical_name
+            and _normalize_text(mention.canonical_name) in searchable
+        )
+    ]
+    if preferred_roles:
+        preferred = [
+            mention
+            for mention in lexical_matches
+            if (mention.semantic_role or "").casefold() in preferred_roles
+        ]
+        if preferred:
+            return preferred[0]
+    if lexical_matches:
+        return lexical_matches[0]
+    if allow_single and len(mentions) == 1:
+        return mentions[0]
+    if allow_single and preferred_roles:
+        preferred = [
+            mention
+            for mention in mentions
+            if (mention.semantic_role or "").casefold() in preferred_roles
+        ]
+        if len(preferred) == 1:
+            return preferred[0]
+    return None
+
+
+def _infer_verb_phrase(
+    action_text: str,
+    direct_object: str | None,
+    tool: str | None,
+    role: str | None,
+) -> str:
+    """Infer a source-grounded verb phrase without a dataset vocabulary."""
+
+    phrase = action_text.strip().rstrip(".")
+    if role and _normalize_text(phrase).startswith(_normalize_text(role)):
+        phrase = phrase[len(role) :].lstrip(" ,:-")
+    boundaries = []
+    lowered = phrase.casefold()
+    for value in (direct_object, tool):
+        if not value:
+            continue
+        position = lowered.find(value.casefold())
+        if position > 0:
+            boundaries.append(position)
+    if boundaries:
+        phrase = phrase[: min(boundaries)].strip()
+    phrase = re.sub(r"\b(with|using|on|into|to|the|a|an)\s*$", "", phrase, flags=re.I)
+    return phrase.strip() or action_text.strip()
 
 
 def _automatically_preprocess_industrial_text(
@@ -338,8 +640,9 @@ def _automatically_preprocess_industrial_text(
     embedding_model: str,
     alias_candidate_threshold: float,
     alias_top_k: int,
+    chunk_max_chars: int,
 ):
-    """延迟导入自动逻辑。 / Lazily import LLM and embedding dependencies."""
+    """Lazily import LLM and embedding dependencies."""
 
     from backend.preprocessing.automatic import automatically_preprocess_industrial_text
 
@@ -349,10 +652,11 @@ def _automatically_preprocess_industrial_text(
         embedding_model=embedding_model,
         alias_candidate_threshold=alias_candidate_threshold,
         alias_top_k=alias_top_k,
+        chunk_max_chars=chunk_max_chars,
     )
 
 
 def _normalize_text(value: str) -> str:
-    """统一大小写和空白。 / Normalize case and whitespace for evidence checks."""
+    """Normalize case and whitespace for evidence checks."""
 
     return " ".join(value.casefold().split())
